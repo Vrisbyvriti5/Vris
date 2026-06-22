@@ -766,7 +766,7 @@ const Checkout = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <div className="w-full px-4 pb-20 pt-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+      <div className="w-full px-4 pb-20 pt-[96px] md:pt-[104px] sm:px-8 md:px-10 lg:px-14 xl:px-20">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#9ca3af]">Secure Checkout</p>

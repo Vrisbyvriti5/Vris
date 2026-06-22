@@ -225,7 +225,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <div className="flex min-h-[84vh] w-full items-center justify-center px-4 pb-16 pt-24 sm:px-8 lg:px-14 xl:px-20">
+      <div className="flex min-h-[84vh] w-full items-center justify-center px-4 pb-16 pt-[96px] md:pt-[104px] sm:px-8 lg:px-14 xl:px-20">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}

@@ -112,7 +112,7 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="pt-24 pb-20 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex items-center justify-center min-h-[80vh]">
+      <div className="pt-[96px] md:pt-[104px] pb-20 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex items-center justify-center min-h-[80vh]">
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-xl">
           <div className="rounded-3xl border border-border bg-card/95 p-6 shadow-[0_10px_35px_rgba(0,0,0,0.06)] sm:p-8">
             <div className="mb-7">

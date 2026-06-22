@@ -568,7 +568,7 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="pt-24 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 text-center py-20">
+        <div className="pt-[96px] md:pt-[104px] w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 text-center py-20">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-destructive/10 mb-4">
             <AlertCircle className="w-8 h-8 text-destructive" />
           </div>
@@ -586,7 +586,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="mx-auto w-full max-w-[1440px] px-6 pb-24 pt-20">
+      <div className="mx-auto w-full max-w-[1440px] px-6 pb-24 pt-[96px] md:pt-[104px]">
         <nav className="flex items-center gap-1.5 overflow-x-auto py-4 text-[13px] font-medium text-muted-foreground no-scrollbar">
           <Link to="/" className="whitespace-nowrap transition-colors hover:text-foreground">Home</Link>
           <ChevronRight size={14} className="shrink-0 text-muted-foreground/50" />
@@ -1131,8 +1131,8 @@ const ProductDetail = () => {
           </motion.div>
         </div>
 
-        <Link to="/custom-product-request" className="mt-6 block w-full overflow-hidden shadow-sm">
-          <img src="https://nirvi-images-2026.s3.ap-south-1.amazonaws.com/products/custom1.png" alt="Custom Creations, Just for You" className="w-[143%] max-w-none md:w-full h-auto object-cover object-left" />
+        <Link to="/custom-product-request" className="mt-6 block w-[calc(100%+48px)] -ml-6 sm:w-full sm:ml-0 overflow-hidden shadow-sm">
+          <img src="https://nirvi-images-2026.s3.ap-south-1.amazonaws.com/products/custom1.png" alt="Custom Creations, Just for You" className="w-full h-auto object-cover" />
         </Link>
 
         <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

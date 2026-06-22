@@ -281,7 +281,7 @@ const Profile = () => {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
-        <div className="pt-28 pb-20 w-full px-4 sm:px-8 max-w-[1280px] mx-auto space-y-6">
+        <div className="pt-[96px] md:pt-[104px] pb-20 w-full px-4 sm:px-8 max-w-[1280px] mx-auto space-y-6">
           <div className="h-6 w-48 bg-gray-200 rounded animate-pulse" />
           <div className="h-8 w-64 bg-gray-200 rounded animate-pulse" />
           <div className="h-48 w-full bg-white rounded-2xl border border-gray-100 p-8 flex gap-6 shadow-sm animate-pulse">
@@ -301,7 +301,7 @@ const Profile = () => {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="pt-32 pb-20 w-full px-5 text-center">
+        <div className="pt-[96px] md:pt-[104px] pb-20 w-full px-5 text-center">
           <AlertCircle size={48} className="mx-auto text-muted-foreground mb-4" />
           <h2 className="text-2xl font-bold font-display text-foreground mb-2">Authentication Required</h2>
           <p className="text-muted-foreground mb-6 font-body">Please login to view your personal dashboard.</p>
@@ -318,7 +318,7 @@ const Profile = () => {
     <div className="min-h-screen bg-white font-body">
       <Navbar />
       
-      <div className="pt-28 pb-24 w-full px-4 sm:px-8 max-w-[1280px] mx-auto space-y-4">
+      <div className="pt-[96px] md:pt-[104px] pb-24 w-full px-4 sm:px-8 max-w-[1280px] mx-auto space-y-4">
         
         {/* Header section */}
         <div>

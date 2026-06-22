@@ -91,7 +91,7 @@ const Contact = () => {
     <div className="min-h-screen bg-white font-body">
       <Navbar />
       
-      <main className="w-full pt-20 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+      <main className="w-full pt-[96px] md:pt-[104px] pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20">
         <div className="mx-auto max-w-7xl">
           
           {/* Header Hero Section */}

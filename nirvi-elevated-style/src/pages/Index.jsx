@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ProductSkeleton from '@/components/ProductSkeleton';
 import Navbar from '@/components/Navbar';
@@ -234,7 +235,14 @@ const InstagramSection = () => {
 const ShopTheLook = () => {
   const { products, loading } = useCatalog();
   const [ref, visible] = useReveal();
+  const scrollRef = useRef(null);
   const shopProducts = products.slice(0, SHOP_PRODUCT_COUNT);
+
+  const scroll = (offset) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
 
   return (
     <section
@@ -244,18 +252,38 @@ const ShopTheLook = () => {
     >
       <h2 className="hp-shop__heading">Shop The Look</h2>
       <p className="hp-shop__subheading">Curated styles for every occasion</p>
-      <div className="hp-shop__grid">
-        {loading
-          ? Array.from({ length: SHOP_PRODUCT_COUNT }).map((_, i) => (
-              <ProductSkeleton key={`skeleton-${i}`} index={i} />
-            ))
-          : shopProducts.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} eagerCount={SHOP_PRODUCT_COUNT} />
-            ))}
+      
+      <div className="relative max-w-[1400px] mx-auto group">
+        <button
+          onClick={() => scroll(-400)}
+          className="absolute left-0 sm:-left-4 top-[40%] sm:top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full text-gray-800 opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft size={20} />
+        </button>
+        
+        <div className="hp-shop__grid" ref={scrollRef}>
+          {loading
+            ? Array.from({ length: SHOP_PRODUCT_COUNT }).map((_, i) => (
+                <ProductSkeleton key={`skeleton-${i}`} index={i} />
+              ))
+            : shopProducts.map((p, i) => (
+                <ProductCard key={p.id} product={p} index={i} eagerCount={SHOP_PRODUCT_COUNT} />
+              ))}
+        </div>
+
+        <button
+          onClick={() => scroll(400)}
+          className="absolute right-0 sm:-right-4 top-[40%] sm:top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full text-gray-800 opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+          aria-label="Scroll right"
+        >
+          <ChevronRight size={20} />
+        </button>
       </div>
+
       <div className="hp-shop__cta-wrap">
         <Link to="/shop" className="hp-shop__cta">
-          View All Products
+          View All
         </Link>
       </div>
     </section>

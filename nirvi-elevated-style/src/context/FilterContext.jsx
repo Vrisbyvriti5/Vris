@@ -3,10 +3,9 @@ import React, { createContext, useContext, useState, useCallback, useMemo } from
 const FilterContext = createContext(undefined);
 const DEFAULT_FILTERS = Object.freeze({
   categories: [],
-  gender: [],
   priceRange: [0, 10000],
   rating: null,
-  discount: null,
+  sizes: [],
 });
 
 export const FilterProvider = ({ children }) => {
@@ -18,15 +17,6 @@ export const FilterProvider = ({ children }) => {
         ? current.categories.filter((entry) => entry !== category)
         : [...current.categories, category];
       return { ...current, categories };
-    });
-  }, []);
-
-  const toggleGender = useCallback((gender) => {
-    setFilters((current) => {
-      const nextGender = current.gender.includes(gender)
-        ? current.gender.filter((entry) => entry !== gender)
-        : [...current.gender, gender];
-      return { ...current, gender: nextGender };
     });
   }, []);
 
@@ -58,11 +48,13 @@ export const FilterProvider = ({ children }) => {
     }));
   }, []);
 
-  const setDiscount = useCallback((discount) => {
-    setFilters((current) => ({
-      ...current,
-      discount: current.discount === discount ? null : discount,
-    }));
+  const toggleSize = useCallback((size) => {
+    setFilters((current) => {
+      const sizes = current.sizes.includes(size)
+        ? current.sizes.filter((entry) => entry !== size)
+        : [...current.sizes, size];
+      return { ...current, sizes };
+    });
   }, []);
 
   const clearAll = useCallback(() => {
@@ -71,10 +63,9 @@ export const FilterProvider = ({ children }) => {
 
   const activeFilterCount = useMemo(() => ([
     filters.categories.length > 0,
-    filters.gender.length > 0,
     filters.priceRange[0] !== 0 || filters.priceRange[1] !== 10000,
     filters.rating !== null,
-    filters.discount !== null,
+    filters.sizes.length > 0,
   ].filter(Boolean).length), [filters]);
 
   return (
@@ -82,16 +73,14 @@ export const FilterProvider = ({ children }) => {
       value={{
         filters,
         selectedCategories: filters.categories,
-        selectedGenders: filters.gender,
         priceRange: filters.priceRange,
         selectedRating: filters.rating,
-        selectedDiscount: filters.discount,
+        selectedSizes: filters.sizes,
         toggleCategory,
-        toggleGender,
         setCategories,
         setPriceRange,
         setRating,
-        setDiscount,
+        toggleSize,
         clearAll,
         activeFilterCount,
       }}

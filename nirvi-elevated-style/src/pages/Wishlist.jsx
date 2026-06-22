@@ -16,7 +16,7 @@ const Wishlist = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-24 pb-20 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-7xl mx-auto">
+      <div className="pt-[96px] md:pt-[104px] pb-20 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-7xl mx-auto">
         <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-[#111827] mb-2">Wishlist</h1>
         <p className="text-sm text-[#6b7280] font-body mb-6 md:mb-10">Products you've saved for later.</p>
         

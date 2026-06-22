@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import useDebouncedValue from '@/hooks/use-debounced-value';
 import { CATEGORY_TO_COLLECTION, PRODUCT_COLLECTIONS, toCategoryLabel } from '@/lib/product-taxonomy';
+import AnnouncementBar from './AnnouncementBar';
 
 const categoryGroups = PRODUCT_COLLECTIONS.map((collection) => ({
   collection,
@@ -38,10 +39,10 @@ const storeEdits = [
 
 const links = [
   { to: '/custom-product-request', label: 'Create' },
-  { to: '/shop?collection=Women', label: 'Women' },
+  { to: '/shop', label: 'Shop' },
   { to: '/shop?sort=bestseller', label: 'Trending' },
-  { to: '/shop?cat=shoes', label: 'Shoes', badge: 'NEW' },
   { to: '/vris-plus', label: 'PLUS', badge: 'NEW' },
+  { to: '/contact', label: 'Contact Us' },
 ];
 
 const Navbar = () => {
@@ -183,24 +184,19 @@ const Navbar = () => {
     location.pathname === '/shop' && currentSort === sort ? desktopNavLinkActive : desktopNavLinkIdle,
   ].join(' ');
 
-  const getMobileLinkClass = (link) => {
-    const linkParams = new URLSearchParams(link.to.includes('?') ? link.to.split('?')[1] : '');
-    const linkSort = linkParams.get('sort') || '';
-    const isActive = linkSort
-      ? location.pathname === '/shop' && currentSort === linkSort
-      : link.to === '/shop'
-        ? location.pathname === '/shop' && !currentSort
-        : location.pathname === link.to;
+  const getMobileLinkClass = () => {
+    return 'text-sm font-medium tracking-wide uppercase transition-colors text-gray-400 hover:text-white';
+  };
 
-    return [
-      'text-sm font-medium tracking-wide uppercase transition-colors',
-      isActive ? 'text-white' : 'text-gray-400 hover:text-white',
-    ].join(' ');
+  const getDesktopLinkClass = () => {
+    return `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors text-gray-400 hover:text-white`;
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black">
-      <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex items-center justify-between gap-4 h-14 md:h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 flex flex-col bg-black">
+      <AnnouncementBar />
+      <nav className="w-full relative">
+        <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex items-center justify-between gap-4 h-14 md:h-16">
         {/* Left: hamburger + logo */}
         <div className="flex min-w-0 items-center gap-3 md:gap-4">
           <button
@@ -225,46 +221,36 @@ const Navbar = () => {
         {/* Center: nav links */}
         <div className="hidden lg:flex items-center gap-8 h-full">
           {/* Create */}
-          <NavLink
+          <Link
             to="/custom-product-request"
-            className={({ isActive }) =>
-              `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors ${
-                isActive ? 'text-white' : 'text-gray-400 hover:text-white'
-              }`
-            }
+            className={getDesktopLinkClass('/custom-product-request')}
           >
             <span className="relative">
               Create
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-foreground transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
             </span>
-          </NavLink>
+          </Link>
 
-          {/* Women */}
-          <NavLink
-            to="/shop?collection=Women"
-            className={({ isActive }) =>
-              `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors ${
-                isActive ? 'text-white' : 'text-gray-400 hover:text-white'
-              }`
-            }
+          {/* Shop */}
+          <Link
+            to="/shop"
+            className={getDesktopLinkClass('/shop')}
           >
             <span className="relative">
-              Women
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-foreground transition-all duration-300 group-hover:w-full"></span>
+              Shop
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
             </span>
-          </NavLink>
+          </Link>
+
+
 
 
 
           {/* Trending (with Mega Menu) */}
           <div className="group/mega h-full flex items-center static">
-            <NavLink
+            <Link
               to="/shop?sort=bestseller"
-              className={({ isActive }) =>
-                `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors ${
-                  isActive ? 'text-white' : 'text-gray-400 hover:text-white'
-                }`
-              }
+              className={getDesktopLinkClass('/shop?sort=bestseller')}
             >
               <span className="relative">
                 Trending
@@ -273,7 +259,7 @@ const Navbar = () => {
                 </span>
                 <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
               </span>
-            </NavLink>
+            </Link>
             {!isCheckoutPage && (
               <div className="absolute left-0 right-0 top-[64px] hidden group-hover/mega:block bg-white/95 backdrop-blur-md border-b border-border shadow-xl">
                 <div className="max-w-7xl mx-auto grid grid-cols-[0.9fr_1.6fr] gap-10 px-8 py-8">
@@ -328,31 +314,11 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Shoes */}
-          <NavLink
-            to="/shop?cat=shoes"
-            className={({ isActive }) =>
-              `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors ${
-                isActive ? 'text-white' : 'text-gray-400 hover:text-white'
-              }`
-            }
-          >
-            <span className="relative">
-              Shoes
-              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#ef4444] tracking-normal">
-                NEW
-              </span>
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
-            </span>
-          </NavLink>
+
           {/* VRIS Plus */}
-          <NavLink
+          <Link
             to="/vris-plus"
-            className={({ isActive }) =>
-              `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors ${
-                isActive ? 'text-white' : 'text-gray-400 hover:text-white'
-              }`
-            }
+            className={getDesktopLinkClass('/vris-plus')}
           >
             <span className="relative">
               PLUS
@@ -361,10 +327,21 @@ const Navbar = () => {
               </span>
               <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
             </span>
-          </NavLink>
+          </Link>
+
+          {/* Contact Us */}
+          <Link
+            to="/contact"
+            className={getDesktopLinkClass('/contact')}
+          >
+            <span className="relative">
+              Contact Us
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
+            </span>
+          </Link>
         </div>
 
-        <div className="hidden md:block min-w-0 flex-1 max-w-sm lg:max-w-md xl:max-w-xl">
+        <div className="hidden md:block min-w-0 flex-1 max-w-sm lg:max-w-md xl:max-w-xl ml-4 lg:ml-8">
           <div className="relative">
             <Search
               size={16}
@@ -631,15 +608,15 @@ const Navbar = () => {
               <Link
                 to="/vris-plus"
                 onClick={() => setMobileOpen(false)}
-                className="flex cursor-pointer items-center justify-between rounded-lg bg-purple-50/50 px-3 py-2 transition-colors hover:bg-purple-50"
+                className="flex cursor-pointer items-center justify-between transition-colors group"
               >
                 <span className="flex items-center gap-1.5">
                   <img
                     src="/Navbar_logo.png"
                     alt="VRIS Logo"
-                    className="h-[24px] w-auto object-contain"
+                    className="h-[36px] w-auto object-contain"
                   />
-                  <span className="font-bold text-sm tracking-wide text-purple-900">VRIS</span>
+                  <span className="font-bold text-sm tracking-wide text-gray-400 group-hover:text-white transition-colors">VRIS</span>
                 </span>
                 <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
                   Plus
@@ -707,7 +684,8 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+      </nav>
+    </header>
   );
 };
 

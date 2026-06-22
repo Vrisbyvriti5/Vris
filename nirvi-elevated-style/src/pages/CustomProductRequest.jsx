@@ -507,9 +507,9 @@ const CustomProductRequest = () => {
     <div className="min-h-screen bg-white font-body">
       <Navbar />
 
-      <main className="pt-16">
+      <main className="pt-[96px] md:pt-[104px]">
         <section className="w-full bg-black overflow-hidden">
-          <img src="https://nirvi-images-2026.s3.ap-south-1.amazonaws.com/products/custom1.png" alt="Custom Product Request" className="w-[143%] max-w-none md:w-full h-auto object-cover object-left" />
+          <img src="https://nirvi-images-2026.s3.ap-south-1.amazonaws.com/products/custom1.png" alt="Custom Product Request" className="w-full h-auto object-cover" />
         </section>
 
         <section className="px-5 py-5 sm:px-8 md:px-12 lg:px-16 xl:px-20">

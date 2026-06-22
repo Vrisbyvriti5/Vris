@@ -6,6 +6,7 @@
 .hp-root {
   overflow-x: hidden;
   background: #fff;
+  padding-top: 104px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -99,6 +100,9 @@
    MOBILE LAYOUT (≤ 768px)
    ═══════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+  .hp-root {
+    padding-top: 144px;
+  }
 
   /* ── Hero: auto height ── */
   .hp-hero {
@@ -177,9 +181,13 @@
   }
 
   .hp-shop__grid {
-    grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px;
     max-width: 100%;
+  }
+  
+  .hp-shop__grid > * {
+    flex: 0 0 calc(50% - 6px) !important;
+    min-width: calc(50% - 6px) !important;
   }
 
   .hp-shop__cta-wrap {
@@ -429,11 +437,25 @@
 }
 
 .hp-shop__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   gap: 20px;
   max-width: 1400px;
   margin: 0 auto;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 24px;
+  scrollbar-width: none;
+}
+
+.hp-shop__grid::-webkit-scrollbar {
+  display: none;
+}
+
+.hp-shop__grid > * {
+  flex: 0 0 calc(25% - 15px);
+  min-width: calc(25% - 15px);
+  scroll-snap-align: start;
 }
 
 .hp-shop__cta-wrap {
@@ -444,6 +466,7 @@
   display: inline-block;
   padding: 16px 48px;
   border: 2px solid #111;
+  border-radius: 9999px;
   color: #111;
   font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 0.75rem;
@@ -464,8 +487,9 @@
 }
 
 @media (max-width: 1024px) {
-  .hp-shop__grid {
-    grid-template-columns: repeat(2, 1fr);
+  .hp-shop__grid > * {
+    flex: 0 0 calc(33.333% - 10px);
+    min-width: calc(33.333% - 10px);
   }
   .hp-shop__heading {
     font-size: 2rem;

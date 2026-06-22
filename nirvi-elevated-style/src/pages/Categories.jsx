@@ -24,7 +24,7 @@ const Categories = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="pt-24 pb-20 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+      <div className="pt-[96px] md:pt-[104px] pb-20 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20">
         <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 md:mb-8">Categories</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
           {cats.map((cat, i) => (

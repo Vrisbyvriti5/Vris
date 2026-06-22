@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * VRISLoader — Premium ultra-minimal loading animation.
  *
- * A tiny serif "N" rotates smoothly in 3D on its center axis while emitting
+ * A tiny serif "V" rotates smoothly in 3D on its center axis while emitting
  * a soft luxury-pink glow pulse.  Pure white background, generous negative
  * space, zero clutter — inspired by Zara / SHEIN / Apple aesthetics.
  *
@@ -86,7 +86,7 @@ const VRISLoader = () => (
     `}</style>
 
     <div className="vris-loader-backdrop" role="status" aria-label="Loading VRIS">
-      <span className="vris-loader-letter" aria-hidden="true">N</span>
+      <span className="vris-loader-letter" aria-hidden="true">V</span>
     </div>
   </>
 );

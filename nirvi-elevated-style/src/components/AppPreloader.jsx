@@ -31,7 +31,7 @@ const preloadImage = (src) =>
 /**
  * AppPreloader
  *
- * Full-screen overlay with the animated VRIS "N" that stays visible until:
+ * Full-screen overlay with the animated VRIS "V" that stays visible until:
  *  1. Critical hero images have been fetched & decoded
  *  2. Document fonts are ready
  *  3. A minimum display time has elapsed (so the animation reads properly)
@@ -168,7 +168,7 @@ const AppPreloader = ({ children }) => {
               }}
               aria-hidden="true"
             >
-              N
+              V
             </span>
           </div>
         </>

@@ -241,8 +241,8 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
       >
 
         {/* ── Image Section ── */}
-        <div className="relative bg-gray-50 p-2.5 sm:p-3">
-          <div className="aspect-square relative overflow-hidden rounded-xl bg-gray-100">
+        <div className="relative bg-gray-50 p-1.5 sm:p-2">
+          <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-gray-100">
             {/* Shimmer placeholder — visible until image loads */}
             {!imgLoaded && (
               <div className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 animate-[shimmer_1.5s_infinite]" style={{ backgroundSize: '200% 100%' }} />
@@ -314,19 +314,19 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
         </button>
 
         {/* ── Product Info ── */}
-        <div className="flex flex-col flex-1 px-2.5 pb-3 pt-2 sm:px-3 sm:pb-3 sm:pt-2 text-left w-full">
+        <div className="flex flex-col flex-1 px-2 pb-2 pt-1.5 sm:px-2.5 sm:pb-2.5 sm:pt-1.5 text-left w-full">
 
           <h3 className="text-xs sm:text-sm font-medium text-gray-800 leading-tight line-clamp-2 font-body hover:text-amber-700 transition-colors">
             {product.name}
           </h3>
 
           {/* Rating */}
-          <div className="mt-1.5">
+          <div className="mt-0.5">
             <StarRating rating={Number(rating)} reviews={Number(reviews)} />
           </div>
 
           {/* ── Pricing ── */}
-          <div className="mt-2 space-y-0.5">
+          <div className="mt-1 space-y-0">
             <div className="flex items-baseline gap-1.5 flex-wrap">
               <span className="text-base sm:text-lg font-bold text-gray-900 font-body">
                 ₹{formatPriceINR(pricing.finalPrice)}
@@ -345,23 +345,12 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
             )}
           </div>
 
-          {/* ── VRIS Delivery Badge ── */}
-          <div className="mt-2 flex items-center">
-            <img
-              src="/Navbar_logo.png"
-              alt="VRIS"
-              className="h-8 w-auto object-contain -mr-1"
-            />
-            <span className="text-[10px] sm:text-[11px] font-semibold text-gray-600 font-body relative z-10">
-              FREE Delivery
-            </span>
-          </div>
 
           {/* Spacer to push CTA to bottom */}
-          <div className="flex-1 min-h-1.5" />
+          <div className="flex-1 min-h-1" />
 
           {/* ── CTA Section ── */}
-          <div className="mt-2.5">
+          <div className="mt-1.5">
             {!cartItem && !outOfStock ? (
               <button
                 type="button"
