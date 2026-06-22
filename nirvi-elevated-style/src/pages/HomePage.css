@@ -1,0 +1,491 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   HomePage.css — Premium Luxury Fashion Home Page Styles
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Reset for full-bleed sections ─────────────────────────────────── */
+.hp-root {
+  overflow-x: hidden;
+  background: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SECTION 2 — Hero Carousel
+   ═══════════════════════════════════════════════════════════════════════ */
+.hp-hero {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  background: #000;
+}
+
+.hp-hero__slide {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+}
+
+.hp-hero__slide--active {
+  opacity: 1;
+  z-index: 2;
+}
+
+.hp-hero__img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Indicators */
+.hp-hero__indicators {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.hp-hero__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.hp-hero__dot--active {
+  background: #fff;
+  border-color: #fff;
+  transform: scale(1.2);
+}
+
+.hp-hero__dot:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SECTIONS 3, 4, 5, 8, 10 — Full-Bleed Promo Images
+   ═══════════════════════════════════════════════════════════════════════ */
+.hp-fullbleed {
+  width: 100%;
+  display: block;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.hp-fullbleed__img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOBILE LAYOUT (≤ 768px)
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Hero: auto height ── */
+  .hp-hero {
+    height: auto;
+  }
+
+  .hp-hero__indicators {
+    bottom: 16px;
+    gap: 8px;
+  }
+
+  .hp-hero__dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* ── Full-bleed images: controlled heights per section ── */
+  .hp-fullbleed__img.hp-mob-h-60,
+  .hp-fullbleed__img.hp-mob-h-50,
+  .hp-fullbleed__img.hp-mob-h-70 {
+    height: auto;
+  }
+
+  /* ── Promo cards: 2x2 square grid ── */
+  .hp-promo-cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 4px;
+    padding: 0;
+  }
+
+  .hp-promo-card__img {
+    aspect-ratio: 1 / 1;
+  }
+
+  .hp-promo-card__title {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  .hp-promo-card__overlay {
+    padding: 12px 8px;
+  }
+
+  /* ── Instagram: hide desktop grid, show mobile scroll ── */
+  .hp-insta {
+    padding: 48px 4%;
+  }
+
+  .hp-insta__heading {
+    font-size: 1.4rem;
+  }
+
+  .hp-insta__subheading {
+    margin-bottom: 24px;
+  }
+
+  .hp-insta__grid--desktop {
+    display: none !important;
+  }
+
+  .hp-insta__scroll--mobile {
+    display: flex !important;
+  }
+
+  /* ── Shop the Look: 2 columns ── */
+  .hp-shop {
+    padding: 48px 4%;
+  }
+
+  .hp-shop__heading {
+    font-size: 1.4rem;
+  }
+
+  .hp-shop__subheading {
+    margin-bottom: 24px;
+  }
+
+  .hp-shop__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+    max-width: 100%;
+  }
+
+  .hp-shop__cta-wrap {
+    margin-top: 32px;
+  }
+
+  .hp-shop__cta {
+    padding: 12px 32px;
+    font-size: 0.65rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SECTION 6 — Promotional Cards
+   ═══════════════════════════════════════════════════════════════════════ */
+.hp-promo-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+
+.hp-promo-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  line-height: 0;
+  background: transparent;
+}
+
+.hp-promo-card__img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hp-promo-card:hover .hp-promo-card__img {
+  transform: scale(1.08);
+}
+
+.hp-promo-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0) 50%
+  );
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px 16px;
+  transition: background 0.4s ease;
+}
+
+.hp-promo-card:hover .hp-promo-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.1) 60%
+  );
+}
+
+.hp-promo-card__title {
+  color: #fff;
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 1024px) {
+  .hp-promo-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .hp-promo-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SECTION 7 — Instagram
+   ═══════════════════════════════════════════════════════════════════════ */
+.hp-insta {
+  padding: 80px 5%;
+  background: #0a0a0a;
+  text-align: center;
+}
+
+.hp-insta__heading {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0 0 12px 0;
+}
+
+.hp-insta__subheading {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.08em;
+  margin: 0 0 48px 0;
+}
+
+.hp-insta__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hp-insta__card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  cursor: pointer;
+  aspect-ratio: 9 / 16;
+  background: #111;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hp-insta__card:hover {
+  transform: scale(1.04);
+}
+
+.hp-insta__poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hp-insta__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.hp-insta__card:hover .hp-insta__play {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.hp-insta__play-icon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 18px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 3px;
+}
+
+/* Mobile horizontal scroll container — hidden by default */
+.hp-insta__scroll {
+  display: none;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hp-insta__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hp-insta__scroll-card {
+  position: relative;
+  flex: 0 0 calc(50% - 6px);
+  min-width: calc(50% - 6px);
+  aspect-ratio: 9 / 16;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .hp-insta__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .hp-insta__heading {
+    font-size: 2rem;
+  }
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SECTION 9 — Shop The Look
+   ═══════════════════════════════════════════════════════════════════════ */
+.hp-shop {
+  padding: 80px 5%;
+  background: #ffffff;
+  text-align: center;
+}
+
+.hp-shop__heading {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0 0 12px 0;
+}
+
+.hp-shop__subheading {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.875rem;
+  color: #888;
+  letter-spacing: 0.08em;
+  margin: 0 0 48px 0;
+}
+
+.hp-shop__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hp-shop__cta-wrap {
+  margin-top: 56px;
+}
+
+.hp-shop__cta {
+  display: inline-block;
+  padding: 16px 48px;
+  border: 2px solid #111;
+  color: #111;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hp-shop__cta:hover {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 1024px) {
+  .hp-shop__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hp-shop__heading {
+    font-size: 2rem;
+  }
+}
+
+
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Scroll Reveal Animation
+   ═══════════════════════════════════════════════════════════════════════ */
+.hp-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hp-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}

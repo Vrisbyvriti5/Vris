@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Store</title> <!-- TODO: Update with your brand name -->
+    <meta name="description" content="TODO: Update with your store description" />
+    <meta name="keywords" content="TODO: Update with your keywords" />
+    <meta name="author" content="TODO: Update with your brand name" />
+
+    <!-- TODO: Update Open Graph meta tags with your brand details -->
+    <!--
+    <meta property="og:title" content="Your Brand Name" />
+    <meta property="og:description" content="Your store description" />
+    <meta property="og:image" content="https://your-domain.com/your-og-image.jpg" />
+    <meta property="og:url" content="https://www.yourdomain.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Your Brand Name" />
+    <meta property="og:image:alt" content="Your brand image description" />
+    -->
+
+    <!-- TODO: Update Twitter card meta tags with your brand details -->
+    <!--
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Your Brand Name" />
+    <meta name="twitter:description" content="Your store description" />
+    <meta name="twitter:image" content="https://your-domain.com/your-twitter-image.jpg" />
+    <meta name="twitter:site" content="@yourbrand" />
+    -->
+
+    <!-- TODO: Update favicon paths -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+
+    <!-- TODO: Update structured data with your brand details -->
+    <!--
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Your Brand Name",
+      "url": "https://www.yourdomain.com/"
+    }
+    </script>
+    -->
+  </head>
+
+  <body>
+    <div id="root">
+      <!-- Initial loader — visible instantly, removed by React mount -->
+      <div id="nirvi-initial-loader" style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#ffffff;">
+        <span style="
+          font-family:'Playfair Display','Georgia','Times New Roman',serif;
+          font-size:42px;font-weight:600;letter-spacing:0.04em;
+          color:#f7b6c8;line-height:1;user-select:none;
+          background:linear-gradient(165deg,#f7b6c8 0%,#fcd5e0 38%,#f7b6c8 52%,#eea3b8 100%);
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+          animation:nirvi-init-spin 1.2s cubic-bezier(0.45,0.05,0.55,0.95) infinite,
+                   nirvi-init-glow 2.4s ease-in-out infinite;
+          filter:drop-shadow(0 1px 3px rgba(247,182,200,0.20));
+          will-change:transform,opacity;
+        ">N</span>
+      </div>
+      <style>
+        @keyframes nirvi-init-spin{0%{transform:perspective(600px) rotateY(0deg)}100%{transform:perspective(600px) rotateY(360deg)}}
+        @keyframes nirvi-init-glow{0%,100%{text-shadow:0 0 8px rgba(247,182,200,0.45),0 0 20px rgba(247,182,200,0.25);opacity:1}50%{text-shadow:0 0 14px rgba(247,182,200,0.65),0 0 32px rgba(247,182,200,0.40);opacity:0.92}}
+      </style>
+    </div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
