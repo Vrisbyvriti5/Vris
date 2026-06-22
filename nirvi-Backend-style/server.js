@@ -34,24 +34,12 @@ const requestBodyLimit = process.env.REQUEST_BODY_LIMIT || '20mb';
 
 // ── Global Middleware ────────────────────────────────────────────────────────
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (Postman, curl, mobile apps)
-    if (!origin) return callback(null, true);
-    const allowedOrigins = [
-      process.env.CLIENT_URL || 'http://localhost:8080',
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:3000',
-      'http://localhost:8080',
-    ];
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(null, true); // Allow all in dev; tighten in production
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: [
+    "http://localhost:5173",
+    "https://vrisbyvriti.com",
+    "https://www.vrisbyvriti.com"
+  ],
+  credentials: true
 }));
 app.use(express.json({ limit: requestBodyLimit }));
 app.use(express.urlencoded({ extended: true, limit: requestBodyLimit }));
