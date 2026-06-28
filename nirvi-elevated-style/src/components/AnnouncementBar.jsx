@@ -31,7 +31,7 @@ const AnnouncementBar = () => {
           animate={{ height: 40, opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="bg-black text-white w-full overflow-hidden border-b border-white/10 flex items-center shrink-0 origin-top"
+          className="bg-[#F0D0B0] text-[#1A1A1A] w-full overflow-hidden border-b border-black/5 flex items-center shrink-0 origin-top"
         >
           <div className="flex w-full h-full items-center overflow-hidden">
             <div className="flex min-w-full shrink-0 items-center justify-around gap-24 pr-24 animate-marquee">

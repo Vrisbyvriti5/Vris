@@ -180,9 +180,9 @@ const Shop = () => {
       <Navbar />
 
       <div className="pt-[144px] md:pt-[104px] pb-20 w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-[1920px] mx-auto">
-        <Link to="/custom-product-request" className="mb-8 block w-[calc(100%+40px)] -ml-5 sm:w-full sm:ml-0 overflow-hidden shadow-sm">
+        {/* <Link to="/custom-product-request" className="mb-8 block w-[calc(100%+40px)] -ml-5 sm:w-full sm:ml-0 overflow-hidden shadow-sm">
           <img src="https://nirvi-images-2026.s3.ap-south-1.amazonaws.com/products/custom1.png" alt="Your Vision, Our Craft" className="w-full h-auto object-cover" />
-        </Link>
+        </Link> */}
 
         {/* ── Horizontal Filter Bar ── */}
         <HorizontalFilterBar

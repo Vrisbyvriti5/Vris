@@ -38,10 +38,10 @@ const storeEdits = [
 ];
 
 const links = [
-  { to: '/custom-product-request', label: 'Create' },
+  // { to: '/custom-product-request', label: 'Create' },
   { to: '/shop', label: 'Shop' },
-  { to: '/shop?sort=bestseller', label: 'Trending' },
-  { to: '/vris-plus', label: 'PLUS', badge: 'NEW' },
+  // { to: '/shop?sort=bestseller', label: 'Trending' },
+  // { to: '/vris-plus', label: 'PLUS', badge: 'NEW' },
   { to: '/contact', label: 'Contact Us' },
 ];
 
@@ -57,6 +57,7 @@ const Navbar = () => {
   const isCheckoutPage = location.pathname === '/checkout';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopSearchValue, setDesktopSearchValue] = useState(currentQuery);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileSearchValue, setMobileSearchValue] = useState(currentQuery);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuCloseTimeoutRef = useRef(null);
@@ -64,9 +65,9 @@ const Navbar = () => {
   const mobileSearchInputRef = useRef(null);
   const debouncedSearchValue = useDebouncedValue(desktopSearchValue, 250);
   const desktopNavLinkBase = 'text-sm font-medium tracking-wide transition-colors uppercase';
-  const desktopNavLinkActive = 'text-white';
-  const desktopNavLinkIdle = 'text-gray-400 hover:text-white';
-  const authButtonBase = 'inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors';
+  const desktopNavLinkActive = 'text-black';
+  const desktopNavLinkIdle = 'text-gray-500 hover:text-black';
+  const authButtonBase = 'inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors text-black border-black/20 hover:bg-black/5';
   const profileDropdownItemClass = 'block w-full cursor-pointer rounded-lg px-4 py-2 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900';
   const searchInputBaseClass = 'h-9 w-full rounded-full bg-white/10 border border-white/20 pl-9 text-sm text-white placeholder:text-gray-400 outline-none transition focus:bg-white/20 focus:border-white/30 focus:ring-4 focus:ring-white/10';
   const searchInputClass = `${searchInputBaseClass} pr-11`;
@@ -185,79 +186,54 @@ const Navbar = () => {
   ].join(' ');
 
   const getMobileLinkClass = () => {
-    return 'text-sm font-medium tracking-wide uppercase transition-colors text-gray-400 hover:text-white';
+    return 'text-sm font-medium tracking-wide uppercase transition-colors text-gray-500 hover:text-black';
   };
 
   const getDesktopLinkClass = () => {
-    return `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors text-gray-400 hover:text-white`;
+    return `group flex h-full items-center text-sm font-medium tracking-wide uppercase transition-colors text-gray-500 hover:text-black`;
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex flex-col bg-black">
+    <header className="fixed top-0 left-0 right-0 z-50 flex flex-col bg-white border-b border-black/5">
       <AnnouncementBar />
       <nav className="w-full relative">
         <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex items-center justify-between gap-4 h-14 md:h-16">
-        {/* Left: hamburger + logo */}
-        <div className="flex min-w-0 items-center gap-3 md:gap-4">
+        {/* Left: hamburger, search, shop, contact */}
+        <div className="flex flex-1 items-center gap-4 md:gap-6">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden shrink-0 text-white p-1"
+            className="lg:hidden shrink-0 text-black p-1"
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <Link to="/" className="inline-flex items-center" aria-label="Go to homepage">
-            <img
-              src="/Navbar_logo.png"
-              alt="VRIS"
-              className="h-14 w-auto object-contain md:h-16"
-              loading="eager"
-              decoding="async"
-            />
-          </Link>
-        </div>
+          
+          {/* SEARCH TOGGLE */}
+          <div className="hidden md:flex items-center">
+            {isSearchOpen ? (
+              <div className="relative animate-fade-in w-64">
+                <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+                <input ref={desktopSearchInputRef} type="text" value={desktopSearchValue} onChange={(e) => setDesktopSearchValue(e.target.value)} placeholder="Search..." className={searchInputClass.replace('bg-black/5', 'bg-white').replace('border-black/10', 'border-gray-200').replace('text-white', 'text-black').replace('focus:ring-white/10', 'focus:ring-black/5')} autoFocus onBlur={(e) => { if(!e.target.value) setIsSearchOpen(false) }} />
+                <button type="button" onClick={() => { setDesktopSearchValue(''); setIsSearchOpen(false); }} className={searchClearClass.replace('text-white/60', 'text-gray-500')}><X size={14}/></button>
+              </div>
+            ) : (
+              <button onClick={() => setIsSearchOpen(true)} className="text-black hover:text-gray-600 p-1 transition-colors" aria-label="Open Search">
+                <Search size={18} />
+              </button>
+            )}
+          </div>
 
-        {/* Center: nav links */}
-        <div className="hidden lg:flex items-center gap-8 h-full">
-          {/* Create */}
-          <Link
-            to="/custom-product-request"
-            className={getDesktopLinkClass('/custom-product-request')}
-          >
-            <span className="relative">
-              Create
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
-            </span>
-          </Link>
-
-          {/* Shop */}
-          <Link
-            to="/shop"
-            className={getDesktopLinkClass('/shop')}
-          >
-            <span className="relative">
-              Shop
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
-            </span>
-          </Link>
-
-
-
-
-
-          {/* Trending (with Mega Menu) */}
+          <div className="hidden lg:flex items-center gap-6 h-full">
+            {/* Shop (with Mega Menu) */}
           <div className="group/mega h-full flex items-center static">
             <Link
-              to="/shop?sort=bestseller"
-              className={getDesktopLinkClass('/shop?sort=bestseller')}
+              to="/shop"
+              className={getDesktopLinkClass('/shop')}
             >
               <span className="relative">
-                Trending
-                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#ef4444] tracking-normal">
-                  HOT
-                </span>
-                <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
+                Shop
+                <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-black transition-all duration-300 group-hover:w-full"></span>
               </span>
             </Link>
             {!isCheckoutPage && (
@@ -315,73 +291,45 @@ const Navbar = () => {
           </div>
 
 
-          {/* VRIS Plus */}
-          <Link
-            to="/vris-plus"
-            className={getDesktopLinkClass('/vris-plus')}
-          >
-            <span className="relative">
-              PLUS
-              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#e0b090] tracking-normal">
-                NEW
-              </span>
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
-            </span>
-          </Link>
+          
 
-          {/* Contact Us */}
+          
+            {/* Contact Us */}
           <Link
             to="/contact"
             className={getDesktopLinkClass('/contact')}
           >
             <span className="relative">
               Contact Us
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-black transition-all duration-300 group-hover:w-full"></span>
             </span>
           </Link>
-        </div>
-
-        <div className="hidden md:block min-w-0 flex-1 max-w-sm lg:max-w-md xl:max-w-xl ml-4 lg:ml-8">
-          <div className="relative">
-            <Search
-              size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              aria-hidden="true"
-            />
-            <input
-              ref={desktopSearchInputRef}
-              type="text"
-              value={desktopSearchValue}
-              onChange={(e) => setDesktopSearchValue(e.target.value)}
-              placeholder="Search for products, brands and more"
-              className={searchInputClass}
-            />
-            {desktopSearchValue ? (
-              <button
-                type="button"
-                onClick={handleClearDesktopSearch}
-                className={searchClearClass}
-              >
-                Clear
-              </button>
-            ) : null}
           </div>
         </div>
 
-        {/* Right: quick actions */}
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3 md:gap-4">
+        {/* CENTER LOGO */}
+        <div className="flex-1 flex justify-center">
+          <Link to="/" className="inline-flex items-center" aria-label="Go to homepage">
+            <img src="/Navbar_logo.png" alt="VRIS" className="h-14 w-auto object-contain md:h-16" loading="eager" decoding="async" />
+          </Link>
+        </div>
+
+        {/* Empty spacer for the right side so justify-between works */}
+        <div className="flex flex-1 justify-end items-center gap-2 sm:gap-3 md:gap-4">
+{/* Right: quick actions */}
+        
           {isUserAdmin && (
             <>
               <Link
                 to="/admin"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-white/10 max-sm:hidden"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-black transition-colors hover:bg-white/10 max-sm:hidden"
               >
                 <LayoutDashboard size={14} />
                 Admin Panel
               </Link>
               <Link
                 to="/admin"
-                className="text-white hover:text-gray-300 transition-colors p-1 sm:hidden"
+                className="text-black hover:text-gray-600 transition-colors p-1 sm:hidden"
                 aria-label="Open admin panel"
               >
                 <LayoutDashboard size={18} />
@@ -392,13 +340,13 @@ const Navbar = () => {
             to="/wishlist"
             className={[
               'transition-colors p-1',
-              location.pathname === '/wishlist' ? 'text-white' : 'text-white hover:text-gray-300',
+              location.pathname === '/wishlist' ? 'text-black font-bold' : 'text-black hover:text-gray-600',
             ].join(' ')}
             aria-label="Open wishlist"
           >
             <Heart size={18} />
           </Link>
-            <Link to="/cart" className="relative text-white hover:text-gray-300 transition-colors p-1 mr-1 sm:mr-2" aria-label="Open cart">
+            <Link to="/cart" className="relative text-black hover:text-gray-600 transition-colors p-1 mr-1 sm:mr-2" aria-label="Open cart">
             <ShoppingBag size={18} />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-1 bg-foreground text-background text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -420,7 +368,7 @@ const Navbar = () => {
             >
                 <Link
                   to="/profile"
-                  className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/20 text-white transition-colors hover:bg-white/10"
+                  className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/20 text-black transition-colors hover:bg-white/10"
                   aria-haspopup="menu"
                   aria-expanded={isProfileMenuOpen}
                   aria-label="Open profile menu"
@@ -467,23 +415,7 @@ const Navbar = () => {
                     </div>
 
                     <div className="border-t border-gray-100 px-3 py-2">
-                      <Link
-                        to="/vris-plus"
-                        className="flex cursor-pointer items-center justify-between rounded-lg px-2 py-2 transition-colors hover:bg-gray-100"
-                        role="menuitem"
-                      >
-                        <span className="flex items-center gap-1.5">
-                          <img
-                            src="/Navbar_logo.png"
-                            alt="VRIS Logo"
-                            className="h-[24px] w-auto object-contain"
-                          />
-                          <span className="font-bold text-sm tracking-wide text-gray-800">VRIS</span>
-                        </span>
-                        <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
-                          Plus
-                        </span>
-                      </Link>
+                      {/* <Link                        to="/vris-plus"                        className="flex cursor-pointer items-center justify-between rounded-lg px-2 py-2 transition-colors hover:bg-gray-100"                        role="menuitem"                      >                        <span className="flex items-center gap-1.5">                          <img                            src="/Navbar_logo.png"                            alt="VRIS Logo"                            className="h-[24px] w-auto object-contain"                          />                          <span className="font-bold text-sm tracking-wide text-gray-800">VRIS</span>                        </span>                        <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">                          Plus                        </span>                      </Link> */}
                     </div>
 
                     <div className="border-t border-gray-100 px-2 py-2">
@@ -515,7 +447,7 @@ const Navbar = () => {
                 to="/login"
                 className={({ isActive }) => [
                   authButtonBase,
-                  isActive ? 'border-white bg-white text-black' : 'border-white/20 text-white hover:bg-white/10',
+                  isActive ? 'border-white bg-black text-white' : 'border-black/20 text-black hover:bg-black/5',
                 ].join(' ')}
               >
                 Login
@@ -524,7 +456,7 @@ const Navbar = () => {
                 to="/login?mode=signup"
                 className={({ isActive }) => [
                   authButtonBase,
-                  isActive ? 'border-white bg-white text-black' : 'border-white/20 text-white hover:bg-white/10',
+                  isActive ? 'border-white bg-black text-white' : 'border-black/20 text-black hover:bg-black/5',
                 ].join(' ')}
               >
                 Signup
@@ -536,7 +468,7 @@ const Navbar = () => {
 
       {/* Mobile Search Bar (Outside) - Visible on Home and Shop Pages */}
       {(location.pathname === '/' || location.pathname === '/shop') && (
-        <div className="md:hidden border-t border-white/10 bg-black px-4 py-1.5">
+        <div className="md:hidden border-t border-black/10 bg-white px-4 py-1.5">
         <form className="relative" onSubmit={handleMobileSearchSubmit}>
           <Search
             size={16}
@@ -563,7 +495,7 @@ const Navbar = () => {
           ) : null}
           <button
             type="submit"
-            className="absolute right-1 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white text-black transition-colors hover:bg-white/90"
+            className="absolute right-1 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black text-black transition-colors hover:bg-white/90"
             aria-label="Search products"
           >
             <Search size={15} />
@@ -579,7 +511,7 @@ const Navbar = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="lg:hidden border-t border-white/10 bg-black overflow-hidden"
+            className="lg:hidden border-t border-black/10 bg-white overflow-hidden"
           >
             <div className="px-5 sm:px-8 py-5 flex flex-col gap-5">
 
@@ -588,7 +520,7 @@ const Navbar = () => {
                   to="/admin"
                   className={({ isActive }) => [
                     'text-sm font-medium tracking-wide uppercase transition-colors',
-                    isActive ? 'text-white' : 'text-gray-400 hover:text-white',
+                    isActive ? 'text-white' : 'text-gray-500 hover:text-black',
                   ].join(' ')}
                 >
                   Admin Panel
@@ -605,23 +537,7 @@ const Navbar = () => {
                 </Link>
               ))}
 
-              <Link
-                to="/vris-plus"
-                onClick={() => setMobileOpen(false)}
-                className="flex cursor-pointer items-center justify-between transition-colors group"
-              >
-                <span className="flex items-center gap-1.5">
-                  <img
-                    src="/Navbar_logo.png"
-                    alt="VRIS Logo"
-                    className="h-[36px] w-auto object-contain"
-                  />
-                  <span className="font-bold text-sm tracking-wide text-gray-400 group-hover:text-white transition-colors">VRIS</span>
-                </span>
-                <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
-                  Plus
-                </span>
-              </Link>
+              {/* <Link                to="/vris-plus"                onClick={() => setMobileOpen(false)}                className="flex cursor-pointer items-center justify-between transition-colors group"              >                <span className="flex items-center gap-1.5">                  <img                    src="/Navbar_logo.png"                    alt="VRIS Logo"                    className="h-[36px] w-auto object-contain"                  />                  <span className="font-bold text-sm tracking-wide text-gray-400 group-hover:text-black transition-colors">VRIS</span>                </span>                <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">                  Plus                </span>              </Link> */}
 
               <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
                 {isAuthenticated ? (
@@ -630,7 +546,7 @@ const Navbar = () => {
                       to="/profile"
                       className={({ isActive }) => [
                         'text-sm font-medium tracking-wide uppercase transition-colors',
-                        isActive ? 'text-white' : 'text-gray-400 hover:text-white',
+                        isActive ? 'text-white' : 'text-gray-500 hover:text-black',
                       ].join(' ')}
                     >
                       Profile
@@ -639,7 +555,7 @@ const Navbar = () => {
                       to="/orders"
                       className={({ isActive }) => [
                         'text-sm font-medium tracking-wide uppercase transition-colors',
-                        isActive ? 'text-white' : 'text-gray-400 hover:text-white',
+                        isActive ? 'text-white' : 'text-gray-500 hover:text-black',
                       ].join(' ')}
                     >
                       Orders
@@ -650,7 +566,7 @@ const Navbar = () => {
                         logout();
                         setMobileOpen(false);
                       }}
-                      className="w-full rounded-full border border-white/20 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-white/10"
+                      className="w-full rounded-full border border-white/20 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-black transition-colors hover:bg-white/10"
                     >
                       Logout
                     </button>
@@ -662,7 +578,7 @@ const Navbar = () => {
                       className={({ isActive }) => [
                         authButtonBase,
                         'w-full',
-                        isActive ? 'border-white bg-white text-black' : 'border-white/20 text-white hover:bg-white/10',
+                        isActive ? 'border-white bg-black text-white' : 'border-black/20 text-black hover:bg-black/5',
                       ].join(' ')}
                     >
                       Login
@@ -672,7 +588,7 @@ const Navbar = () => {
                       className={({ isActive }) => [
                         authButtonBase,
                         'w-full',
-                        isActive ? 'border-white bg-white text-black' : 'border-white/20 text-white hover:bg-white/10',
+                        isActive ? 'border-white bg-black text-white' : 'border-black/20 text-black hover:bg-black/5',
                       ].join(' ')}
                     >
                       Signup

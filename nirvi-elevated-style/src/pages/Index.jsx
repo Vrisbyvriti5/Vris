@@ -18,16 +18,6 @@ const HERO_SLIDES = [
     src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038691292-49467ab07788-First.webp',
     alt: 'Luxury fashion editorial — model in designer outfit',
   },
-  {
-    id: 2,
-    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038691204-60363ba52cb1-Second.webp',
-    alt: 'High fashion editorial — runway look',
-  },
-  {
-    id: 3,
-    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038691125-2a41b4555745-third2.webp',
-    alt: 'Premium women fashion — elegant pose',
-  },
 ];
 
 const PROMO_FULL_1 = 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038690810-4e556c0cc880-fourth2.webp';
@@ -85,51 +75,16 @@ const useReveal = () => {
 // SECTION 2 — Hero Carousel
 // ═══════════════════════════════════════════════════════════════════════
 const HeroCarousel = () => {
-  const [current, setCurrent] = useState(0);
-  const timerRef = useRef(null);
-
-  const startTimer = useCallback(() => {
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 4000);
-  }, []);
-
-  useEffect(() => {
-    startTimer();
-    return () => clearInterval(timerRef.current);
-  }, [startTimer]);
-
-  const goTo = (index) => {
-    setCurrent(index);
-    startTimer();
-  };
-
   return (
     <section className="hp-hero" id="hp-hero">
-      {HERO_SLIDES.map((slide, i) => (
-        <div
-          key={slide.id}
-          className={`hp-hero__slide ${i === current ? 'hp-hero__slide--active' : ''}`}
-        >
-          <img
-            src={slide.src}
-            alt={slide.alt}
-            className="hp-hero__img"
-            loading={i === 0 ? 'eager' : 'lazy'}
-            decoding={i === 0 ? 'sync' : 'async'}
-          />
-        </div>
-      ))}
-      <div className="hp-hero__indicators">
-        {HERO_SLIDES.map((_, i) => (
-          <button
-            key={i}
-            className={`hp-hero__dot ${i === current ? 'hp-hero__dot--active' : ''}`}
-            onClick={() => goTo(i)}
-            aria-label={`Go to slide ${i + 1}`}
-          />
-        ))}
+      <div className="hp-hero__slide hp-hero__slide--active">
+        <img
+          src={HERO_SLIDES[0].src}
+          alt={HERO_SLIDES[0].alt}
+          className="hp-hero__img"
+          loading="eager"
+          decoding="sync"
+        />
       </div>
     </section>
   );
@@ -301,22 +256,6 @@ const Index = () => {
 
       {/* SECTION 2 — Hero Carousel */}
       <HeroCarousel />
-
-      {/* SECTION 3 — Full-width promo image (mobile: 40vh) */}
-      <FullBleedImage
-        src={PROMO_FULL_1}
-        alt="Luxury fashion campaign — editorial collection"
-        id="hp-promo-1"
-        mobileHeight="60"
-      />
-
-      {/* SECTION 4 — Full-width promo image (mobile: 40vh) */}
-      <FullBleedImage
-        src={PROMO_FULL_2}
-        alt="Premium fashion — shopping editorial"
-        id="hp-promo-2"
-        mobileHeight="60"
-      />
 
       {/* SECTION 5 — Full-width promo image (mobile: 40vh) */}
       <FullBleedImage

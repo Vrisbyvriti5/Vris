@@ -1131,9 +1131,9 @@ const ProductDetail = () => {
           </motion.div>
         </div>
 
-        <Link to="/custom-product-request" className="mt-6 block w-[calc(100%+48px)] -ml-6 sm:w-full sm:ml-0 overflow-hidden shadow-sm">
+        {/* <Link to="/custom-product-request" className="mt-6 block w-[calc(100%+48px)] -ml-6 sm:w-full sm:ml-0 overflow-hidden shadow-sm">
           <img src="https://nirvi-images-2026.s3.ap-south-1.amazonaws.com/products/custom1.png" alt="Custom Creations, Just for You" className="w-full h-auto object-cover" />
-        </Link>
+        </Link> */}
 
         <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
