@@ -84,7 +84,7 @@ const Careers = () => {
                 For collaboration proposals, please include a clear purpose, the expected format of the project, a general timeline, and what you believe the mutual benefit will be. We review every application and will reach out if we see a potential fit for current or future projects.
               </p>
               <p className="mt-6 font-bold text-black uppercase tracking-wider">
-                Direct all inquiries to: <a href="mailto:project.vris@gmail.com" className="underline hover:text-[#e0b090] transition-colors">project.vris@gmail.com</a>
+                Direct all inquiries to: <a href="mailto:Vrisbyvriti5@gmail.com" className="underline hover:text-[#e0b090] transition-colors">Vrisbyvriti5@gmail.com</a>
               </p>
             </div>
 

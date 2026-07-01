@@ -74,7 +74,7 @@ const Sustainability = () => {
                 Our customers are an essential part of this practice. By choosing handcrafted over mass-produced, and by caring for your pieces with intention, you are helping to build a more sustainable fashion ecosystem. We invite you to join us in this journey—to ask questions, to share feedback, and to celebrate a brand that values every reborn thread.
               </p>
               <p className="mt-6 font-bold text-black uppercase tracking-wider">
-                For care advice or material questions: <a href="mailto:project.vris@gmail.com" className="underline hover:text-[#e0b090] transition-colors">project.vris@gmail.com</a>
+                For care advice or material questions: <a href="mailto:Vrisbyvriti5@gmail.com" className="underline hover:text-[#e0b090] transition-colors">Vrisbyvriti5@gmail.com</a>
               </p>
             </div>
 

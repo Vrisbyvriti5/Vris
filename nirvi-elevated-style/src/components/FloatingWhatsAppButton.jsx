@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const sanitizePhone = (value) => String(value || '').replace(/\D/g, '');
 
 const configuredPhone = sanitizePhone(import.meta.env.VITE_WHATSAPP_NUMBER);
-const fallbackPhone = '919671300024';
+const fallbackPhone = '918607187086';
 const whatsappPhone = configuredPhone || fallbackPhone;
 
 const BASE_BOTTOM = 20; // px — matches the original bottom-5

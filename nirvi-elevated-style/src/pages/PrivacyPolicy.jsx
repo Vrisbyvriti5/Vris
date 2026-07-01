@@ -113,15 +113,14 @@ const PrivacyPolicy = () => {
             <div>
               <h2 className="text-[15px] font-bold text-black mb-5 uppercase tracking-widest">7. Contact and Support</h2>
               <p>
-                7.1. If you have questions or comments about this policy, you may contact our Grievance Officer at project.vris@gmail.com or by post to:
+                7.1. If you have questions or comments about this policy, you may contact our Grievance Officer at Vrisbyvriti5@gmail.com or by post to:
               </p>
               <p className="mt-4 font-bold text-black">
                 VRISBYVRITI
               </p>
               <p className="text-gray-600">
-                Bennett University, Plot Nos 8-11, TechZone II,<br />
-                Greater Noida, Uttar Pradesh 201310<br />
-                Phone: +91 96713 00024
+                Panipat, Haryana<br />
+                Phone: +91 86071 87086
               </p>
             </div>
 

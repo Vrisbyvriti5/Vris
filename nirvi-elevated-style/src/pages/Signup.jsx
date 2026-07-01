@@ -161,7 +161,7 @@ const Signup = () => {
                 <input
                   id="signup-phone"
                   type="tel"
-                  placeholder="e.g. +91 96713 00024"
+                  placeholder="e.g. +91 86071 87086"
                   value={formValues.phone}
                   onChange={updateField('phone')}
                   onBlur={touchField('phone')}

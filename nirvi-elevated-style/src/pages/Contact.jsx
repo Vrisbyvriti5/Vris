@@ -17,17 +17,17 @@ const supportCards = [
   {
     icon: Phone,
     title: 'Call Support',
-    detail: '+91 96713 00024',
+    detail: '+91 86071 87086',
     note: 'Active orders & time-sensitive help.',
-    href: 'tel:+919671300024',
+    href: 'tel:+918607187086',
     color: 'bg-blue-50 text-blue-600',
   },
   {
     icon: Mail,
     title: 'Email VRIS',
-    detail: 'project.vris@gmail.com',
+    detail: 'Vrisbyvriti5@gmail.com',
     note: 'Care questions & custom requests.',
-    href: 'mailto:project.vris@gmail.com',
+    href: 'mailto:Vrisbyvriti5@gmail.com',
     color: 'bg-[#e0b090]/10 text-[#e0b090]',
   },
   {
@@ -35,7 +35,7 @@ const supportCards = [
     title: 'WhatsApp',
     detail: 'Direct Message',
     note: 'Quick chats and style advice.',
-    href: 'https://wa.me/919671300024',
+    href: 'https://wa.me/918607187086',
     color: 'bg-emerald-50 text-emerald-600',
   },
 ];
@@ -170,8 +170,8 @@ const Contact = () => {
                     <MapPin className="text-[#e0b090] shrink-0" size={20} />
                     <div>
                       <p className="text-sm font-bold text-[#111827]">Our Base</p>
-                      <p className="mt-1 text-sm text-[#6b7280]">Bennett University Campus</p>
-                      <p className="text-sm text-[#6b7280]">Greater Noida, UP 201310</p>
+                      <p className="mt-1 text-sm text-[#6b7280]">Panipat</p>
+                      <p className="text-sm text-[#6b7280]">Haryana</p>
                     </div>
                   </div>
                 </div>

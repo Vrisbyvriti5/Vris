@@ -4,23 +4,18 @@ import { Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 
 const customerLinks = [
   { to: '/contact', label: 'Contact and Support' },
-  { to: '/faq', label: 'Frequently Asked Questions' },
   { to: '/shipping-returns', label: 'Shipping, Returns and Care' },
 ];
 
 const companyLinks = [
   { to: '/about', label: 'Our Story' },
-  { to: '/sustainability', label: 'Sustainability Practice' },
-  { to: '/careers', label: 'Careers and Collaborations' },
   { to: '/privacy-policy', label: 'Privacy and Data Policy' },
 ];
 
 const categoryLinks = [
-  { to: '/shop?collection=Denim', label: 'Denim Collection' },
-  { to: '/shop?collection=Wool', label: 'Wool Accessories' },
-  { to: '/shop?collection=Flex', label: 'Flex Essentials' },
-  { to: '/shop?cat=totebags', label: 'Totebags' },
-  { to: '/shop?cat=laptop%20sleeves', label: 'Laptop Sleeves' },
+  { to: '/shop?cat=dresses', label: 'Dresses' },
+  { to: '/shop?cat=tops', label: 'Tops' },
+  { to: '/shop?cat=skirts', label: 'Skirts' },
 ];
 
 const Footer = () => {
@@ -31,21 +26,21 @@ const Footer = () => {
           <div className="col-span-2 md:col-span-1">
             <h3 className="font-display text-2xl font-bold text-white mb-4">VRISBYVRITI</h3>
             <p className="text-sm text-[#e5e5e5] leading-relaxed font-body">
-              VRISBYVRITI creates handcrafted fashion essentials from thoughtful material stories: upcycled denim, wool details, and expressive Flex pieces. Every product is designed for everyday use, finished in small batches, and made to carry more character than mass-produced accessories.
+              At VrisbyVriti we create timeless statement pieces designed to make you feel confident, effortless, and uniquely you. With a focus on quality, versatility, and thoughtful craftsmanship, many of our designs can be customized to suit your personal style.
             </p>
 
             <div className="mt-5 space-y-2 text-sm text-[#e5e5e5] font-body">
               <p className="inline-flex items-center gap-2">
                 <Phone size={16} />
-                +91 96713 00024
+                +91 86071 87086
               </p>
               <p className="inline-flex items-center gap-2">
                 <Mail size={16} />
-                project.vris@gmail.com
+                Vrisbyvriti5@gmail.com
               </p>
               <p className="inline-flex items-center gap-2">
                 <MapPin size={16} />
-                Bennett University, Greater Noida
+                Panipat, Haryana
               </p>
             </div>
           </div>

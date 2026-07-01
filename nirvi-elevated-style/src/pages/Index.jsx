@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Instagram } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ProductSkeleton from '@/components/ProductSkeleton';
 import Navbar from '@/components/Navbar';
@@ -33,12 +33,50 @@ const PROMO_CARDS = [
   { title: 'Limited Edition', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038642362-d7db064fef02-Pthird.webp' },
 ];
 
-const INSTA_POSTERS = [
-  'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=700&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=700&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=700&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&h=700&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=700&q=80&auto=format&fit=crop',
+const INSTAGRAM_REELS = [
+  {
+    id: 1,
+    // Note: You need to provide a direct .mp4 file link for the video to play here.
+    videoUrl: 'https://cdn.pixabay.com/video/2019/11/04/28731-371239868_large.mp4', 
+    instagramUrl: 'https://www.instagram.com/reel/DZcgnEXhMDS/?igsh=bGNmOHYyaTRhNGM5',
+    poster: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=700&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 2,
+    videoUrl: 'https://cdn.pixabay.com/video/2020/05/25/40141-424855497_large.mp4',
+    instagramUrl: 'https://www.instagram.com/reel/DZpAn5zBphN/?igsh=MXF3ZnlnZmY4b2x5Mg==',
+    poster: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=700&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 3,
+    videoUrl: 'https://cdn.pixabay.com/video/2020/03/17/33827-398717878_large.mp4',
+    instagramUrl: 'https://www.instagram.com/reel/DZsFnoThqPA/?igsh=MWl0eGszaHhzbmV1cA==',
+    poster: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=700&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 4,
+    videoUrl: 'https://cdn.pixabay.com/video/2021/08/17/85338-589366627_large.mp4',
+    instagramUrl: 'https://www.instagram.com/reel/DZ4sfasha8w/?igsh=eGIwZHMxNzhraGdk',
+    poster: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&h=700&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 5,
+    videoUrl: 'https://cdn.pixabay.com/video/2020/09/27/50800-463870685_large.mp4',
+    instagramUrl: 'https://www.instagram.com/reel/DaAgYrah1LG/?igsh=aGFzeDBxOWtqMzJp',
+    poster: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=700&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 6,
+    videoUrl: 'https://cdn.pixabay.com/video/2019/11/04/28731-371239868_large.mp4',
+    instagramUrl: 'https://www.instagram.com/reel/DaKqFXnh2m2/?igsh=OHNjMWxoYnVpNzRo',
+    poster: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=700&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 7,
+    videoUrl: 'https://cdn.pixabay.com/video/2020/05/25/40141-424855497_large.mp4',
+    instagramUrl: 'https://www.instagram.com/reel/DZe9qMlhaVd/?igsh=NXFvczhraDJ1aWgz',
+    poster: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=700&q=80&auto=format&fit=crop',
+  },
 ];
 
 const SHOP_PRODUCT_COUNT = 8;
@@ -138,49 +176,98 @@ const PromoCards = () => {
 const InstagramSection = () => {
   const [ref, visible] = useReveal();
   const scrollRef = useRef(null);
+  const [activeReel, setActiveReel] = useState(null);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (activeReel) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [activeReel]);
 
   return (
-    <section
-      ref={ref}
-      className={`hp-insta hp-reveal ${visible ? 'hp-reveal--visible' : ''}`}
-      id="hp-instagram"
-    >
-      <h2 className="hp-insta__heading">Our Instagram</h2>
-      <p className="hp-insta__subheading">Follow us for daily inspiration</p>
-      {/* Desktop: grid | Mobile: horizontal scroll */}
-      <div className="hp-insta__grid hp-insta__grid--desktop">
-        {INSTA_POSTERS.map((poster, i) => (
-          <div key={i} className="hp-insta__card">
-            <img
-              src={poster}
-              alt={`Instagram reel ${i + 1}`}
-              className="hp-insta__poster"
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="hp-insta__play">
-              <div className="hp-insta__play-icon" />
-            </div>
+    <>
+      <section
+        ref={ref}
+        className={`hp-insta hp-reveal ${visible ? 'hp-reveal--visible' : ''}`}
+        id="hp-instagram"
+      >
+        <h2 className="hp-insta__heading">Our Instagram</h2>
+        <p className="hp-insta__subheading">Follow us for daily inspiration</p>
+        
+        <div className="relative max-w-[1400px] mx-auto group">
+          <button
+            onClick={() => scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
+            className="absolute left-0 sm:-left-4 top-[40%] sm:top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full text-gray-800 opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          
+          <div className="hp-insta__carousel" ref={scrollRef}>
+            {INSTAGRAM_REELS.map((reel) => (
+              <div key={reel.id} className="hp-insta__card" onClick={() => setActiveReel(reel)}>
+                <video
+                  src={reel.videoUrl}
+                  poster={reel.poster}
+                  className="hp-insta__poster"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+                <div className="hp-insta__play">
+                  <div className="hp-insta__play-icon" />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="hp-insta__scroll hp-insta__scroll--mobile" ref={scrollRef}>
-        {INSTA_POSTERS.map((poster, i) => (
-          <div key={i} className="hp-insta__scroll-card">
-            <img
-              src={poster}
-              alt={`Instagram reel ${i + 1}`}
-              className="hp-insta__poster"
-              loading="lazy"
-              decoding="async"
+
+          <button
+            onClick={() => scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
+            className="absolute right-0 sm:-right-4 top-[40%] sm:top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full text-gray-800 opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+            aria-label="Scroll right"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </section>
+
+      {/* Fullscreen Video Modal */}
+      {activeReel && (
+        <div className="hp-insta__modal" onClick={() => setActiveReel(null)}>
+          <div className="hp-insta__modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="hp-insta__modal-close" onClick={() => setActiveReel(null)}>
+              <X size={28} />
+            </button>
+            
+            <video
+              src={activeReel.videoUrl}
+              className="hp-insta__modal-video"
+              autoPlay
+              loop
+              controls
+              playsInline
             />
-            <div className="hp-insta__play">
-              <div className="hp-insta__play-icon" />
-            </div>
+            
+            <a
+              href={activeReel.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hp-insta__modal-link"
+            >
+              <Instagram size={20} />
+              Open in Instagram
+            </a>
           </div>
-        ))}
-      </div>
-    </section>
+        </div>
+      )}
+    </>
   );
 };
 
