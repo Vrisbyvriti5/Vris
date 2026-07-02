@@ -15,8 +15,18 @@ import './HomePage.css';
 const HERO_SLIDES = [
   {
     id: 1,
-    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038691292-49467ab07788-First.webp',
+    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783033831430-fa48999cd164-thirdd.webp',
     alt: 'Luxury fashion editorial — model in designer outfit',
+  },
+  {
+    id: 2,
+    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783033831977-086ebfc6c2bc-secondd.webp',
+    alt: 'Luxury fashion editorial — elegant look',
+  },
+  {
+    id: 3,
+    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783033832075-7c24c169c607-Firstt.webp',
+    alt: 'Luxury fashion editorial — signature style',
   },
 ];
 
@@ -36,46 +46,33 @@ const PROMO_CARDS = [
 const INSTAGRAM_REELS = [
   {
     id: 1,
-    // Note: You need to provide a direct .mp4 file link for the video to play here.
-    videoUrl: 'https://cdn.pixabay.com/video/2019/11/04/28731-371239868_large.mp4', 
-    instagramUrl: 'https://www.instagram.com/reel/DZcgnEXhMDS/?igsh=bGNmOHYyaTRhNGM5',
-    poster: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=700&q=80&auto=format&fit=crop',
+    videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/vris+reel+3.webm',
+    instagramUrl: 'https://www.instagram.com/reel/DZsFnoThqPA/?igsh=MWl0eGszaHhzbmV1cA==',
   },
   {
     id: 2,
-    videoUrl: 'https://cdn.pixabay.com/video/2020/05/25/40141-424855497_large.mp4',
+    videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/vris.webm',
     instagramUrl: 'https://www.instagram.com/reel/DZpAn5zBphN/?igsh=MXF3ZnlnZmY4b2x5Mg==',
-    poster: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=700&q=80&auto=format&fit=crop',
   },
   {
     id: 3,
-    videoUrl: 'https://cdn.pixabay.com/video/2020/03/17/33827-398717878_large.mp4',
-    instagramUrl: 'https://www.instagram.com/reel/DZsFnoThqPA/?igsh=MWl0eGszaHhzbmV1cA==',
-    poster: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=700&q=80&auto=format&fit=crop',
+    videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_8782.webm',
+    instagramUrl: 'https://www.instagram.com/reel/DZ4sfasha8w/?igsh=eGIwZHMxNzhraGdk',
   },
   {
     id: 4,
-    videoUrl: 'https://cdn.pixabay.com/video/2021/08/17/85338-589366627_large.mp4',
-    instagramUrl: 'https://www.instagram.com/reel/DZ4sfasha8w/?igsh=eGIwZHMxNzhraGdk',
-    poster: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&h=700&q=80&auto=format&fit=crop',
+    videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_8260.webm',
+    instagramUrl: 'https://www.instagram.com/reel/DaAgYrah1LG/?igsh=aGFzeDBxOWtqMzJp',
   },
   {
     id: 5,
-    videoUrl: 'https://cdn.pixabay.com/video/2020/09/27/50800-463870685_large.mp4',
-    instagramUrl: 'https://www.instagram.com/reel/DaAgYrah1LG/?igsh=aGFzeDBxOWtqMzJp',
-    poster: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=700&q=80&auto=format&fit=crop',
+    videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_8284.webm',
+    instagramUrl: 'https://www.instagram.com/reel/DZcgnEXhMDS/?igsh=bGNmOHYyaTRhNGM5',
   },
   {
     id: 6,
-    videoUrl: 'https://cdn.pixabay.com/video/2019/11/04/28731-371239868_large.mp4',
+    videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_4645.webm',
     instagramUrl: 'https://www.instagram.com/reel/DaKqFXnh2m2/?igsh=OHNjMWxoYnVpNzRo',
-    poster: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=700&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 7,
-    videoUrl: 'https://cdn.pixabay.com/video/2020/05/25/40141-424855497_large.mp4',
-    instagramUrl: 'https://www.instagram.com/reel/DZe9qMlhaVd/?igsh=NXFvczhraDJ1aWgz',
-    poster: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=700&q=80&auto=format&fit=crop',
   },
 ];
 
@@ -113,16 +110,41 @@ const useReveal = () => {
 // SECTION 2 — Hero Carousel
 // ═══════════════════════════════════════════════════════════════════════
 const HeroCarousel = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 2000);
+    
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section className="hp-hero" id="hp-hero">
-      <div className="hp-hero__slide hp-hero__slide--active">
-        <img
-          src={HERO_SLIDES[0].src}
-          alt={HERO_SLIDES[0].alt}
-          className="hp-hero__img"
-          loading="eager"
-          decoding="sync"
-        />
+      {HERO_SLIDES.map((slide, idx) => (
+        <div 
+          key={slide.id}
+          className={`hp-hero__slide ${idx === currentSlide ? 'hp-hero__slide--active' : ''}`}
+        >
+          <img
+            src={slide.src}
+            alt={slide.alt}
+            className="hp-hero__img"
+            loading={idx === 0 ? "eager" : "lazy"}
+            decoding={idx === 0 ? "sync" : "async"}
+          />
+        </div>
+      ))}
+      <div className="hp-hero__indicators">
+        {HERO_SLIDES.map((_, idx) => (
+          <button
+            key={idx}
+            className={`hp-hero__dot ${idx === currentSlide ? 'hp-hero__dot--active' : ''}`}
+            onClick={() => setCurrentSlide(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
@@ -146,6 +168,54 @@ const FullBleedImage = ({ src, alt, id, mobileHeight }) => (
 // ═══════════════════════════════════════════════════════════════════════
 // SECTION 6 — Promo Cards
 // ═══════════════════════════════════════════════════════════════════════
+const CATEGORY_CARDS = [
+  { title: 'Dresses', src: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80' },
+  { title: 'Tops', src: 'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=800&q=80' },
+  { title: 'Bottoms', src: 'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?w=800&q=80' },
+  { title: 'Accessories', src: 'https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=800&q=80' },
+];
+
+const ShopByCategories = () => {
+  const [ref, visible] = useReveal();
+
+  return (
+    <section
+      ref={ref}
+      className={`hp-shop hp-reveal ${visible ? 'hp-reveal--visible' : ''}`}
+      id="hp-shop-by-categories"
+    >
+      <h2 className="hp-shop__heading">Shop By Categories</h2>
+      <p className="hp-shop__subheading">Explore our exclusive collections tailored for your lifestyle</p>
+      
+      <div className="hp-promo-cards" style={{ marginTop: '40px' }}>
+        {CATEGORY_CARDS.map((card, idx) => (
+          <div key={idx} className="hp-promo-card" style={{ background: '#f5f5f5', aspectRatio: '9/16' }}>
+            {card.src ? (
+              <img
+                src={card.src}
+                alt={card.title}
+                className="hp-promo-card__img"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#eaeaea' }}>
+                <span style={{ fontFamily: 'var(--font-display, serif)', fontSize: '1rem', letterSpacing: '0.1em', color: '#888', textTransform: 'uppercase' }}>
+                  Image Placeholder
+                </span>
+              </div>
+            )}
+            <div className="hp-promo-card__overlay">
+              <h3 className="hp-promo-card__title">{card.title}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 const PromoCards = () => {
   const [ref, visible] = useReveal();
 
@@ -199,7 +269,7 @@ const InstagramSection = () => {
       >
         <h2 className="hp-insta__heading">Our Instagram</h2>
         <p className="hp-insta__subheading">Follow us for daily inspiration</p>
-        
+
         <div className="relative max-w-[1400px] mx-auto group">
           <button
             onClick={() => scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
@@ -208,13 +278,12 @@ const InstagramSection = () => {
           >
             <ChevronLeft size={20} />
           </button>
-          
+
           <div className="hp-insta__carousel" ref={scrollRef}>
             {INSTAGRAM_REELS.map((reel) => (
               <div key={reel.id} className="hp-insta__card" onClick={() => setActiveReel(reel)}>
                 <video
                   src={reel.videoUrl}
-                  poster={reel.poster}
                   className="hp-insta__poster"
                   autoPlay
                   loop
@@ -245,7 +314,7 @@ const InstagramSection = () => {
             <button className="hp-insta__modal-close" onClick={() => setActiveReel(null)}>
               <X size={28} />
             </button>
-            
+
             <video
               src={activeReel.videoUrl}
               className="hp-insta__modal-video"
@@ -254,7 +323,7 @@ const InstagramSection = () => {
               controls
               playsInline
             />
-            
+
             <a
               href={activeReel.instagramUrl}
               target="_blank"
@@ -294,7 +363,7 @@ const ShopTheLook = () => {
     >
       <h2 className="hp-shop__heading">Shop The Look</h2>
       <p className="hp-shop__subheading">Curated styles for every occasion</p>
-      
+
       <div className="relative max-w-[1400px] mx-auto group">
         <button
           onClick={() => scroll(-400)}
@@ -303,15 +372,15 @@ const ShopTheLook = () => {
         >
           <ChevronLeft size={20} />
         </button>
-        
+
         <div className="hp-shop__grid" ref={scrollRef}>
           {loading
             ? Array.from({ length: SHOP_PRODUCT_COUNT }).map((_, i) => (
-                <ProductSkeleton key={`skeleton-${i}`} index={i} />
-              ))
+              <ProductSkeleton key={`skeleton-${i}`} index={i} />
+            ))
             : shopProducts.map((p, i) => (
-                <ProductCard key={p.id} product={p} index={i} eagerCount={SHOP_PRODUCT_COUNT} />
-              ))}
+              <ProductCard key={p.id} product={p} index={i} eagerCount={SHOP_PRODUCT_COUNT} />
+            ))}
         </div>
 
         <button
@@ -344,13 +413,8 @@ const Index = () => {
       {/* SECTION 2 — Hero Carousel */}
       <HeroCarousel />
 
-      {/* SECTION 5 — Full-width promo image (mobile: 40vh) */}
-      <FullBleedImage
-        src={PROMO_FULL_3}
-        alt="Fashion runway — luxury clothing"
-        id="hp-promo-3"
-        mobileHeight="60"
-      />
+      {/* SECTION 5 — Shop By Categories */}
+      <ShopByCategories />
 
       {/* SECTION 6 — Promotional Cards */}
       <PromoCards />
