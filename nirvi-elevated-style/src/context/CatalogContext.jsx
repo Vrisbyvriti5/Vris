@@ -80,11 +80,12 @@ const buildProductFormData = (input) => {
 
 const buildCategoryOptions = (products) => {
   const available = [...new Set(products.map((product) => product.category?.trim().toLowerCase()).filter(Boolean))];
+  const lowerProductCategories = PRODUCT_CATEGORIES.map(c => c.toLowerCase());
 
   return [
     'All',
     ...PRODUCT_CATEGORIES,
-    ...available.filter((category) => !PRODUCT_CATEGORIES.includes(category)).sort(),
+    ...available.filter((category) => !lowerProductCategories.includes(category)).sort(),
   ];
 };
 
