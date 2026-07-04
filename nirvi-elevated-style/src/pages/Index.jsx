@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, X, Instagram, Play } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ProductSkeleton from '@/components/ProductSkeleton';
@@ -116,7 +116,6 @@ const useReveal = () => {
 // SECTION 2 — Hero Carousel
 // ═══════════════════════════════════════════════════════════════════════
 const HeroCarousel = () => {
-  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
@@ -166,16 +165,16 @@ const HeroCarousel = () => {
         <div 
           key={slide.id}
           className={`hp-hero__slide ${idx === currentSlide ? 'hp-hero__slide--active' : ''}`}
-          onClick={() => navigate('/shop')}
-          style={{ cursor: 'pointer' }}
         >
-          <img
+          <Link to="/shop" className="block w-full h-full">
+            <img
             src={slide.src}
             alt={slide.alt}
             className="hp-hero__img"
             loading={idx === 0 ? "eager" : "lazy"}
             decoding={idx === 0 ? "sync" : "async"}
           />
+          </Link>
         </div>
       ))}
       <div className="hp-hero__indicators">
