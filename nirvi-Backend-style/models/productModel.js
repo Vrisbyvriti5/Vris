@@ -1,7 +1,6 @@
 const { pool } = require('../config/db');
 const {
   PRODUCT_CATEGORIES,
-  resolveCollectionFromCategory,
 } = require('../utils/productTaxonomy');
 
 const clampDiscount = (value) => {
@@ -60,7 +59,33 @@ const normalizeProduct = (product, imageMap = new Map()) => {
     review_count: Number(product.review_count || 0),
     images,
     image: images[0] || null,
+    sizes: product.sizes || [],
   };
+};
+
+const fetchSizesForProducts = async (productIds, connection = pool) => {
+  if (!productIds.length) {
+    return new Map();
+  }
+
+  const [rows] = await connection.query(
+    `SELECT product_id, size
+     FROM vris_product_sizes
+     WHERE product_id IN (?)
+     ORDER BY product_id ASC, id ASC`,
+    [productIds],
+  );
+
+  const map = new Map();
+  rows.forEach((row) => {
+    const key = String(row.product_id);
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key).push(row.size);
+  });
+
+  return map;
 };
 
 const fetchImagesForProducts = async (productIds, connection = pool) => {
@@ -100,6 +125,25 @@ const replaceProductImages = async (connection, productId, images) => {
       `INSERT INTO vris_product_images (product_id, image_path, sort_order)
        VALUES (?, ?, ?)`,
       [productId, images[index], index],
+    );
+  }
+};
+
+const replaceProductSizes = async (connection, productId, sizes) => {
+  await connection.query('DELETE FROM vris_product_sizes WHERE product_id = ?', [productId]);
+
+  if (!sizes || !sizes.length) {
+    return;
+  }
+
+  const validSizes = ['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'];
+  const uniqueSizes = [...new Set(sizes)].filter(size => validSizes.includes(size));
+
+  for (const size of uniqueSizes) {
+    await connection.query(
+      `INSERT INTO vris_product_sizes (product_id, size)
+       VALUES (?, ?)`,
+      [productId, size],
     );
   }
 };
@@ -167,8 +211,7 @@ const interleaveRandomByCategory = (products = []) => {
   return mixed;
 };
 
-// ── Get all products (with optional category/collection/search filters) ─────
-const findAll = async ({ category, collection, search, sort } = {}) => {
+const findAll = async ({ category, search, sort } = {}) => {
   let sql = buildProductQueryBase();
   const params = [];
   const conditions = [];
@@ -178,25 +221,10 @@ const findAll = async ({ category, collection, search, sort } = {}) => {
     params.push(category);
   }
 
-  // When filtering by Women or Men, also include products tagged with Unisex.
-  // Collections are stored as comma-separated values (e.g. "Denim,Unisex").
-  // Use LIKE on a normalized (lowercased, space-stripped) column to be robust
-  // against case and whitespace inconsistencies in stored data.
-  if (collection && collection !== 'All') {
-    const lowerCol = collection.toLowerCase();
-    if (lowerCol === 'women' || lowerCol === 'men') {
-      conditions.push('(LOWER(p.collection) LIKE ? OR LOWER(p.collection) LIKE ?)');
-      params.push(`%${lowerCol}%`, '%unisex%');
-    } else {
-      conditions.push('LOWER(p.collection) LIKE ?');
-      params.push(`%${lowerCol}%`);
-    }
-  }
-
   if (search) {
-    conditions.push('(p.name LIKE ? OR p.description LIKE ? OR p.category LIKE ? OR p.collection LIKE ?)');
+    conditions.push('(p.name LIKE ? OR p.description LIKE ? OR p.category LIKE ?)');
     const wildcard = `%${search}%`;
-    params.push(wildcard, wildcard, wildcard, wildcard);
+    params.push(wildcard, wildcard, wildcard);
   }
 
   if (conditions.length) {
@@ -224,7 +252,12 @@ const findAll = async ({ category, collection, search, sort } = {}) => {
   const [rows] = await pool.query(sql, params);
   const productIds = rows.map((row) => row.id);
   const imageMap = await fetchImagesForProducts(productIds);
-  const normalizedProducts = rows.map((row) => normalizeProduct(row, imageMap));
+  const sizeMap = await fetchSizesForProducts(productIds);
+  
+  const normalizedProducts = rows.map((row) => {
+    const productData = { ...row, sizes: sizeMap.get(String(row.id)) || [] };
+    return normalizeProduct(productData, imageMap);
+  });
 
   if (requestedSort === 'random') {
     return shuffleList(normalizedProducts);
@@ -253,7 +286,10 @@ const findById = async (id) => {
   }
 
   const imageMap = await fetchImagesForProducts([rows[0].id]);
-  return normalizeProduct(rows[0], imageMap);
+  const sizeMap = await fetchSizesForProducts([rows[0].id]);
+  const productData = { ...rows[0], sizes: sizeMap.get(String(rows[0].id)) || [] };
+  
+  return normalizeProduct(productData, imageMap);
 };
 
 const findRawById = async (connection, id) => {
@@ -276,7 +312,6 @@ const create = async (data) => {
     images,
     stock,
     sku,
-    collection,
     featured,
   } = data;
 
@@ -295,8 +330,8 @@ const create = async (data) => {
 
     const [result] = await connection.query(
       `INSERT INTO vris_products
-        (name, description, price, mrp, discount_percent, category, image, stock, sku, collection, featured)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (name, description, price, mrp, discount_percent, category, image, stock, sku, featured)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         name,
         description,
@@ -307,7 +342,6 @@ const create = async (data) => {
         primaryImage,
         stock || 0,
         sku || null,
-        collection || resolveCollectionFromCategory(category) || 'Denim',
         featured || false,
       ],
     );
@@ -317,6 +351,10 @@ const create = async (data) => {
       : (primaryImage ? [primaryImage] : []);
 
     await replaceProductImages(connection, result.insertId, finalGallery);
+    
+    if (data.sizes) {
+      await replaceProductSizes(connection, result.insertId, data.sizes);
+    }
 
     await connection.commit();
     return findById(result.insertId);
@@ -346,7 +384,7 @@ const update = async (id, data) => {
 
   const allowedFields = [
     'name', 'description', 'price', 'category', 'image',
-    'stock', 'sku', 'collection', 'featured', 'mrp', 'discount_percent',
+    'stock', 'sku', 'featured', 'mrp', 'discount_percent',
   ];
 
   for (const field of allowedFields) {
@@ -416,6 +454,10 @@ const update = async (id, data) => {
         : (primaryImage ? [primaryImage] : []);
 
       await replaceProductImages(connection, id, galleryToPersist);
+    }
+    
+    if (data.sizes !== undefined) {
+      await replaceProductSizes(connection, id, data.sizes);
     }
 
     if (fields.length) {

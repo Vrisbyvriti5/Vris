@@ -1,0 +1,14 @@
+const fs = require('fs');
+let c = fs.readFileSync('src/App.jsx', 'utf8');
+c = c.replace(/const TrackOrder.*\n?/g, '');
+c = c.replace(/const Support.*\n?/g, '');
+c = c.replace(/const Search.*\n?/g, '');
+c = c.replace(/const OrderDetail.*\n?/g, '');
+c = c.replace(/const CheckoutSuccess.*\n?/g, '');
+c = c.replace(/.*path="\/track-order".*\n?/g, '');
+c = c.replace(/.*path="\/support".*\n?/g, '');
+c = c.replace(/.*path="\/search".*\n?/g, '');
+c = c.replace(/.*path="\/orders\/:orderId".*\n?/g, '');
+c = c.replace(/.*path="\/checkout\/success".*\n?/g, '');
+fs.writeFileSync('src/App.jsx', c);
+console.log('Fixed App.jsx');

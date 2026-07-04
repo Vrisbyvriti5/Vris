@@ -2,9 +2,7 @@ const ProductModel = require('../models/productModel');
 const ReviewModel = require('../models/reviewModel');
 const {
   PRODUCT_CATEGORIES,
-  PRODUCT_COLLECTIONS,
   normalizeCategory,
-  normalizeCollection,
   resolveProductTaxonomy,
 } = require('../utils/productTaxonomy');
 const { convertFilesToWebp } = require('../utils/imageProcessor');
@@ -136,23 +134,18 @@ const calculateFinalPrice = (mrp, discountPercent) => {
   return Number(Math.max(final, 0).toFixed(2));
 };
 
-const validateAndResolveTaxonomy = ({ category, collection, name, description, requireBoth = false }) => {
+const validateAndResolveTaxonomy = ({ category }) => {
   const hasCategory = String(category || '').trim() !== '';
-  const hasCollection = String(collection || '').trim() !== '';
 
-  if (requireBoth && (!hasCategory || !hasCollection)) {
+  if (!hasCategory) {
     return {
       valid: false,
-      message: 'Category and collection are required.',
+      message: 'Category is required.',
     };
   }
 
   const resolved = resolveProductTaxonomy({
     category,
-    collection,
-    name,
-    description,
-    allowInfer: true,
   });
 
   if (!resolved.valid) {
@@ -162,14 +155,13 @@ const validateAndResolveTaxonomy = ({ category, collection, name, description, r
   return {
     valid: true,
     category: resolved.category,
-    collection: resolved.collection,
   };
 };
 
 // ── Get all products ─────────────────────────────────────────────────────────
 const getAllProducts = async (req, res) => {
   try {
-    const { category, collection, search, sort } = req.query;
+    const { category, search, sort } = req.query;
 
     const normalizedCategory = category && category !== 'All'
       ? normalizeCategory(category)
@@ -182,20 +174,8 @@ const getAllProducts = async (req, res) => {
       });
     }
 
-    const normalizedCollection = collection && collection !== 'All'
-      ? normalizeCollection(collection)
-      : null;
-
-    if (collection && collection !== 'All' && !normalizedCollection) {
-      return res.status(400).json({
-        success: false,
-        message: `Collection must be one of: ${PRODUCT_COLLECTIONS.join(', ')}.`,
-      });
-    }
-
     const products = await ProductModel.findAll({
       category: normalizedCategory || 'All',
-      collection: normalizedCollection || 'All',
       search,
       sort,
     });
@@ -234,8 +214,8 @@ const createProduct = async (req, res) => {
       category,
       stock,
       sku,
-      collection,
       featured,
+      sizes,
     } = req.body;
 
     if (!name || (!price && !mrp)) {
@@ -260,10 +240,6 @@ const createProduct = async (req, res) => {
 
     const taxonomy = validateAndResolveTaxonomy({
       category,
-      collection,
-      name,
-      description,
-      requireBoth: false,
     });
 
     if (!taxonomy.valid) {
@@ -287,8 +263,8 @@ const createProduct = async (req, res) => {
       images: galleryImages,
       stock: parseInt(stock, 10) || 0,
       sku,
-      collection: taxonomy.collection,
       featured: featured === 'true' || featured === true,
+      sizes: Array.isArray(sizes) ? sizes : (typeof sizes === 'string' ? [sizes] : []),
     });
 
     res.set('Cache-Control', 'no-store');
@@ -360,13 +336,19 @@ const updateProduct = async (req, res) => {
     if (updateData.discountPercent !== undefined) {
       delete updateData.discountPercent;
     }
+    
+    if (updateData.sizes !== undefined) {
+      if (Array.isArray(updateData.sizes)) {
+        // already array
+      } else if (typeof updateData.sizes === 'string') {
+        updateData.sizes = [updateData.sizes];
+      } else {
+        updateData.sizes = [];
+      }
+    }
 
     const taxonomy = validateAndResolveTaxonomy({
       category: updateData.category ?? existing.category,
-      collection: updateData.collection ?? existing.collection,
-      name: updateData.name ?? existing.name,
-      description: updateData.description ?? existing.description,
-      requireBoth: false,
     });
 
     if (!taxonomy.valid) {
@@ -377,7 +359,6 @@ const updateProduct = async (req, res) => {
     }
 
     updateData.category = taxonomy.category;
-    updateData.collection = taxonomy.collection;
 
     // ── Image conversion pipeline (WebP) ──────────────────────────────────
     const galleryImages = await buildImageGalleryFromRequest(req);

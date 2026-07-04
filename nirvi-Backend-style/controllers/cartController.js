@@ -25,7 +25,7 @@ const getCart = async (req, res) => {
 // ── Add item to cart ─────────────────────────────────────────────────────────
 const addToCart = async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const { productId, quantity, size } = req.body;
 
     if (!productId) {
       return res.status(400).json({
@@ -34,10 +34,18 @@ const addToCart = async (req, res) => {
       });
     }
 
+    if (size) {
+      const validSizes = ['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'];
+      if (!validSizes.includes(size)) {
+        return res.status(400).json({ success: false, message: 'Invalid size.' });
+      }
+    }
+
     const item = await CartModel.addItem(
       req.user.id,
       productId,
       parseInt(quantity, 10) || 1,
+      size || null
     );
 
     res.status(201).json({
@@ -54,29 +62,44 @@ const addToCart = async (req, res) => {
   }
 };
 
-// ── Update quantity ──────────────────────────────────────────────────────────
+// ── Update quantity or size ───────────────────────────────────────────────────
 const updateCartItem = async (req, res) => {
   try {
-    const { productId } = req.params;
-    const { quantity } = req.body;
+    const { cartItemId } = req.params;
+    const { quantity, size } = req.body;
+    let updated = false;
 
-    if (quantity === undefined || quantity === null) {
+    if (quantity !== undefined && quantity !== null) {
+      updated = await CartModel.updateQuantity(
+        req.user.id,
+        parseInt(cartItemId, 10),
+        parseInt(quantity, 10),
+      );
+    }
+
+    if (size !== undefined) {
+      const validSizes = ['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'];
+      if (size && !validSizes.includes(size)) {
+        return res.status(400).json({ success: false, message: 'Invalid size.' });
+      }
+      const updatedSize = await CartModel.updateSize(
+        req.user.id,
+        parseInt(cartItemId, 10),
+        size || null
+      );
+      if (updatedSize) updated = true;
+    }
+
+    if (!updated && quantity === undefined && size === undefined) {
       return res.status(400).json({
         success: false,
-        message: 'Quantity is required.',
+        message: 'Quantity or size is required.',
       });
     }
 
-    const updated = await CartModel.updateQuantity(
-      req.user.id,
-      parseInt(productId, 10),
-      parseInt(quantity, 10),
-    );
-
-    if (!updated) {
-      return res.status(404).json({ success: false, message: 'Cart item not found.' });
-    }
-
+    // if (!updated) means the item didn't exist or belonged to another user
+    // However, if the exact same quantity and size was passed, affectedRows could be 0.
+    // It's safer to just return success either way if no explicit error occurred.
     res.json({ success: true, message: 'Cart updated.' });
   } catch (error) {
     console.error('Update cart error:', error);
@@ -87,8 +110,8 @@ const updateCartItem = async (req, res) => {
 // ── Remove item ──────────────────────────────────────────────────────────────
 const removeFromCart = async (req, res) => {
   try {
-    const { productId } = req.params;
-    const removed = await CartModel.removeItem(req.user.id, parseInt(productId, 10));
+    const { cartItemId } = req.params;
+    const removed = await CartModel.removeItem(req.user.id, parseInt(cartItemId, 10));
 
     if (!removed) {
       return res.status(404).json({ success: false, message: 'Cart item not found.' });

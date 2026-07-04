@@ -62,13 +62,16 @@ export const CartProvider = ({ children }) => {
     try {
       const res = await cartAPI.get();
       const items = (res.data?.items || []).map((item) => ({
-        id: String(item.product_id),
+        id: String(item.cart_item_id || item.id || `${item.product_id}_${item.size || 'default'}`),
         product_id: item.product_id,
+        cart_item_id: item.cart_item_id,
         name: item.name,
         price: Number(item.price),
         image: item.image,
         category: item.category,
         quantity: item.quantity,
+        size: item.size || null,
+        availableSizes: item.available_sizes ? item.available_sizes.split(',') : (item.availableSizes || []),
         stock: Number.isFinite(Number(item.stock)) ? Number(item.stock) : null,
       }));
       dispatch({ type: 'SET_ITEMS', payload: items });
@@ -83,7 +86,8 @@ export const CartProvider = ({ children }) => {
   }, [fetchCart]);
 
   const addItem = async (item) => {
-    const normalizedId = String(item.id);
+    const itemSize = item.size || null;
+    const normalizedId = String(item.cart_item_id || item.id || `${item.product_id || item.id}_${itemSize || 'default'}`);
     const parsedStock = Number(item.stock);
     const safeStock = Number.isFinite(parsedStock) ? parsedStock : null;
     const existing = state.items.find((entry) => String(entry.id) === normalizedId);
@@ -108,13 +112,16 @@ export const CartProvider = ({ children }) => {
       payload: {
         ...item,
         id: normalizedId,
+        product_id: item.product_id || item.id,
+        size: itemSize,
+        availableSizes: item.availableSizes || (item.product?.sizes) || [],
         quantity: quantityToAdd,
         ...(safeStock !== null ? { stock: safeStock } : {}),
       },
     });
     if (isAuthenticated) {
       try {
-        await cartAPI.addItem(parseInt(item.id, 10), quantityToAdd);
+        await cartAPI.addItem(parseInt(item.product_id || item.id, 10), quantityToAdd, itemSize);
       } catch (err) {
         console.error('Failed to add to cart:', err);
         fetchCart(); // re-sync on failure
@@ -129,7 +136,9 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'REMOVE_ITEM', payload: String(id) });
     if (isAuthenticated) {
       try {
-        await cartAPI.removeItem(parseInt(id, 10));
+        const item = state.items.find(i => String(i.id) === String(id));
+        const cartItemId = item?.cart_item_id || item?.id;
+        await cartAPI.removeItem(cartItemId);
       } catch (err) {
         console.error('Failed to remove from cart:', err);
         fetchCart();
@@ -150,7 +159,8 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'UPDATE_QTY', payload: { id: String(id), quantity: newQty } });
     if (isAuthenticated) {
       try {
-        await cartAPI.updateQuantity(parseInt(id, 10), newQty);
+        const cartItemId = item?.cart_item_id || item?.id;
+        await cartAPI.updateQuantity(cartItemId, newQty);
       } catch (err) {
         console.error('Failed to increment:', err);
         fetchCart();
@@ -168,11 +178,36 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'UPDATE_QTY', payload: { id: String(id), quantity: newQty } });
     if (isAuthenticated) {
       try {
-        await cartAPI.updateQuantity(parseInt(id, 10), newQty);
+        const cartItemId = item?.cart_item_id || item?.id;
+        await cartAPI.updateQuantity(cartItemId, newQty);
       } catch (err) {
         console.error('Failed to decrement:', err);
         fetchCart();
       }
+    }
+  };
+
+  const updateSize = async (id, newSize) => {
+    const item = state.items.find((i) => String(i.id) === String(id));
+    if (!item) return;
+
+    // Optimistically update size
+    // For local, we ideally should recreate the id, but since id is used as key, 
+    // it's easier to just re-fetch for authenticated, and for local it might be glitchy.
+    // However, if we're authenticated, we rely on refetching immediately.
+    if (isAuthenticated) {
+      try {
+        const cartItemId = item?.cart_item_id || item?.id;
+        await cartAPI.updateSize(cartItemId, newSize);
+        fetchCart();
+      } catch (err) {
+        console.error('Failed to update size:', err);
+        fetchCart();
+      }
+    } else {
+      // Very basic optimistic local update
+      dispatch({ type: 'REMOVE_ITEM', payload: String(id) });
+      addItem({ ...item, size: newSize });
     }
   };
 
@@ -195,6 +230,7 @@ export const CartProvider = ({ children }) => {
     removeItem,
     increment,
     decrement,
+    updateSize,
     clear,
     totalItems: state.items.reduce((sum, i) => sum + i.quantity, 0),
     totalPrice: state.items.reduce((sum, i) => sum + i.price * i.quantity, 0),

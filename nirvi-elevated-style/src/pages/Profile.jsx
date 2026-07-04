@@ -58,9 +58,7 @@ const QuickActionsRail = ({ onSecurityClick, onAddressesClick }) => {
         <Link to="/wishlist" className={cardSlotClass} data-quick-action-card>
           <QuickActionCard icon={Heart} title="Your Wishlist" subtitle="View saved items" />
         </Link>
-        {/* <Link to="/custom-product-request" className={cardSlotClass} data-quick-action-card>
-          <QuickActionCard icon={Palette} title="Custom Orders" subtitle="Request personalized products" />
-        </Link> */}
+
       </div>
     </div>
   );

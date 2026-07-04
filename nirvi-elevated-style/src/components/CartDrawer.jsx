@@ -9,7 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 const CartDrawer = ({ onClose }) => {
-  const { items, totalItems, totalPrice, increment, decrement, removeItem } = useCart();
+  const { items, totalItems, totalPrice, increment, decrement, removeItem, updateSize } = useCart();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -71,7 +71,28 @@ const CartDrawer = ({ onClose }) => {
                         <Trash2 size={14} />
                       </button>
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5 uppercase tracking-wider">{item.category}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <p className="text-[11px] text-gray-500 uppercase tracking-wider">{item.category}</p>
+                      {item.availableSizes && item.availableSizes.length > 0 ? (
+                        <div className="flex items-center gap-1 border-l pl-2 border-gray-200">
+                          <span className="text-[10px] text-gray-400 font-bold uppercase">Size:</span>
+                          <select 
+                            value={item.size || ''} 
+                            onChange={(e) => updateSize(item.id, e.target.value)}
+                            className="bg-transparent text-[11px] font-bold text-gray-900 focus:outline-none cursor-pointer pr-1"
+                          >
+                            {item.availableSizes.map(sz => (
+                              <option key={sz} value={sz}>{sz}</option>
+                            ))}
+                          </select>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1 border-l pl-2 border-gray-200">
+                          <span className="text-[10px] text-gray-400 font-bold uppercase">Size:</span>
+                          <span className="text-[11px] font-bold text-gray-900">{item.size || 'One Size'}</span>
+                        </div>
+                      )}
+                    </div>
                     
                     <div className="flex items-center justify-between mt-auto pt-2">
                       <div className="flex items-center border border-gray-100 rounded-lg bg-gray-50/50">

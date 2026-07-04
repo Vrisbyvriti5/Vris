@@ -7,7 +7,7 @@ import ProductForm from '@/components/admin/ProductForm';
 const AdminProductFormPage = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
-  const { products, customizationOptions, addProduct, updateProduct, refreshProducts } = useCatalog();
+  const { products, addProduct, updateProduct, refreshProducts } = useCatalog();
   const editingProduct = products.find((product) => product.id === productId);
   const isEditMode = Boolean(productId);
 
@@ -49,7 +49,6 @@ const AdminProductFormPage = () => {
       <ProductForm
         mode={isEditMode ? 'edit' : 'create'}
         initialValues={editingProduct}
-        customizationOptions={customizationOptions}
         onSubmit={handleSubmit}
         onCancel={() => navigate('/admin/products')}
       />

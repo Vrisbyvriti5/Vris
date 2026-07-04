@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   PRODUCT_CATEGORIES,
-  MATERIAL_COLLECTIONS,
-  GENDER_COLLECTIONS,
-  getCollectionForCategory,
   isValidCategory,
-  isValidCollection,
 } from '@/lib/product-taxonomy';
 
 const parseImageInput = (value) => String(value || '')
@@ -271,19 +267,7 @@ const computeFinalPrice = (mrp, discountPercent) => {
   return Number((safeMrp * (1 - (safeDiscount / 100))).toFixed(2));
 };
 
-const parseMaterialFromCollection = (collectionStr, category) => {
-  if (!collectionStr) return getCollectionForCategory(category) || 'Denim';
-  const parts = String(collectionStr).split(',').map((c) => c.trim().toLowerCase());
-  return MATERIAL_COLLECTIONS.find((m) => parts.includes(m.toLowerCase()))
-    || getCollectionForCategory(category)
-    || 'Denim';
-};
 
-const parseGenderFromCollection = (collectionStr) => {
-  if (!collectionStr) return 'Unisex';
-  const parts = String(collectionStr).split(',').map((c) => c.trim().toLowerCase());
-  return GENDER_COLLECTIONS.find((g) => parts.includes(g.toLowerCase())) || 'Unisex';
-};
 
 const createInitialState = (initialValues) => ({
   name: initialValues?.name || '',
@@ -298,19 +282,12 @@ const createInitialState = (initialValues) => ({
       : (initialValues?.image ? [initialValues.image] : [])
   ).join('\n'),
   imageFiles: [],
-  materialCollection: parseMaterialFromCollection(initialValues?.collection, initialValues?.category),
-  genderCollection: parseGenderFromCollection(initialValues?.collection),
-  customizationOptions: {
-    colors: initialValues?.customizationOptions?.colors || [],
-    styles: initialValues?.customizationOptions?.styles || [],
-    addOns: initialValues?.customizationOptions?.addOns || [],
-  },
+  sizes: initialValues?.sizes || [],
 });
 
 const ProductForm = ({
   mode = 'create',
   initialValues,
-  customizationOptions,
   onSubmit,
   onCancel,
 }) => {
@@ -347,22 +324,7 @@ const ProductForm = ({
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
-  const toggleCustomizationSelection = (group, option) => {
-    setFormData((current) => {
-      const values = current.customizationOptions[group] || [];
-      const nextValues = values.includes(option)
-        ? values.filter((entry) => entry !== option)
-        : [...values, option];
 
-      return {
-        ...current,
-        customizationOptions: {
-          ...current.customizationOptions,
-          [group]: nextValues,
-        },
-      };
-    });
-  };
 
   const handleImageUpload = async (event) => {
     const files = Array.from(event.target.files || []);
@@ -450,28 +412,21 @@ const ProductForm = ({
 
   const handleCategoryChange = (value) => {
     setFormData((current) => {
-      const suggestedMaterial = getCollectionForCategory(value);
       return {
         ...current,
         category: value,
-        // Auto-suggest material collection from category (if not already chosen).
-        materialCollection: current.materialCollection || suggestedMaterial || current.materialCollection,
       };
     });
   };
 
-  const selectMaterial = (col) => {
-    setFormData((current) => ({
-      ...current,
-      materialCollection: current.materialCollection === col ? '' : col,
-    }));
-  };
-
-  const selectGender = (col) => {
-    setFormData((current) => ({
-      ...current,
-      genderCollection: current.genderCollection === col ? '' : col,
-    }));
+  const handleSizeToggle = (size) => {
+    setFormData((current) => {
+      const sizes = current.sizes || [];
+      if (sizes.includes(size)) {
+        return { ...current, sizes: sizes.filter(s => s !== size) };
+      }
+      return { ...current, sizes: [...sizes, size] };
+    });
   };
 
   const validate = () => {
@@ -485,13 +440,7 @@ const ProductForm = ({
       nextErrors.category = `Category must be one of: ${PRODUCT_CATEGORIES.join(', ')}.`;
     }
 
-    if (!formData.materialCollection || !isValidCollection(formData.materialCollection)) {
-      nextErrors.materialCollection = 'Please select a material collection (Denim, Wool, or Flex).';
-    }
 
-    if (!formData.genderCollection || !isValidCollection(formData.genderCollection)) {
-      nextErrors.genderCollection = 'Please select a gender collection (Men, Women, or Unisex).';
-    }
 
     if (!formData.description.trim()) {
       nextErrors.description = 'Description is required.';
@@ -536,23 +485,19 @@ const ProductForm = ({
 
       await onSubmit({
         ...formData,
-        collection: [formData.materialCollection, formData.genderCollection].filter(Boolean).join(','),
         mrp,
         discount_percent: discountPercent,
         stock: Number(formData.stock),
         imageUrls,
         imagesFiles: formData.imageFiles,
+        sizes: formData.sizes,
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const customizationGroups = [
-    { key: 'colors', label: 'Colors' },
-    { key: 'styles', label: 'Styles' },
-    { key: 'addOns', label: 'Add-ons' },
-  ];
+
 
   const previewUrls = parseImageInput(formData.imageUrlsText);
   const allPreviewImages = [...previewUrls, ...filePreviews];
@@ -633,58 +578,6 @@ const ProductForm = ({
               />
               {errors.stock ? <span className="text-xs text-destructive">{errors.stock}</span> : null}
             </label>
-
-            <div className="space-y-4 sm:col-span-2 lg:col-span-4">
-              <div className="space-y-2">
-                <span className="text-sm font-semibold text-foreground">Material Collection</span>
-                <p className="text-[11px] text-muted-foreground font-body">Select one material type</p>
-                <div className="flex flex-wrap gap-2">
-                  {MATERIAL_COLLECTIONS.map((col) => {
-                    const isActive = formData.materialCollection === col;
-                    return (
-                      <button
-                        key={col}
-                        type="button"
-                        onClick={() => selectMaterial(col)}
-                        className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] transition-colors ${
-                          isActive
-                            ? 'border-foreground bg-foreground text-background'
-                            : 'border-border text-foreground hover:bg-muted'
-                        }`}
-                      >
-                        {col}
-                      </button>
-                    );
-                  })}
-                </div>
-                {errors.materialCollection ? <span className="text-xs text-destructive">{errors.materialCollection}</span> : null}
-              </div>
-
-              <div className="space-y-2">
-                <span className="text-sm font-semibold text-foreground">Gender Collection</span>
-                <p className="text-[11px] text-muted-foreground font-body">Select one — Unisex will show the product in both Men & Women</p>
-                <div className="flex flex-wrap gap-2">
-                  {GENDER_COLLECTIONS.map((col) => {
-                    const isActive = formData.genderCollection === col;
-                    return (
-                      <button
-                        key={col}
-                        type="button"
-                        onClick={() => selectGender(col)}
-                        className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] transition-colors ${
-                          isActive
-                            ? 'border-foreground bg-foreground text-background'
-                            : 'border-border text-foreground hover:bg-muted'
-                        }`}
-                      >
-                        {col}
-                      </button>
-                    );
-                  })}
-                </div>
-                {errors.genderCollection ? <span className="text-xs text-destructive">{errors.genderCollection}</span> : null}
-              </div>
-            </div>
           </div>
 
           <div className="rounded-2xl border border-border bg-muted/40 px-4 py-3">
@@ -703,6 +596,24 @@ const ProductForm = ({
             />
             {errors.description ? <span className="text-xs text-destructive">{errors.description}</span> : null}
           </label>
+
+          <div className="space-y-3">
+            <span className="text-sm font-semibold text-foreground">Available Sizes</span>
+            <div className="flex flex-wrap gap-3">
+              {['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'].map((size) => (
+                <label key={size} className="flex cursor-pointer items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted">
+                  <input
+                    type="checkbox"
+                    checked={formData.sizes?.includes(size) || false}
+                    onChange={() => handleSizeToggle(size)}
+                    className="h-4 w-4 rounded border-border text-foreground accent-foreground focus:ring-foreground"
+                  />
+                  <span className="font-medium">{size}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground font-body">Select the sizes available for this product.</p>
+          </div>
         </div>
 
         <div className="space-y-6">
@@ -747,40 +658,7 @@ const ProductForm = ({
             </div>
           </div>
 
-          <div className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-6">
-            <div>
-              <p className="text-sm font-semibold text-foreground">Available Customizations</p>
-              <p className="mt-1 text-xs text-muted-foreground font-body">Choose the options shoppers can use for this product.</p>
-            </div>
 
-            <div className="mt-5 space-y-4">
-              {customizationGroups.map((group) => (
-                <div key={group.key}>
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-muted-foreground">{group.label}</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {(customizationOptions[group.key] || []).map((option) => {
-                      const isActive = formData.customizationOptions[group.key]?.includes(option);
-
-                      return (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => toggleCustomizationSelection(group.key, option)}
-                          className={`rounded-full border px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] transition-colors ${
-                            isActive
-                              ? 'border-foreground bg-foreground text-background'
-                              : 'border-border text-foreground hover:bg-muted'
-                          }`}
-                        >
-                          {option}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 

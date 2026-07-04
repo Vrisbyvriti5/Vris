@@ -11,7 +11,7 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const { PRODUCT_CATEGORIES, PRODUCT_COLLECTIONS } = require('../utils/productTaxonomy');
+const { PRODUCT_CATEGORIES } = require('../utils/productTaxonomy');
 const { runProductTaxonomyMigration } = require('./productTaxonomyMigration');
 
 const DB_NAME = process.env.DB_NAME || 'vris_ecommerce';
@@ -24,7 +24,7 @@ const DEFAULT_COUPONS = [
 ];
 
 const PRODUCT_CATEGORY_ENUM_SQL = PRODUCT_CATEGORIES.map((value) => `'${value}'`).join(', ');
-const PRODUCT_COLLECTION_ENUM_SQL = PRODUCT_COLLECTIONS.map((value) => `'${value}'`).join(', ');
+
 
 const initDatabase = async () => {
   // 1. Connect without specifying a database so we can CREATE it.
@@ -188,7 +188,6 @@ const initDatabase = async () => {
     await ensureColumnExists('vris_users', 'reset_otp_expires_at', 'DATETIME NULL');
     await ensureColumnExists('vris_users', 'reset_otp_verified', 'BOOLEAN DEFAULT FALSE');
     await ensureColumnExists('vris_users', 'dob', 'DATE NULL');
-    await ensureColumnExists('vris_users', 'gender', 'ENUM(\'Male\', \'Female\', \'Other\') NULL');
     await ensureColumnExists('vris_users', 'avatar_url', 'VARCHAR(500) NULL');
 
     // ── Products ───────────────────────────────────────────────────────────
@@ -204,7 +203,6 @@ const initDatabase = async () => {
         image       VARCHAR(500),
         stock       INT           NOT NULL DEFAULT 0,
         sku         VARCHAR(50)   UNIQUE,
-        collection  VARCHAR(255) NOT NULL DEFAULT 'Denim',
         featured    BOOLEAN       DEFAULT FALSE,
         created_at  TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
         updated_at  TIMESTAMP     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -230,20 +228,49 @@ const initDatabase = async () => {
     console.log('✅  Table "vris_product_images" ready');
     await backfillPrimaryProductImages();
 
+    // ── Product Sizes ──────────────────────────────────────────────────────
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS vris_product_sizes (
+        id          INT           AUTO_INCREMENT PRIMARY KEY,
+        product_id  INT           NOT NULL,
+        size        ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NOT NULL,
+        created_at  TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (product_id) REFERENCES vris_products(id) ON DELETE CASCADE,
+        UNIQUE KEY unique_product_size (product_id, size)
+      )
+    `);
+    console.log('✅  Table "vris_product_sizes" ready');
+
     // ── Cart ───────────────────────────────────────────────────────────────
     await connection.query(`
       CREATE TABLE IF NOT EXISTS vris_cart_items (
         id          INT  AUTO_INCREMENT PRIMARY KEY,
         user_id     INT  NOT NULL,
         product_id  INT  NOT NULL,
+        size        ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL,
         quantity    INT  NOT NULL DEFAULT 1,
         created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        UNIQUE KEY  unique_user_product (user_id, product_id),
         FOREIGN KEY (user_id)    REFERENCES vris_users(id)    ON DELETE CASCADE,
         FOREIGN KEY (product_id) REFERENCES vris_products(id) ON DELETE CASCADE
       )
     `);
+    
+    await ensureColumnExists('vris_cart_items', 'size', "ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL");
+
+    // Drop old unique constraint and add new one
+    try {
+      await connection.query('ALTER TABLE vris_cart_items DROP INDEX unique_user_product');
+      await connection.query('ALTER TABLE vris_cart_items ADD UNIQUE KEY unique_user_product_size (user_id, product_id, size)');
+    } catch (err) {
+      // Ignore errors if index doesn't exist or already dropped
+      try {
+        await connection.query('ALTER TABLE vris_cart_items ADD UNIQUE KEY unique_user_product_size (user_id, product_id, size)');
+      } catch (innerErr) {
+        // Ignore if new index already exists
+      }
+    }
+
     console.log('✅  Table "vris_cart_items" ready');
 
     // ── Orders ─────────────────────────────────────────────────────────────
@@ -377,6 +404,7 @@ const initDatabase = async () => {
         order_id    INT           NOT NULL,
         product_id  INT           NOT NULL,
         name        VARCHAR(255)  NOT NULL,
+        size        ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL,
         price       DECIMAL(10,2) NOT NULL,
         quantity    INT           NOT NULL DEFAULT 1,
         image       VARCHAR(500),
@@ -384,6 +412,7 @@ const initDatabase = async () => {
         FOREIGN KEY (product_id) REFERENCES vris_products(id) ON DELETE CASCADE
       )
     `);
+    await ensureColumnExists('vris_order_items', 'size', "ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL");
     console.log('✅  Table "vris_order_items" ready');
 
     console.log('\n🎉  All vris_* tables created successfully!');

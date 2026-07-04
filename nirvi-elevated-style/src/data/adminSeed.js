@@ -9,33 +9,15 @@ const createDateOffset = (daysAgo) => {
 };
 
 const stockLevels = [18, 12, 9, 24, 30, 16, 7, 11, 15, 22, 14, 19, 8, 10, 13, 17, 6, 20, 26, 5];
-const customizationPalette = {
-  colors: ['Stone Grey', 'Midnight Black', 'Indigo Wash', 'Sand', 'Ivory'],
-  styles: ['Minimal', 'Patchwork', 'Hand-painted', 'Street Classic'],
-  addOns: ['Monogram Tag', 'Gift Wrap', 'Premium Strap', 'Handwritten Note'],
-};
-
-const buildProductCustomizations = (index) => ({
-  colors: customizationPalette.colors.slice(0, 2 + (index % 2)),
-  styles: customizationPalette.styles.slice(0, 1 + (index % customizationPalette.styles.length)),
-  addOns: customizationPalette.addOns.slice(0, 1 + (index % 3)),
-});
 
 export const initialCatalogProducts = baseProducts.map((product, index) => ({
   ...product,
   stock: stockLevels[index] ?? 12,
   sku: `VRIS-${String(index + 1).padStart(4, '0')}`,
-  collection: product.collection || 'Denim',
-  customizationOptions: buildProductCustomizations(index),
   createdAt: createDateOffset(120 - index * 3),
   updatedAt: createDateOffset(12 - (index % 6)),
 }));
 
-export const initialCustomizationOptions = {
-  colors: [...customizationPalette.colors],
-  styles: [...customizationPalette.styles],
-  addOns: [...customizationPalette.addOns],
-};
 
 export const initialUsers = [
   {

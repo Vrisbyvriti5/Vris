@@ -42,7 +42,7 @@ const buildDeliveryEstimate = (offset) => {
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { items, increment, decrement, removeItem } = useCart();
+  const { items, increment, decrement, removeItem, updateSize } = useCart();
   const {
     selectedAddress,
     checkoutCoupon,
@@ -557,6 +557,7 @@ const Cart = () => {
                         onDecrement={() => decrement(item.id)}
                         onRemove={() => removeItem(item.id)}
                         onMoveToWishlist={() => handleMoveSingleToWishlist(item.id)}
+                        onSizeChange={(newSize) => updateSize(item.id, newSize)}
                         canEdit
                       />
                     ))}

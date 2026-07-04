@@ -32,10 +32,6 @@ const About = () => {
             </p>
 
             <p>
-              What makes us different is our commitment to customization. We understand that everyone has their own preferences, which is why many of our designs can be customized in your preferred color and, where possible, tailored to your requirements. We want every outfit to feel like it was made especially for you.
-            </p>
-
-            <p>
               From everyday essentials to statement pieces, each garment is crafted with attention to detail, premium fabrics, and flattering silhouettes. At VrisbyVriti, we're not just creating clothes, we're creating pieces you'll reach for again and again because it's never a one-time thing.
             </p>
 

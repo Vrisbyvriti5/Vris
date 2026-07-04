@@ -13,9 +13,10 @@ const companyLinks = [
 ];
 
 const categoryLinks = [
-  { to: '/shop?cat=dresses', label: 'Dresses' },
   { to: '/shop?cat=tops', label: 'Tops' },
   { to: '/shop?cat=skirts', label: 'Skirts' },
+  { to: '/shop?cat=dresses', label: 'Dresses' },
+  { to: '/shop?cat=full%20set', label: 'Full Set' },
 ];
 
 const Footer = () => {
@@ -26,7 +27,7 @@ const Footer = () => {
           <div className="col-span-2 md:col-span-1">
             <h3 className="font-display text-2xl font-bold text-white mb-4">VRISBYVRITI</h3>
             <p className="text-sm text-[#e5e5e5] leading-relaxed font-body">
-              At VrisbyVriti we create timeless statement pieces designed to make you feel confident, effortless, and uniquely you. With a focus on quality, versatility, and thoughtful craftsmanship, many of our designs can be customized to suit your personal style.
+              At VrisbyVriti we create timeless statement pieces designed to make you feel confident, effortless, and uniquely you. With a focus on quality, versatility, and thoughtful craftsmanship.
             </p>
 
             <div className="mt-5 space-y-2 text-sm text-[#e5e5e5] font-body">

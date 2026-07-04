@@ -23,22 +23,20 @@ const Shop = lazy(() => import("./pages/Shop"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Cart = lazy(() => import("./pages/Cart"));
 const Checkout = lazy(() => import("./pages/Checkout"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Faq = lazy(() => import("./pages/Faq"));
+const Orders = lazy(() => import("./pages/Orders"));
 const Login = lazy(() => import("./pages/Login"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const OAuthSuccess = lazy(() => import("./pages/OAuthSuccess"));
-const Wishlist = lazy(() => import("./pages/Wishlist"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Orders = lazy(() => import("./pages/Orders"));
-const CustomProductRequest = lazy(() => import("./pages/CustomProductRequest"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
-const Faq = lazy(() => import("./pages/Faq"));
 const ShippingReturns = lazy(() => import("./pages/ShippingReturns"));
 const Sustainability = lazy(() => import("./pages/Sustainability"));
 const Careers = lazy(() => import("./pages/Careers"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const VRISPlus = lazy(() => import("./pages/VRISPlus"));
 
 const AdminLayout = lazy(() => import("./components/admin/AdminLayout"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -77,14 +75,6 @@ const App = () => (
                           <Route path="/product/:id" element={<ProductDetail />} />
                           <Route path="/cart" element={<Cart />} />
                           <Route path="/checkout" element={<Checkout />} />
-                          <Route path="/login" element={<Login />} />
-                          <Route path="/forgot-password" element={<ForgotPassword />} />
-                          <Route path="/oauth-success" element={<OAuthSuccess />} />
-                          <Route path="/signup" element={<Navigate to="/login?mode=signup" replace />} />
-                          <Route path="/wishlist" element={<Wishlist />} />
-                          <Route path="/profile" element={<Profile />} />
-                          <Route path="/orders" element={<Orders />} />
-                          <Route path="/custom-product-request" element={<CustomProductRequest />} />
                           <Route path="/about" element={<About />} />
                           <Route path="/contact" element={<Contact />} />
                           <Route path="/faq" element={<Faq />} />
@@ -92,9 +82,14 @@ const App = () => (
                           <Route path="/sustainability" element={<Sustainability />} />
                           <Route path="/careers" element={<Careers />} />
                           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                          <Route path="/vris-plus" element={<VRISPlus />} />
-
-
+                          <Route path="/wishlist" element={<Wishlist />} />
+                          <Route path="/profile" element={<Profile />} />
+                          <Route path="/orders" element={<Orders />} />
+                          <Route path="/login" element={<Login />} />
+                          <Route path="/forgot-password" element={<ForgotPassword />} />
+                          <Route path="/oauth-success" element={<OAuthSuccess />} />
+                          <Route path="/signup" element={<Navigate to="/login?mode=signup" replace />} />
+                          
                           <Route
                             path="/admin/login"
                             element={(

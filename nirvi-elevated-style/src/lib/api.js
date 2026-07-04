@@ -229,20 +229,26 @@ export const couponsAPI = {
 export const cartAPI = {
   get: () => request('/cart'),
 
-  addItem: (productId, quantity = 1) =>
+  addItem: (productId, quantity = 1, size = null) =>
     request('/cart', {
       method: 'POST',
-      body: JSON.stringify({ productId, quantity }),
+      body: JSON.stringify({ productId, quantity, size }),
     }),
 
-  updateQuantity: (productId, quantity) =>
-    request(`/cart/${productId}`, {
+  updateQuantity: (cartItemId, quantity) =>
+    request(`/cart/${cartItemId}`, {
       method: 'PUT',
       body: JSON.stringify({ quantity }),
     }),
 
-  removeItem: (productId) =>
-    request(`/cart/${productId}`, { method: 'DELETE' }),
+  updateSize: (cartItemId, size) =>
+    request(`/cart/${cartItemId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ size }),
+    }),
+
+  removeItem: (cartItemId) =>
+    request(`/cart/${cartItemId}`, { method: 'DELETE' }),
 
   clear: () =>
     request('/cart/clear', { method: 'DELETE' }),
@@ -334,19 +340,5 @@ export const contactRequestsAPI = {
     request(`/contact-requests/${id}/status`, {
       method: 'PATCH',
       body: JSON.stringify({ status }),
-    }),
-};
-
-// ── Plus Membership API ───────────────────────────────────────────────────
-export const plusAPI = {
-  createSubscription: () =>
-    request('/plus/create-subscription', {
-      method: 'POST',
-    }),
-
-  verifySubscription: (payload) =>
-    request('/plus/verify-subscription', {
-      method: 'POST',
-      body: JSON.stringify(payload),
     }),
 };

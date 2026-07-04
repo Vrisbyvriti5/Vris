@@ -2,7 +2,7 @@ import React, { createContext, useContext, useCallback, useEffect, useState } fr
 import { productsAPI } from '@/lib/api';
 import { getProductPricing } from '@/lib/pricing';
 import { getEntityStock } from '@/lib/stock';
-import { PRODUCT_CATEGORIES, getCollectionForCategory } from '@/lib/product-taxonomy';
+import { PRODUCT_CATEGORIES } from '@/lib/product-taxonomy';
 
 const CatalogContext = createContext(undefined);
 
@@ -25,7 +25,8 @@ const normalizeProductData = (product) => {
     images,
     image: images[0] || null,
     category: String(product.category || '').trim().toLowerCase(),
-    collection: product.collection || getCollectionForCategory(product.category) || 'Denim',
+    sizes: Array.isArray(product.sizes) ? product.sizes : [],
+    
     averageRating: Number(product.average_rating ?? product.averageRating ?? 0),
     reviewCount: Number(product.review_count ?? product.reviewCount ?? 0),
     createdAt: product.createdAt || product.created_at || new Date().toISOString(),
@@ -41,7 +42,7 @@ const buildProductFormData = (input) => {
       return;
     }
 
-    if (key === 'imagesFiles' && Array.isArray(value)) {
+    if ((key === 'imagesFiles' || key === 'imageFiles') && Array.isArray(value)) {
       value.forEach((file) => {
         if (file instanceof File) {
           formData.append('images', file);
@@ -63,6 +64,11 @@ const buildProductFormData = (input) => {
 
     if (value instanceof File) {
       formData.append('images', value);
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach(v => formData.append(key, v));
       return;
     }
 

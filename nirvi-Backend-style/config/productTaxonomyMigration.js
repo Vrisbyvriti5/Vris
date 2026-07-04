@@ -1,6 +1,5 @@
 const {
   PRODUCT_CATEGORIES,
-  PRODUCT_COLLECTIONS,
   resolveProductTaxonomy,
 } = require('../utils/productTaxonomy');
 
@@ -24,29 +23,26 @@ const ensureColumnExists = async (connection, dbName, tableName, columnName, def
 
 const runProductTaxonomyMigration = async ({ connection, dbName }) => {
   await ensureColumnExists(connection, dbName, 'vris_products', 'category', 'VARCHAR(100) NULL');
-  await ensureColumnExists(connection, dbName, 'vris_products', 'collection', `VARCHAR(100) NOT NULL DEFAULT '${PRODUCT_COLLECTIONS[0]}'`);
 
   const [rows] = await connection.query(
-    'SELECT id, name, description, category, collection FROM vris_products ORDER BY id ASC',
+    'SELECT id, name, description, category FROM vris_products ORDER BY id ASC',
   );
 
   for (const row of rows) {
     const resolved = resolveProductTaxonomy({
       category: row.category,
-      collection: row.collection,
       name: row.name,
       description: row.description,
       allowInfer: true,
     });
 
-    const nextCategory = resolved.valid ? resolved.category : 'flex';
-    const nextCollection = resolved.valid ? resolved.collection : 'Flex';
+    const nextCategory = resolved.valid ? resolved.category : PRODUCT_CATEGORIES[0];
 
     await connection.query(
       `UPDATE vris_products
-       SET category = ?, collection = ?
+       SET category = ?
        WHERE id = ?`,
-      [nextCategory, nextCollection, row.id],
+      [nextCategory, row.id],
     );
   }
 
@@ -55,12 +51,7 @@ const runProductTaxonomyMigration = async ({ connection, dbName }) => {
      MODIFY COLUMN category ENUM(${quoteValues(PRODUCT_CATEGORIES)}) NOT NULL`,
   );
 
-  await connection.query(
-    `ALTER TABLE vris_products
-     MODIFY COLUMN collection VARCHAR(255) NOT NULL DEFAULT '${PRODUCT_COLLECTIONS[0]}'`,
-  );
-
-  console.log('✅  Product taxonomy migrated (category + collection)');
+  console.log('✅  Product taxonomy migrated (category)');
 
   return {
     migratedRows: rows.length,

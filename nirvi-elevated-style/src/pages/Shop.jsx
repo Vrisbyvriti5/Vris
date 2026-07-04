@@ -56,10 +56,8 @@ const Shop = () => {
   const [fetchError, setFetchError] = useState('');
 
   const catParam = params.get('cat');
-  const collectionParam = params.get('collection');
   const sortParam = params.get('sort');
   const query = params.get('q') || '';
-  const activeCollection = collectionParam || 'All';
   const activeSort = sortParam || 'newest';
   const backendSort = (activeSort === 'price-low-high' || activeSort === 'price-high-low' || activeSort === 'popular')
     ? 'diverse-random'
@@ -79,7 +77,6 @@ const Shop = () => {
 
       try {
         const response = await productsAPI.getAll({
-          collection: activeCollection,
           search: query,
           sort: backendSort,
           _ts: Date.now(),
@@ -112,7 +109,7 @@ const Shop = () => {
     return () => {
       isDisposed = true;
     };
-  }, [activeCollection, backendSort, query]);
+  }, [backendSort, query]);
 
   const filteredProducts = useMemo(() => {
     const filtered = products.filter((product) => {

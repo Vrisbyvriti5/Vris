@@ -11,6 +11,7 @@ const CartItem = ({
   onDecrement,
   onRemove,
   onMoveToWishlist,
+  onSizeChange,
   canEdit,
 }) => {
   return (
@@ -57,7 +58,23 @@ const CartItem = ({
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-[#6b7280]">
-            <span className="rounded-md bg-[#f4f4f5] px-2 py-1">Size: {item.sizeLabel}</span>
+            {item.availableSizes && item.availableSizes.length > 0 ? (
+              <div className="flex items-center gap-1 rounded-md bg-[#f4f4f5] px-2 py-1">
+                <span>Size:</span>
+                <select 
+                  value={item.size || ''} 
+                  onChange={(e) => onSizeChange && onSizeChange(e.target.value)}
+                  className="bg-transparent font-semibold text-[#111827] focus:outline-none cursor-pointer"
+                  disabled={!canEdit}
+                >
+                  {item.availableSizes.map(sz => (
+                    <option key={sz} value={sz}>{sz}</option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <span className="rounded-md bg-[#f4f4f5] px-2 py-1">Size: {item.size || 'One Size'}</span>
+            )}
 
             <div className="inline-flex items-center overflow-hidden rounded-md border border-[#d1d5db] bg-white">
               <button

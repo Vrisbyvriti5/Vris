@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, X, Instagram } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Instagram, Play } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ProductSkeleton from '@/components/ProductSkeleton';
 import Navbar from '@/components/Navbar';
@@ -48,31 +48,37 @@ const INSTAGRAM_REELS = [
     id: 1,
     videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/vris+reel+3.webm',
     instagramUrl: 'https://www.instagram.com/reel/DZsFnoThqPA/?igsh=MWl0eGszaHhzbmV1cA==',
+    views: '21.4k',
   },
   {
     id: 2,
     videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/vris.webm',
     instagramUrl: 'https://www.instagram.com/reel/DZpAn5zBphN/?igsh=MXF3ZnlnZmY4b2x5Mg==',
+    views: '10.3k',
   },
   {
     id: 3,
     videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_8782.webm',
     instagramUrl: 'https://www.instagram.com/reel/DZ4sfasha8w/?igsh=eGIwZHMxNzhraGdk',
+    views: '15.1k',
   },
   {
     id: 4,
     videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_8260.webm',
     instagramUrl: 'https://www.instagram.com/reel/DaAgYrah1LG/?igsh=aGFzeDBxOWtqMzJp',
+    views: '8.2k',
   },
   {
     id: 5,
     videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_8284.webm',
     instagramUrl: 'https://www.instagram.com/reel/DZcgnEXhMDS/?igsh=bGNmOHYyaTRhNGM5',
+    views: '32.5k',
   },
   {
     id: 6,
     videoUrl: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/IMG_4645.webm',
     instagramUrl: 'https://www.instagram.com/reel/DaKqFXnh2m2/?igsh=OHNjMWxoYnVpNzRo',
+    views: '12.8k',
   },
 ];
 
@@ -111,6 +117,8 @@ const useReveal = () => {
 // ═══════════════════════════════════════════════════════════════════════
 const HeroCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -120,8 +128,39 @@ const HeroCarousel = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe) {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    } else if (isRightSwipe) {
+      setCurrentSlide((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
+    }
+    
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
-    <section className="hp-hero" id="hp-hero">
+    <section 
+      className="hp-hero" 
+      id="hp-hero"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {HERO_SLIDES.map((slide, idx) => (
         <div 
           key={slide.id}
@@ -169,10 +208,10 @@ const FullBleedImage = ({ src, alt, id, mobileHeight }) => (
 // SECTION 6 — Promo Cards
 // ═══════════════════════════════════════════════════════════════════════
 const CATEGORY_CARDS = [
-  { title: 'Dresses', src: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80' },
-  { title: 'Tops', src: 'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=800&q=80' },
-  { title: 'Bottoms', src: 'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?w=800&q=80' },
-  { title: 'Accessories', src: 'https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=800&q=80' },
+  { title: 'Tops', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188561366-1128e026c30e-Catone.webp', to: '/shop?cat=tops' },
+  { title: 'Skirts', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188503890-0f854ea8a047-carfour.webp', to: '/shop?cat=skirts' },
+  { title: 'Dresses', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188504150-8d0d4fdff658-catthird.webp', to: '/shop?cat=dresses' },
+  { title: 'Full Set', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188504221-7aebc1eca5ec-Catsecond.webp', to: '/shop?cat=full%20set' },
 ];
 
 const ShopByCategories = () => {
@@ -189,7 +228,7 @@ const ShopByCategories = () => {
       
       <div className="hp-promo-cards" style={{ marginTop: '40px' }}>
         {CATEGORY_CARDS.map((card, idx) => (
-          <div key={idx} className="hp-promo-card" style={{ background: '#f5f5f5', aspectRatio: '9/16' }}>
+          <Link to={card.to} key={idx} className="hp-promo-card block cursor-pointer transition-transform hover:scale-[1.02]" style={{ background: '#f5f5f5', aspectRatio: '9/16' }}>
             {card.src ? (
               <img
                 src={card.src}
@@ -209,7 +248,7 @@ const ShopByCategories = () => {
             <div className="hp-promo-card__overlay">
               <h3 className="hp-promo-card__title">{card.title}</h3>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
@@ -290,8 +329,9 @@ const InstagramSection = () => {
                   muted
                   playsInline
                 />
-                <div className="hp-insta__play">
-                  <div className="hp-insta__play-icon" />
+                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-white font-medium text-sm z-10 drop-shadow-md">
+                  <Play size={16} fill="currentColor" />
+                  <span>{reel.views}</span>
                 </div>
               </div>
             ))}

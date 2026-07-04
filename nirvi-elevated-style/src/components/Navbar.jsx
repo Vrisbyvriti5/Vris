@@ -5,15 +5,8 @@ import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import useDebouncedValue from '@/hooks/use-debounced-value';
-import { CATEGORY_TO_COLLECTION, PRODUCT_COLLECTIONS, toCategoryLabel } from '@/lib/product-taxonomy';
+import { toCategoryLabel } from '@/lib/product-taxonomy';
 import AnnouncementBar from './AnnouncementBar';
-
-const categoryGroups = PRODUCT_COLLECTIONS.map((collection) => ({
-  collection,
-  categories: Object.entries(CATEGORY_TO_COLLECTION)
-    .filter(([, group]) => group === collection)
-    .map(([category]) => category),
-}));
 
 const storeHighlights = [
   {
@@ -31,10 +24,10 @@ const storeHighlights = [
 ];
 
 const storeEdits = [
-  { label: 'Featured Picks', to: '/shop?sort=featured', description: 'A curated edit of standout VRIS pieces.' },
-  { label: 'Gift Ready', to: '/shop?cat=keychains', description: 'Small handcrafted pieces made for thoughtful gifting.' },
-  { label: 'Everyday Carry', to: '/shop?cat=totebags', description: 'Totes, sleeves, and pouches built for regular use.' },
-  { label: 'Accessory Edit', to: '/shop?collection=Wool', description: 'Soft details, bracelets, and bag charms with personality.' },
+  { label: 'Tops', to: '/shop?cat=tops', description: 'Chic and stylish tops for every occasion.' },
+  { label: 'Skirts', to: '/shop?cat=skirts', description: 'Flowy and elegant skirts to elevate your look.' },
+  { label: 'Dresses', to: '/shop?cat=dresses', description: 'Beautifully crafted dresses for effortless style.' },
+  { label: 'Full Set', to: '/shop?cat=full%20set', description: 'Coordinated matching sets for a complete outfit.' },
 ];
 
 const links = [
@@ -240,10 +233,10 @@ const Navbar = () => {
               <div className="absolute left-0 right-0 top-[64px] hidden group-hover/mega:block bg-white/95 backdrop-blur-md border-b border-border shadow-xl">
                 <div className="max-w-7xl mx-auto grid grid-cols-[0.9fr_1.6fr] gap-10 px-8 py-8">
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.22em] text-gray-400">Trending Edit</p>
-                    <h3 className="mt-3 font-display text-2xl font-bold text-gray-950">Discover what is moving now</h3>
+                    <p className="text-xs font-bold uppercase tracking-[0.22em] text-gray-400">Our Collection</p>
+                    <h3 className="mt-3 font-display text-2xl font-bold text-gray-950">Elevate Your Wardrobe</h3>
                     <p className="mt-3 text-sm leading-6 text-gray-600">
-                      Browse fresh arrivals, bestsellers, and curated edits designed for everyday utility with a handcrafted finish.
+                      Discover our exquisite range of women's dresses and fashion essentials, designed for elegance and everyday comfort.
                     </p>
                     <div className="mt-6 grid gap-3">
                       {storeEdits.map((edit) => (
@@ -415,7 +408,23 @@ const Navbar = () => {
                     </div>
 
                     <div className="border-t border-gray-100 px-3 py-2">
-                      {/* <Link                        to="/vris-plus"                        className="flex cursor-pointer items-center justify-between rounded-lg px-2 py-2 transition-colors hover:bg-gray-100"                        role="menuitem"                      >                        <span className="flex items-center gap-1.5">                          <img                            src="/Navbar_logo.png"                            alt="VRIS Logo"                            className="h-[24px] w-auto object-contain"                          />                          <span className="font-bold text-sm tracking-wide text-gray-800">VRIS</span>                        </span>                        <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">                          Plus                        </span>                      </Link> */}
+                      {/* <Link
+                        to="/vris-plus"
+                        className="flex cursor-pointer items-center justify-between rounded-lg px-2 py-2 transition-colors hover:bg-gray-100"
+                        role="menuitem"
+                      >
+                        <span className="flex items-center gap-1.5">
+                          <img
+                            src="/Navbar_logo.png"
+                            alt="VRIS Logo"
+                            className="h-[24px] w-auto object-contain"
+                          />
+                          <span className="font-bold text-sm tracking-wide text-gray-800">VRIS</span>
+                        </span>
+                        <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                          Plus
+                        </span>
+                      </Link> */}
                     </div>
 
                     <div className="border-t border-gray-100 px-2 py-2">
@@ -537,7 +546,23 @@ const Navbar = () => {
                 </Link>
               ))}
 
-              {/* <Link                to="/vris-plus"                onClick={() => setMobileOpen(false)}                className="flex cursor-pointer items-center justify-between transition-colors group"              >                <span className="flex items-center gap-1.5">                  <img                    src="/Navbar_logo.png"                    alt="VRIS Logo"                    className="h-[36px] w-auto object-contain"                  />                  <span className="font-bold text-sm tracking-wide text-gray-400 group-hover:text-black transition-colors">VRIS</span>                </span>                <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">                  Plus                </span>              </Link> */}
+              {/* <Link
+                to="/vris-plus"
+                onClick={() => setMobileOpen(false)}
+                className="flex cursor-pointer items-center justify-between transition-colors group"
+              >
+                <span className="flex items-center gap-1.5">
+                  <img
+                    src="/Navbar_logo.png"
+                    alt="VRIS Logo"
+                    className="h-[36px] w-auto object-contain"
+                  />
+                  <span className="font-bold text-sm tracking-wide text-gray-400 group-hover:text-black transition-colors">VRIS</span>
+                </span>
+                <span className="rounded bg-purple-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                  Plus
+                </span>
+              </Link> */}
 
               <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
                 {isAuthenticated ? (

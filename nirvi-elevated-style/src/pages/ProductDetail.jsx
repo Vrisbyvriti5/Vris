@@ -115,6 +115,7 @@ const ProductDetail = () => {
   const { toast } = useToast();
 
   const [qty, setQty] = useState(1);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [activeImage, setActiveImage] = useState('');
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [reviewsError, setReviewsError] = useState('');
@@ -227,6 +228,20 @@ const ProductDetail = () => {
     return images.filter(Boolean);
   }, [product]);
 
+  const availableSizes = useMemo(() => {
+    return Array.isArray(product?.sizes) && product?.sizes.length > 0 ? product.sizes : [];
+  }, [product]);
+
+  useEffect(() => {
+    if (availableSizes.length > 0) {
+      if (!selectedSize || !availableSizes.includes(selectedSize)) {
+        setSelectedSize(availableSizes[0]);
+      }
+    } else {
+      setSelectedSize(null);
+    }
+  }, [availableSizes]);
+
   useEffect(() => {
     if (galleryImages.length > 0) {
       setActiveImage(galleryImages[0]);
@@ -278,7 +293,9 @@ const ProductDetail = () => {
   }, [fetchReviews]);
 
   const primaryImage = activeImage || galleryImages[0] || '/placeholder.svg';
-  const cartItem = product ? items.find((entry) => entry.id === product?.id) : null;
+  // Note: if a user can add multiple sizes of the same product, cartItem will just be the first one found here.
+  // We can match by product id and selected size.
+  const cartItem = product ? items.find((entry) => String(entry.product_id || entry.id) === String(product?.id) && (entry.size === selectedSize || (!entry.size && !selectedSize))) : null;
   const related = product
     ? products.filter((entry) => entry?.category === product?.category && entry?.id !== product?.id).slice(0, 4)
     : [];
@@ -292,14 +309,7 @@ const ProductDetail = () => {
   const ratingTotal = Number(reviewCount || product?.reviewCount || 0);
   const cartQuantity = Number(cartItem?.quantity || 0);
   const sidebarPincode = hasDeliveryPincode ? deliveryPincode : '250002';
-  const isPlusMember = Boolean(
-    user?.is_plus_member ||
-    user?.isPlusMember ||
-    user?.plusMember ||
-    user?.vrisPlusMember ||
-    user?.membership === 'plus' ||
-    user?.membership_status === 'active'
-  );
+
 
   const customBannerItems = useMemo(() => {
     const targets = ['Cute Bear Denim Pouch', 'Cosmic Creation Tote Bag', 'Serpent Denim Cap', 'VRIS Formula X Racing Pouch'];
@@ -339,13 +349,16 @@ const ProductDetail = () => {
     const quantityToAdd = Math.max(0, Math.min(qty, remainingStock));
     if (quantityToAdd > 0) {
       addItem({
-        id: product?.id,
+        id: product?.id, // CartContext logic will make this a composite key for local cart
+        product_id: product?.id,
         name: product?.name || 'Product',
         price: finalPrice,
         image: primaryImage,
         category: product?.category || 'General',
         stock: stockValue,
         quantity: quantityToAdd,
+        size: selectedSize,
+        availableSizes: availableSizes,
       });
     }
   };
@@ -373,12 +386,15 @@ const ProductDetail = () => {
       source: 'buyNow',
       item: {
         id: product?.id,
+        product_id: product?.id,
         name: product?.name || 'Product',
         price: finalPrice,
         image: primaryImage,
         category: product?.category || 'General',
         quantity: quantityToBuyNow,
         stock: stockValue,
+        size: selectedSize,
+        availableSizes: availableSizes,
       },
     });
     navigate('/checkout');
@@ -713,7 +729,35 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-wrap items-center gap-4">
+            <div className="mt-6">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <span className="text-sm font-extrabold text-foreground">Select Size</span>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {availableSizes.length > 0 ? (
+                  availableSizes.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => setSelectedSize(size)}
+                      className={`flex h-11 min-w-[3.5rem] items-center justify-center rounded-xl border px-3 text-sm font-bold uppercase transition-all ${
+                        selectedSize === size
+                          ? 'border-foreground bg-foreground text-background shadow-md'
+                          : 'border-black/10 bg-white text-foreground hover:border-foreground/50 hover:bg-muted'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))
+                ) : (
+                  <div className="flex h-11 items-center justify-center rounded-xl border border-black/10 bg-white px-4 text-sm font-bold uppercase text-foreground">
+                    One Size
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center gap-4">
               <span className="text-sm font-extrabold text-foreground">Quantity</span>
               <div className="inline-flex h-9 items-center rounded-full border border-black/10 bg-white px-1 shadow-sm">
                 <button
@@ -906,26 +950,6 @@ const ProductDetail = () => {
               </button>
             </div>
 
-            <div className="relative max-h-[220px] overflow-hidden rounded-xl border border-[#ffbad0] bg-[#ffeaf1] p-4 shadow-sm">
-              <div className="absolute right-3 top-3 rounded-full bg-white/60 p-2 text-[#e0b090]">
-                <Crown size={20} />
-              </div>
-              <div className="relative max-w-[80%]">
-                <div className="flex items-center gap-1.5">
-                  <Crown size={13} className="fill-[#e0b090] text-[#e0b090]" />
-                  <h2 className="font-display text-[13px] font-bold text-foreground">VRIS Plus</h2>
-                </div>
-                <p className="mt-1.5 text-[11px] font-medium leading-tight text-foreground">
-                  {isPlusMember ? 'FREE Delivery + Perks active.' : 'Get FREE Delivery + Discounts!'}
-                </p>
-                <p className="mt-1 text-[10px] font-bold text-[#e0b090]">
-                  {isPlusMember ? 'Thanks for being a member.' : 'Join for ₹99/month'}
-                </p>
-              </div>
-              <Link to="/vris-plus" className="relative mt-2.5 inline-flex h-[36px] items-center rounded-lg bg-[#e0b090] px-4 text-[10px] font-extrabold uppercase tracking-widest text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#d6a382]">
-                {isPlusMember ? 'Manage' : 'Join Now'}
-              </Link>
-            </div>
           </motion.aside>
         </div>
 

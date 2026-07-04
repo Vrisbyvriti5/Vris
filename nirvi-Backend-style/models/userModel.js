@@ -16,7 +16,7 @@ const findByGoogleId = async (googleId) => {
 // ── Find user by ID ──────────────────────────────────────────────────────────
 const findById = async (id) => {
   const [rows] = await pool.query(
-    `SELECT id, name, email, phone, phone_verified, default_address_enabled, address_line1, address_line2, city, state, pincode, role, status, created_at, updated_at, dob, gender, avatar_url
+    `SELECT id, name, email, phone, phone_verified, default_address_enabled, address_line1, address_line2, city, state, pincode, role, status, created_at, updated_at, dob, avatar_url
      FROM vris_users
      WHERE id = ?`,
     [id],
@@ -37,7 +37,6 @@ const create = async ({
   state = null,
   pincode = null,
   dob = null,
-  gender = null,
   phoneVerified = false,
   defaultAddressEnabled = true,
 }) => {
@@ -51,11 +50,10 @@ const create = async ({
   const normalizedPhoneVerified = Boolean(phoneVerified);
   const normalizedDefaultAddressEnabled = Boolean(defaultAddressEnabled);
   const normalizedDob = dob ? String(dob).trim() : null;
-  const normalizedGender = gender ? String(gender).trim() : null;
   const [result] = await pool.query(
-    `INSERT INTO vris_users (name, email, password, phone, phone_verified, default_address_enabled, address_line1, address_line2, city, state, pincode, dob, gender, role)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [name, normalizedEmail, password, normalizedPhone, normalizedPhoneVerified, normalizedDefaultAddressEnabled, normalizedAddressLine1, normalizedAddressLine2, normalizedCity, normalizedState, normalizedPincode, normalizedDob, normalizedGender, role],
+    `INSERT INTO vris_users (name, email, password, phone, phone_verified, default_address_enabled, address_line1, address_line2, city, state, pincode, dob, role)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [name, normalizedEmail, password, normalizedPhone, normalizedPhoneVerified, normalizedDefaultAddressEnabled, normalizedAddressLine1, normalizedAddressLine2, normalizedCity, normalizedState, normalizedPincode, normalizedDob, role],
   );
   return {
     id: result.insertId,
@@ -70,7 +68,6 @@ const create = async ({
     state: normalizedState,
     pincode: normalizedPincode,
     dob: normalizedDob,
-    gender: normalizedGender,
     role,
   };
 };
@@ -127,7 +124,6 @@ const updateProfileById = async (id, {
   state,
   pincode,
   dob,
-  gender,
   defaultAddressEnabled,
 }) => {
   const normalizedName = String(name || '').trim();
@@ -138,13 +134,12 @@ const updateProfileById = async (id, {
   const normalizedState = String(state || '').trim() || null;
   const normalizedPincode = String(pincode || '').trim() || null;
   const normalizedDob = dob ? String(dob).trim() : null;
-  const normalizedGender = gender ? String(gender).trim() : null;
   const normalizedDefaultAddressEnabled = Boolean(defaultAddressEnabled);
   const [result] = await pool.query(
     `UPDATE vris_users
-     SET name = ?, phone = ?, default_address_enabled = ?, address_line1 = ?, address_line2 = ?, city = ?, state = ?, pincode = ?, dob = ?, gender = ?
+     SET name = ?, phone = ?, default_address_enabled = ?, address_line1 = ?, address_line2 = ?, city = ?, state = ?, pincode = ?, dob = ?
      WHERE id = ?`,
-    [normalizedName, normalizedPhone, normalizedDefaultAddressEnabled, normalizedAddressLine1, normalizedAddressLine2, normalizedCity, normalizedState, normalizedPincode, normalizedDob, normalizedGender, id],
+    [normalizedName, normalizedPhone, normalizedDefaultAddressEnabled, normalizedAddressLine1, normalizedAddressLine2, normalizedCity, normalizedState, normalizedPincode, normalizedDob, id],
   );
   return result.affectedRows > 0;
 };

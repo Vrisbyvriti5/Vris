@@ -118,7 +118,6 @@ const register = async (req, res) => {
           state: user.state,
           pincode: user.pincode,
           dob: user.dob,
-          gender: user.gender,
           avatar_url: user.avatar_url
         },
         token,
@@ -363,7 +362,6 @@ const login = async (req, res) => {
           state: user.state,
           pincode: user.pincode,
           dob: user.dob,
-          gender: user.gender,
           avatar_url: user.avatar_url
         },
         token,
@@ -410,7 +408,6 @@ const updateProfile = async (req, res) => {
     const state = String(req.body?.state || '').trim();
     const pincode = String(req.body?.pincode || '').trim();
     const dob = req.body?.dob ? String(req.body.dob).trim() : null;
-    const gender = req.body?.gender ? String(req.body.gender).trim() : null;
 
     if (!name) {
       return res.status(400).json({ success: false, message: 'Name is required.' });
@@ -436,7 +433,6 @@ const updateProfile = async (req, res) => {
       state,
       pincode,
       dob,
-      gender,
     });
     if (!updated) {
       return res.status(404).json({ success: false, message: 'User not found.' });

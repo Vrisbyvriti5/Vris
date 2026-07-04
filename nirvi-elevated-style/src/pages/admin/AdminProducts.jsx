@@ -6,13 +6,11 @@ import AdminSection from '@/components/admin/AdminSection';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import StatusPill from '@/components/admin/StatusPill';
 import { formatCurrency, formatDate } from '@/lib/admin-formatters';
-import { PRODUCT_COLLECTIONS } from '@/lib/product-taxonomy';
 
 const AdminProducts = () => {
   const { products, categories, deleteProduct } = useCatalog();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
-  const [collectionFilter, setCollectionFilter] = useState('All');
   const [productToDelete, setProductToDelete] = useState(null);
   const deferredSearch = useDeferredValue(searchTerm);
 
@@ -20,16 +18,11 @@ const AdminProducts = () => {
   const filteredProducts = [...products]
     .filter((product) => categoryFilter === 'All' || product.category === categoryFilter)
     .filter((product) => {
-      if (collectionFilter === 'All') return true;
-      const tokens = String(product.collection || '').split(',').map((c) => c.trim().toLowerCase());
-      return tokens.includes(collectionFilter.toLowerCase());
-    })
-    .filter((product) => {
       if (!normalizedSearch) {
         return true;
       }
 
-      const searchable = [product.name, product.description, product.category, product.collection, product.sku]
+      const searchable = [product.name, product.description, product.category, product.sku]
         .filter(Boolean)
         .join(' ')
         .toLowerCase();
@@ -68,21 +61,13 @@ const AdminProducts = () => {
               className="w-full bg-transparent text-sm text-foreground outline-none"
             />
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="flex shrink-0">
             <select
               value={categoryFilter}
               onChange={(event) => setCategoryFilter(event.target.value)}
               className="rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-foreground"
             >
               {categories.map((category) => <option key={category} value={category}>{category}</option>)}
-            </select>
-            <select
-              value={collectionFilter}
-              onChange={(event) => setCollectionFilter(event.target.value)}
-              className="rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-foreground"
-            >
-              <option value="All">All collections</option>
-              {PRODUCT_COLLECTIONS.map((collection) => <option key={collection} value={collection}>{collection}</option>)}
             </select>
           </div>
         </div>
@@ -94,7 +79,6 @@ const AdminProducts = () => {
                 <th className="pb-3 pr-4">Product</th>
                 <th className="pb-3 pr-4">Price</th>
                 <th className="pb-3 pr-4">Category</th>
-                <th className="pb-3 pr-4">Collection</th>
                 <th className="pb-3 pr-4">Stock</th>
                 <th className="pb-3 pr-4">Updated</th>
                 <th className="pb-3 text-right">Actions</th>
@@ -114,7 +98,6 @@ const AdminProducts = () => {
                   </td>
                   <td className="py-4 pr-4 text-sm font-medium text-foreground">{formatCurrency(product.price)}</td>
                   <td className="py-4 pr-4 text-sm text-muted-foreground font-body">{product.category}</td>
-                  <td className="py-4 pr-4 text-sm text-muted-foreground font-body">{product.collection}</td>
                   <td className="py-4 pr-4">
                     <div className="flex items-center gap-3">
                       <StatusPill value={product.stock <= 10 ? 'low' : 'healthy'} />
@@ -155,7 +138,6 @@ const AdminProducts = () => {
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-foreground">{product.name}</p>
                   <p className="mt-1 text-xs text-muted-foreground font-body">{product.category}</p>
-                  <p className="mt-1 text-xs text-muted-foreground font-body">{product.collection}</p>
                   <p className="mt-2 text-sm font-medium text-foreground">{formatCurrency(product.price)}</p>
                 </div>
                 <StatusPill value={product.stock <= 10 ? 'low' : 'healthy'} />

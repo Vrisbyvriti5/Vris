@@ -450,10 +450,11 @@ export const CheckoutProvider = ({ children }) => {
     // Call backend API
     const orderPayload = {
       items: items.map((item) => ({
-        productId: parseInt(item.id, 10),
+        productId: parseInt(item.product_id || item.id, 10),
         name: item.name,
         price: Number(item.price),
         quantity: item.quantity,
+        size: item.size || null,
         image: item.image,
       })),
       totalPrice: total,

@@ -62,9 +62,9 @@ const create = async (userId, orderData) => {
     // Insert each order item
     for (const item of items) {
       await connection.query(
-        `INSERT INTO vris_order_items (order_id, product_id, name, price, quantity, image)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [orderId, item.productId || item.product_id, item.name, item.price, item.quantity, item.image || null],
+        `INSERT INTO vris_order_items (order_id, product_id, name, size, price, quantity, image)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [orderId, item.productId || item.product_id, item.name, item.size || null, item.price, item.quantity, item.image || null],
       );
     }
 

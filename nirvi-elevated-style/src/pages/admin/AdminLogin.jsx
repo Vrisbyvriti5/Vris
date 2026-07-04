@@ -38,7 +38,7 @@ const AdminLogin = () => {
           <div>
             <p className="font-display text-4xl font-bold tracking-[0.22em]">VRIS</p>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-background/70 font-body">
-              A focused control room for products, orders, users, and customization workflows.
+              A focused control room for products, orders, and users.
             </p>
           </div>
 
@@ -51,7 +51,7 @@ const AdminLogin = () => {
               </p>
             </div>
             <div className="grid gap-3">
-              {['Manage the full catalog', 'Track order fulfillment', 'Review customer accounts', 'Configure custom product options'].map((item) => (
+              {['Manage the full catalog', 'Track order fulfillment', 'Review customer accounts'].map((item) => (
                 <div key={item} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-body text-background/80">
                   {item}
                 </div>
@@ -66,7 +66,7 @@ const AdminLogin = () => {
               <p className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">VRIS Admin</p>
               <h1 className="font-display text-4xl font-bold text-foreground">Secure Login</h1>
               <p className="text-sm text-muted-foreground font-body">
-                Sign in to review inventory, orders, users, and customization settings.
+                Sign in to review inventory, orders, and users.
               </p>
             </div>
 

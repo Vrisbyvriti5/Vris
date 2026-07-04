@@ -21,7 +21,16 @@ const AnnouncementBar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollPos]);
 
-  const textItems = Array.from({ length: 8 });
+  const messages = [
+    { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+    { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+    { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+    { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+  ];
 
   return (
     <AnimatePresence>
@@ -35,16 +44,16 @@ const AnnouncementBar = () => {
         >
           <div className="flex w-full h-full items-center overflow-hidden">
             <div className="flex min-w-full shrink-0 items-center justify-around gap-24 pr-24 animate-marquee">
-              {textItems.map((_, i) => (
+              {messages.map((msg, i) => (
                 <span key={i} className="text-[11px] sm:text-xs md:text-sm font-semibold tracking-[0.15em] uppercase flex items-center gap-2 whitespace-nowrap">
-                  🎉 VRISBYVRITI OFFICIALLY LIVE
+                  <span>{msg.icon}</span> {msg.text}
                 </span>
               ))}
             </div>
             <div className="flex min-w-full shrink-0 items-center justify-around gap-24 pr-24 animate-marquee" aria-hidden="true">
-              {textItems.map((_, i) => (
+              {messages.map((msg, i) => (
                 <span key={`dup-${i}`} className="text-[11px] sm:text-xs md:text-sm font-semibold tracking-[0.15em] uppercase flex items-center gap-2 whitespace-nowrap">
-                  🎉 VRISBYVRITI OFFICIALLY LIVE
+                  <span>{msg.icon}</span> {msg.text}
                 </span>
               ))}
             </div>
