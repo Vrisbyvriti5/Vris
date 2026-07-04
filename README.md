@@ -15,7 +15,7 @@ cd nirvi-elevated-style
 npm install
 npm run dev
 ```
-
+Latest
 ### Backend
 ```bash
 cd nirvi-Backend-style
