@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, X, Instagram, Play } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ProductSkeleton from '@/components/ProductSkeleton';
@@ -116,6 +116,7 @@ const useReveal = () => {
 // SECTION 2 — Hero Carousel
 // ═══════════════════════════════════════════════════════════════════════
 const HeroCarousel = () => {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
@@ -165,6 +166,8 @@ const HeroCarousel = () => {
         <div 
           key={slide.id}
           className={`hp-hero__slide ${idx === currentSlide ? 'hp-hero__slide--active' : ''}`}
+          onClick={() => navigate('/shop')}
+          style={{ cursor: 'pointer' }}
         >
           <img
             src={slide.src}
@@ -192,15 +195,27 @@ const HeroCarousel = () => {
 // ═══════════════════════════════════════════════════════════════════════
 // Full-Bleed Image Section
 // ═══════════════════════════════════════════════════════════════════════
-const FullBleedImage = ({ src, alt, id, mobileHeight }) => (
+const FullBleedImage = ({ src, alt, id, mobileHeight, to }) => (
   <section className="hp-fullbleed" id={id}>
-    <img
-      src={src}
-      alt={alt}
-      className={`hp-fullbleed__img${mobileHeight ? ` hp-mob-h-${mobileHeight}` : ''}`}
-      loading="lazy"
-      decoding="async"
-    />
+    {to ? (
+      <Link to={to} className="block w-full h-full cursor-pointer">
+        <img
+          src={src}
+          alt={alt}
+          className={`hp-fullbleed__img${mobileHeight ? ` hp-mob-h-${mobileHeight}` : ''}`}
+          loading="lazy"
+          decoding="async"
+        />
+      </Link>
+    ) : (
+      <img
+        src={src}
+        alt={alt}
+        className={`hp-fullbleed__img${mobileHeight ? ` hp-mob-h-${mobileHeight}` : ''}`}
+        loading="lazy"
+        decoding="async"
+      />
+    )}
   </section>
 );
 
@@ -265,7 +280,7 @@ const PromoCards = () => {
       id="hp-promo-cards"
     >
       {PROMO_CARDS.map((card) => (
-        <div key={card.title} className="hp-promo-card">
+        <Link to="/shop" key={card.title} className="hp-promo-card block cursor-pointer transition-transform hover:scale-[1.02]">
           <img
             src={card.src}
             alt={card.title}
@@ -273,7 +288,7 @@ const PromoCards = () => {
             loading="lazy"
             decoding="async"
           />
-        </div>
+        </Link>
       ))}
     </section>
   );
@@ -468,6 +483,7 @@ const Index = () => {
         alt="Premium fashion editorial — designer wear"
         id="hp-promo-4"
         mobileHeight="50"
+        to="/shop"
       />
 
       {/* SECTION 9 — Shop The Look */}
@@ -479,6 +495,7 @@ const Index = () => {
         alt="Luxury fashion — elegant editorial"
         id="hp-promo-5"
         mobileHeight="70"
+        to="/shop"
       />
 
       {/* SECTION 11 — Footer (untouched) */}
