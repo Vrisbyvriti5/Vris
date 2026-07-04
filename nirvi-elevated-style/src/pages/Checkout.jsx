@@ -29,7 +29,7 @@ const emptyAddress = {
   landmark: '',
 };
 
-const deliveryChargeFor = (subtotal) => (subtotal >= 999 || subtotal === 0 ? 0 : 49);
+const deliveryChargeFor = (subtotal) => (subtotal >= 299 || subtotal === 0 ? 0 : 49);
 
 const getDeliveryEstimate = (index) => {
   const estimateDate = new Date();

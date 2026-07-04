@@ -227,7 +227,7 @@ const OrderSummary = ({
           <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#2563eb]">
             <Truck size={14} /> Free Delivery
           </p>
-          <p className="mt-1 text-sm text-[#6b7280]">Free delivery on orders above Rs 999.</p>
+          <p className="mt-1 text-sm text-[#6b7280]">Free delivery on orders above Rs 299.</p>
         </div>
         <div className="rounded-xl border border-[#fff1d8] bg-[#fffaf0] p-3">
           <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#b45309]">
