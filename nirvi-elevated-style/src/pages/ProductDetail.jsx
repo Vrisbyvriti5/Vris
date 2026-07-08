@@ -136,6 +136,10 @@ const ProductDetail = () => {
   const [pincodeSaving, setPincodeSaving] = useState(false);
   const pincodeInputRef = useRef(null);
 
+  // Size chart modal state
+  const [showSizeChart, setShowSizeChart] = useState(false);
+  const sizeChartCloseRef = useRef(null);
+
   // Fetch individual product if not found in catalog
   useEffect(() => {
     if (!id) {
@@ -732,6 +736,16 @@ const ProductDetail = () => {
             <div className="mt-6">
               <div className="flex items-center justify-between gap-4 mb-3">
                 <span className="text-sm font-extrabold text-foreground">Select Size</span>
+                <button
+                  type="button"
+                  onClick={() => setShowSizeChart(true)}
+                  aria-haspopup="dialog"
+                  aria-label="Open size chart"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e0b090] underline underline-offset-2 decoration-dotted hover:text-[#c89070] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090] rounded"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/><path d="M7 3v3M12 3v3M17 3v3"/></svg>
+                  Size Chart
+                </button>
               </div>
               <div className="flex flex-wrap gap-3">
                 {availableSizes.length > 0 ? (
@@ -756,6 +770,142 @@ const ProductDetail = () => {
                 )}
               </div>
             </div>
+
+            {/* ── Size Chart Modal ─────────────────────────────────────── */}
+            <AnimatePresence>
+              {showSizeChart && (
+                <>
+                  {/* Backdrop */}
+                  <motion.div
+                    key="size-chart-backdrop"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-[2px]"
+                    onClick={() => setShowSizeChart(false)}
+                    aria-hidden="true"
+                  />
+
+                  {/* Modal panel */}
+                  <motion.div
+                    key="size-chart-modal"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="size-chart-title"
+                    initial={{ opacity: 0, scale: 0.96, y: 24 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, y: 24 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    className="fixed inset-x-4 bottom-0 top-auto z-[9999] mx-auto flex max-h-[88dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] sm:inset-0 sm:m-auto sm:max-h-[90vh] sm:rounded-2xl"
+                    onKeyDown={(e) => { if (e.key === 'Escape') setShowSizeChart(false); }}
+                    tabIndex={-1}
+                    ref={(el) => { if (el && showSizeChart) el.focus(); }}
+                  >
+                    {/* Header */}
+                    <div className="flex shrink-0 items-center justify-between border-b border-black/8 px-5 py-4 sm:px-6">
+                      <div>
+                        <h2 id="size-chart-title" className="text-[17px] font-extrabold tracking-tight text-foreground">Women's Size Guide</h2>
+                        <p className="mt-0.5 text-[11px] font-medium text-muted-foreground">All measurements in inches</p>
+                      </div>
+                      <button
+                        type="button"
+                        ref={sizeChartCloseRef}
+                        onClick={() => setShowSizeChart(false)}
+                        aria-label="Close size chart"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-muted-foreground shadow-sm transition-all hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090]"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+
+                    {/* Scrollable table area */}
+                    <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 sm:px-6">
+                      {/* Body part labels */}
+                      <div className="mb-4 flex flex-wrap gap-3">
+                        {['Bust', 'Waist', 'Hips'].map((label) => (
+                          <span key={label} className="inline-flex items-center gap-1.5 rounded-full bg-[#fbf5f1] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#e0b090]">
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="overflow-x-auto rounded-xl border border-black/8 shadow-sm">
+                        <table className="w-full min-w-[420px] border-collapse text-sm" role="table" aria-label="Women's clothing size measurements">
+                          <thead>
+                            <tr className="bg-foreground text-background">
+                              {['Size', 'Bust (in)', 'Waist (in)', 'Hips (in)'].map((col) => (
+                                <th
+                                  key={col}
+                                  scope="col"
+                                  className="px-4 py-3 text-center text-[11px] font-extrabold uppercase tracking-widest first:rounded-tl-xl last:rounded-tr-xl"
+                                >
+                                  {col}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[
+                              { size: 'XS',     bust: '31–33', waist: '24–26', hips: '34–36' },
+                              { size: 'S',      bust: '33–35', waist: '26–28', hips: '36–38' },
+                              { size: 'M',      bust: '35–37', waist: '28–30', hips: '38–40' },
+                              { size: 'L',      bust: '37–39', waist: '30–32', hips: '40–42' },
+                              { size: 'XL',     bust: '39–41', waist: '32–34', hips: '42–44' },
+                              { size: 'XXL',    bust: '41–43', waist: '34–36', hips: '44–46' },
+                              { size: 'XXXL',   bust: '43–46', waist: '36–39', hips: '46–49' },
+                              { size: 'XXXXL',  bust: '46–49', waist: '39–42', hips: '49–52' },
+                              { size: 'XXXXXL', bust: '49–52', waist: '42–45', hips: '52–55' },
+                            ].map(({ size, bust, waist, hips }, idx) => {
+                              const isActive = selectedSize && selectedSize.toUpperCase() === size;
+                              return (
+                                <tr
+                                  key={size}
+                                  aria-selected={isActive}
+                                  className={`border-t border-black/5 transition-colors ${
+                                    isActive
+                                      ? 'bg-[#fbf5f1] font-bold'
+                                      : idx % 2 === 0 ? 'bg-white hover:bg-[#fafafa]' : 'bg-[#f9f9f9] hover:bg-[#f5f5f5]'
+                                  }`}
+                                >
+                                  <td className="px-4 py-3 text-center">
+                                    <span className={`inline-flex h-8 min-w-[3rem] items-center justify-center rounded-lg px-2 text-[13px] font-extrabold uppercase ${
+                                      isActive
+                                        ? 'bg-foreground text-background'
+                                        : 'bg-[#f0f0f0] text-foreground'
+                                    }`}>{size}</span>
+                                  </td>
+                                  <td className="px-4 py-3 text-center text-[13px] font-semibold tabular-nums text-foreground">{bust}</td>
+                                  <td className="px-4 py-3 text-center text-[13px] font-semibold tabular-nums text-foreground">{waist}</td>
+                                  <td className="px-4 py-3 text-center text-[13px] font-semibold tabular-nums text-foreground">{hips}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Note */}
+                      <p className="mt-4 rounded-xl border border-[#e0b090]/25 bg-[#fbf5f1] px-4 py-3 text-[12px] leading-relaxed text-[#8a6a50]">
+                        <span className="font-bold">Note: </span>
+                        All measurements are in inches. If your measurements fall between two sizes, choose the larger size for a more comfortable fit.
+                      </p>
+                    </div>
+
+                    {/* Footer close cta */}
+                    <div className="shrink-0 border-t border-black/5 px-5 py-3 sm:px-6">
+                      <button
+                        type="button"
+                        onClick={() => setShowSizeChart(false)}
+                        className="w-full rounded-xl bg-foreground py-3 text-sm font-extrabold uppercase tracking-wide text-background transition-all hover:opacity-90 active:scale-[0.98]"
+                      >
+                        Got it, close
+                      </button>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
 
             <div className="mt-6 flex flex-wrap items-center gap-4">
               <span className="text-sm font-extrabold text-foreground">Quantity</span>
