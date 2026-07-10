@@ -456,6 +456,13 @@ export const CheckoutProvider = ({ children }) => {
         quantity: item.quantity,
         size: item.size || null,
         image: item.image,
+        // Customization fields (optional — only set for custom orders)
+        is_custom: Boolean(item.is_custom),
+        custom_bust:   item.custom_bust   ?? null,
+        custom_waist:  item.custom_waist  ?? null,
+        custom_hips:   item.custom_hips   ?? null,
+        custom_length: item.custom_length ?? null,
+        custom_color:  item.custom_color  ?? null,
       })),
       totalPrice: total,
       deliveryCharge: deliveryCharge || 0,

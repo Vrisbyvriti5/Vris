@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { LayoutDashboard, Package, PlusSquare, ShoppingCart, Users, Settings, MessageSquareText, X } from 'lucide-react';
+import { LayoutDashboard, Package, PlusSquare, ShoppingCart, Ruler, Users, Settings, MessageSquareText, X } from 'lucide-react';
 
 const navigation = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/products', label: 'Products', icon: Package },
   { to: '/admin/products/new', label: 'Add Product', icon: PlusSquare },
   { to: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+  { to: '/admin/customizations', label: 'Customizations', icon: Ruler },
   { to: '/admin/user-requests', label: 'User Requests', icon: MessageSquareText },
   { to: '/admin/users', label: 'Users', icon: Users },
   { to: '/admin/settings', label: 'Settings', icon: Settings },

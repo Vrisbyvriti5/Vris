@@ -23,13 +23,13 @@ const AnnouncementBar = () => {
 
   const messages = [
     { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
-    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹2999', icon: '🚚' },
     { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
-    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹2999', icon: '🚚' },
     { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
-    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹2999', icon: '🚚' },
     { text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
-    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹299', icon: '🚚' },
+    { text: 'FREE DELIVERY ON ORDERS ABOVE ₹2999', icon: '🚚' },
   ];
 
   return (

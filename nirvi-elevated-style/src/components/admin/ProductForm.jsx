@@ -283,6 +283,7 @@ const createInitialState = (initialValues) => ({
   ).join('\n'),
   imageFiles: [],
   sizes: initialValues?.sizes || [],
+  customizeColors: initialValues?.customizeColors || [],
 });
 
 const ProductForm = ({
@@ -368,6 +369,9 @@ const ProductForm = ({
       };
 
       for (const file of files) {
+        // Yield to the main thread to prevent mobile browser UI freezing/crashing
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
         try {
           let intermediateFile = file;
 
@@ -426,6 +430,17 @@ const ProductForm = ({
         return { ...current, sizes: sizes.filter(s => s !== size) };
       }
       return { ...current, sizes: [...sizes, size] };
+    });
+  };
+
+  const handleColorToggle = (color) => {
+    setFormData((current) => {
+      const colors = current.customizeColors || [];
+      const exists = colors.some((c) => c.name === color.name);
+      if (exists) {
+        return { ...current, customizeColors: colors.filter((c) => c.name !== color.name) };
+      }
+      return { ...current, customizeColors: [...colors, color] };
     });
   };
 
@@ -491,6 +506,7 @@ const ProductForm = ({
         imageUrls,
         imagesFiles: formData.imageFiles,
         sizes: formData.sizes,
+        customizeColors: formData.customizeColors,
       });
     } finally {
       setIsSubmitting(false);
@@ -614,6 +630,72 @@ const ProductForm = ({
             </div>
             <p className="text-xs text-muted-foreground font-body">Select the sizes available for this product.</p>
           </div>
+
+          {/* ── Customize Colors ─────────────────────────────────────────────────── */}
+          <div className="space-y-3 rounded-2xl border border-border bg-muted/30 p-4">
+            <div>
+              <span className="text-sm font-semibold text-foreground">Customize Colors</span>
+              <p className="mt-1 text-xs text-muted-foreground font-body">
+                Select which colors customers can choose when customizing this product. Leave empty to hide the color option.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {[
+                { name: 'Black',  hex: '#1a1a1a' },
+                { name: 'White',  hex: '#f5f5f5' },
+                { name: 'Red',    hex: '#e53e3e' },
+                { name: 'Green',  hex: '#38a169' },
+                { name: 'Blue',   hex: '#3b82f6' },
+                { name: 'Pink',   hex: '#ec4899' },
+                { name: 'Purple', hex: '#8b5cf6' },
+                { name: 'Yellow', hex: '#f59e0b' },
+                { name: 'Orange', hex: '#f97316' },
+                { name: 'Beige',  hex: '#d4b896' },
+                { name: 'Navy',   hex: '#1e3a5f' },
+                { name: 'Brown',  hex: '#795548' },
+                { name: 'Grey',   hex: '#9e9e9e' },
+              ].map((color) => {
+                const isSelected = (formData.customizeColors || []).some((c) => c.name === color.name);
+                return (
+                  <button
+                    key={color.name}
+                    type="button"
+                    title={color.name}
+                    onClick={() => handleColorToggle(color)}
+                    className={`flex flex-col items-center gap-1.5 rounded-xl p-2 transition-all hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
+                      isSelected ? 'bg-foreground/8' : ''
+                    }`}
+                  >
+                    <span
+                      className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${
+                        isSelected
+                          ? 'ring-2 ring-offset-2 ring-foreground scale-110'
+                          : 'ring-1 ring-black/15 hover:ring-foreground/40'
+                      }`}
+                      style={{ backgroundColor: color.hex }}
+                    >
+                      {isSelected ? (
+                        <svg viewBox="0 0 12 12" fill="none" stroke={color.hex === '#f5f5f5' ? '#000' : '#fff'} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" width={10} height={10}>
+                          <path d="M2 6l3 3 5-5" />
+                        </svg>
+                      ) : null}
+                    </span>
+                    <span className={`text-[10px] font-bold ${ isSelected ? 'text-foreground' : 'text-muted-foreground' }`}>
+                      {color.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {(formData.customizeColors || []).length > 0 ? (
+              <p className="text-xs font-medium text-foreground">
+                Selected:&nbsp;
+                {(formData.customizeColors || []).map((c) => c.name).join(', ')}
+              </p>
+            ) : (
+              <p className="text-xs text-muted-foreground font-body">No colors selected — customize button will still show without color options.</p>
+            )}
+          </div>
         </div>
 
         <div className="space-y-6">
@@ -625,7 +707,7 @@ const ProductForm = ({
               </div>
               <input
                 type="file"
-                accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/heif,.heic,.heif"
+                accept="image/*,.heic,.heif,.HEIC,.HEIF"
                 multiple
                 onChange={handleImageUpload}
                 className="w-full rounded-2xl border border-dashed border-border bg-background px-4 py-4 text-sm text-muted-foreground file:mr-4 file:rounded-xl file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.24em] file:text-background"

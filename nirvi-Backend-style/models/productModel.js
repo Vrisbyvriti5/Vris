@@ -37,7 +37,7 @@ const normalizePricing = (row) => {
   };
 };
 
-const normalizeProduct = (product, imageMap = new Map()) => {
+const normalizeProduct = (product, imageMap = new Map(), colorMap = new Map()) => {
   const { mrp, discountPercent, finalPrice } = normalizePricing(product);
   const galleryImages = imageMap.get(String(product.id)) || [];
   const fallbackImage = product.image || null;
@@ -60,6 +60,7 @@ const normalizeProduct = (product, imageMap = new Map()) => {
     images,
     image: images[0] || null,
     sizes: product.sizes || [],
+    customizeColors: colorMap.get(String(product.id)) || [],
   };
 };
 
@@ -86,6 +87,48 @@ const fetchSizesForProducts = async (productIds, connection = pool) => {
   });
 
   return map;
+};
+
+const fetchCustomizeColorsForProducts = async (productIds, connection = pool) => {
+  if (!productIds.length) {
+    return new Map();
+  }
+
+  const [rows] = await connection.query(
+    `SELECT product_id, color_name, color_hex
+     FROM vris_product_customize_colors
+     WHERE product_id IN (?)
+     ORDER BY product_id ASC, sort_order ASC, id ASC`,
+    [productIds],
+  );
+
+  const map = new Map();
+  rows.forEach((row) => {
+    const key = String(row.product_id);
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key).push({ name: row.color_name, hex: row.color_hex });
+  });
+
+  return map;
+};
+
+const replaceProductCustomizeColors = async (connection, productId, colors) => {
+  await connection.query('DELETE FROM vris_product_customize_colors WHERE product_id = ?', [productId]);
+
+  if (!colors || !colors.length) {
+    return;
+  }
+
+  for (let index = 0; index < colors.length; index += 1) {
+    const color = colors[index];
+    await connection.query(
+      `INSERT INTO vris_product_customize_colors (product_id, color_name, color_hex, sort_order)
+       VALUES (?, ?, ?, ?)`,
+      [productId, String(color.name || '').trim(), String(color.hex || '').trim(), index],
+    );
+  }
 };
 
 const fetchImagesForProducts = async (productIds, connection = pool) => {
@@ -253,10 +296,11 @@ const findAll = async ({ category, search, sort } = {}) => {
   const productIds = rows.map((row) => row.id);
   const imageMap = await fetchImagesForProducts(productIds);
   const sizeMap = await fetchSizesForProducts(productIds);
-  
+  const colorMap = await fetchCustomizeColorsForProducts(productIds);
+
   const normalizedProducts = rows.map((row) => {
     const productData = { ...row, sizes: sizeMap.get(String(row.id)) || [] };
-    return normalizeProduct(productData, imageMap);
+    return normalizeProduct(productData, imageMap, colorMap);
   });
 
   if (requestedSort === 'random') {
@@ -287,9 +331,10 @@ const findById = async (id) => {
 
   const imageMap = await fetchImagesForProducts([rows[0].id]);
   const sizeMap = await fetchSizesForProducts([rows[0].id]);
+  const colorMap = await fetchCustomizeColorsForProducts([rows[0].id]);
   const productData = { ...rows[0], sizes: sizeMap.get(String(rows[0].id)) || [] };
-  
-  return normalizeProduct(productData, imageMap);
+
+  return normalizeProduct(productData, imageMap, colorMap);
 };
 
 const findRawById = async (connection, id) => {
@@ -351,9 +396,13 @@ const create = async (data) => {
       : (primaryImage ? [primaryImage] : []);
 
     await replaceProductImages(connection, result.insertId, finalGallery);
-    
+
     if (data.sizes) {
       await replaceProductSizes(connection, result.insertId, data.sizes);
+    }
+
+    if (data.customizeColors !== undefined) {
+      await replaceProductCustomizeColors(connection, result.insertId, data.customizeColors);
     }
 
     await connection.commit();
@@ -458,6 +507,10 @@ const update = async (id, data) => {
     
     if (data.sizes !== undefined) {
       await replaceProductSizes(connection, id, data.sizes);
+    }
+
+    if (data.customizeColors !== undefined) {
+      await replaceProductCustomizeColors(connection, id, data.customizeColors);
     }
 
     if (fields.length) {

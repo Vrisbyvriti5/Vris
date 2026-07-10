@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Star, StarHalf, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
+import { Heart, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { formatPriceINR, getProductPricing } from '@/lib/pricing';
@@ -8,46 +8,6 @@ import { getEntityStock, isOutOfStock } from '@/lib/stock';
 import { useToast } from '@/components/ui/use-toast';
 
 const ADD_TO_CART_TOAST_DURATION = 1500;
-
-// ─── Star Rating Component ──────────────────────────────────────────
-const StarRating = ({ rating = 0, reviews = 0 }) => {
-  const hasRating = rating > 0;
-  const fullStars = Math.floor(rating);
-  const hasHalf = hasRating && rating - fullStars >= 0.25 && rating - fullStars < 0.75;
-  const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
-
-  // No ratings at all — show muted message
-  if (!hasRating) {
-    return (
-      <div className="flex items-center gap-1.5 flex-wrap">
-        <div className="flex items-center gap-px">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={`e-${i}`} size={12} className="text-gray-300" />
-          ))}
-        </div>
-        <span className="text-[11px] text-gray-400 italic font-body">No ratings yet</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex items-center gap-1.5 flex-wrap">
-      <div className="flex items-center gap-px">
-        {Array.from({ length: fullStars }).map((_, i) => (
-          <Star key={`f-${i}`} size={12} className="fill-emerald-500 text-emerald-500" />
-        ))}
-        {hasHalf && <StarHalf size={12} className="fill-emerald-500 text-emerald-500" />}
-        {Array.from({ length: emptyStars }).map((_, i) => (
-          <Star key={`e-${i}`} size={12} className="text-gray-300" />
-        ))}
-      </div>
-      <span className="text-[11px] font-bold text-emerald-600">{rating.toFixed(1)} ★</span>
-      <span className="text-[11px] text-gray-400">
-        ({reviews > 0 ? reviews.toLocaleString('en-IN') : '0'})
-      </span>
-    </div>
-  );
-};
 
 // ─── Main ProductCard ───────────────────────────────────────────────
 const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount = 15 }) => {
@@ -81,10 +41,6 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
     return () => clearInterval(interval);
   }, [isHovered, galleryImages.length]);
 
-  // Use real rating only — no fake/random fallbacks
-  const rawRating = product.rating ?? product.average_rating ?? product.avg_rating ?? product.averageRating ?? 0;
-  const rating = Number(rawRating) || 0;
-  const reviews = product.reviewCount ?? product.reviews ?? product.review_count ?? product.total_reviews ?? 0;
   const savingsAmount = pricing.hasDiscount ? pricing.mrp - pricing.finalPrice : 0;
 
   const navigateToProduct = () => {
@@ -290,7 +246,7 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
 
           {/* Discount badge */}
           {pricing.hasDiscount && !outOfStock && (
-            <span className="absolute left-4 top-4 rounded-full bg-red-500 px-2.5 py-1 text-[10px] font-bold text-white shadow-md">
+            <span className="absolute left-4 top-4 rounded-full bg-[#e0b090] px-2.5 py-1 text-[10px] font-bold text-white shadow-md">
               -{pricing.discountLabel}%
             </span>
           )}
@@ -319,11 +275,6 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
           <h3 className="text-xs sm:text-sm font-medium text-gray-800 leading-tight line-clamp-2 font-body hover:text-amber-700 transition-colors">
             {product.name}
           </h3>
-
-          {/* Rating */}
-          <div className="mt-0.5">
-            <StarRating rating={Number(rating)} reviews={Number(reviews)} />
-          </div>
 
           {/* ── Pricing ── */}
           <div className="mt-1 space-y-0">

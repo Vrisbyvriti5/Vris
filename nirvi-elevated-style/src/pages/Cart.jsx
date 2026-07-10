@@ -15,7 +15,7 @@ import { useWishlist } from '@/context/WishlistContext';
 import { couponsAPI } from '@/lib/api';
 import { getEntityStock } from '@/lib/stock';
 
-const SHIPPING_FREE_THRESHOLD = 299;
+const SHIPPING_FREE_THRESHOLD = 2999;
 
 const shuffleProducts = (list) => {
   const next = [...list];

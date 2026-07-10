@@ -23,6 +23,7 @@ import {
   Paintbrush,
   Plus,
   RefreshCcw,
+  Ruler,
   Search,
   ShieldCheck,
   ShoppingBag,
@@ -49,6 +50,7 @@ import ProductDetailSkeleton from '@/components/ProductDetailSkeleton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatPriceINR, getProductPricing } from '@/lib/pricing';
 import { getEntityStock } from '@/lib/stock';
+import CustomizeModal from '@/components/CustomizeModal';
 
 const ADD_TO_CART_TOAST_DURATION = 1500;
 
@@ -139,6 +141,9 @@ const ProductDetail = () => {
   // Size chart modal state
   const [showSizeChart, setShowSizeChart] = useState(false);
   const sizeChartCloseRef = useRef(null);
+
+  // Customize modal state
+  const [showCustomize, setShowCustomize] = useState(false);
 
   // Fetch individual product if not found in catalog
   useEffect(() => {
@@ -399,6 +404,35 @@ const ProductDetail = () => {
         stock: stockValue,
         size: selectedSize,
         availableSizes: availableSizes,
+      },
+    });
+    navigate('/checkout');
+  };
+
+  const handleCustomizeCheckout = (customizationData) => {
+    setShowCustomize(false);
+    const quantityToBuyNow = Math.max(1, Math.min(qty, Math.max(remainingStock, 1)));
+    startCheckout({
+      source: 'buyNow',
+      item: {
+        id: product?.id,
+        product_id: product?.id,
+        name: product?.name || 'Product',
+        price: finalPrice,
+        image: primaryImage,
+        category: product?.category || 'General',
+        quantity: quantityToBuyNow,
+        stock: stockValue,
+        size: selectedSize,
+        availableSizes: availableSizes,
+        // Customization payload
+        is_custom: true,
+        custom_bust:   customizationData.bust,
+        custom_waist:  customizationData.waist,
+        custom_hips:   customizationData.hips,
+        custom_length: customizationData.length,
+        custom_color:  customizationData.color ? customizationData.color.name : null,
+        customization: customizationData,
       },
     });
     navigate('/checkout');
@@ -765,7 +799,7 @@ const ProductDetail = () => {
                   ))
                 ) : (
                   <div className="flex h-11 items-center justify-center rounded-xl border border-black/10 bg-white px-4 text-sm font-bold uppercase text-foreground">
-                    One Size
+                    Free Size
                   </div>
                 )}
               </div>
@@ -960,6 +994,16 @@ const ProductDetail = () => {
                 className="inline-flex h-12 items-center justify-center rounded-xl border border-[#e0b090] bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-[#e0b090] shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#fbf5f1] hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Buy Now
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowCustomize(true)}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-[#e0b090] bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-[#e0b090] shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#fbf5f1] hover:shadow-md active:scale-[0.98]"
+                aria-haspopup="dialog"
+                aria-label="Customize this product"
+              >
+                <Ruler size={16} />
+                Customize
               </button>
               <button
                 type="button"
@@ -1694,6 +1738,14 @@ const ProductDetail = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── Customize Modal ── */}
+      <CustomizeModal
+        product={product}
+        isOpen={showCustomize}
+        onClose={() => setShowCustomize(false)}
+        onCheckout={handleCustomizeCheckout}
+      />
 
       <Footer />
     </div>

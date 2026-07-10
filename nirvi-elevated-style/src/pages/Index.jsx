@@ -15,12 +15,12 @@ import './HomePage.css';
 const HERO_SLIDES = [
   {
     id: 1,
-    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783033831430-fa48999cd164-thirdd.webp',
+    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783033831977-086ebfc6c2bc-secondd.webp',
     alt: 'Luxury fashion editorial — model in designer outfit',
   },
   {
     id: 2,
-    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783033831977-086ebfc6c2bc-secondd.webp',
+    src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783033831430-fa48999cd164-thirdd.webp',
     alt: 'Luxury fashion editorial — elegant look',
   },
   {
@@ -30,18 +30,8 @@ const HERO_SLIDES = [
   },
 ];
 
-const PROMO_FULL_1 = 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038690810-4e556c0cc880-fourth2.webp';
-const PROMO_FULL_2 = 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038731927-fdeaf757836e-Fifth2.webp';
-const PROMO_FULL_3 = 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038732041-7fd935dbef41-sixth2.webp';
 const PROMO_FULL_4 = 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038732126-996bff7d90ee-seventh.webp';
-const PROMO_FULL_5 = 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038731671-1ab5a6d98ebf-eight2.webp';
 
-const PROMO_CARDS = [
-  { title: 'New Arrivals', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038642432-9a45d50cfe2d-Psecond.webp' },
-  { title: 'Best Sellers', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038641923-e06bab68586b-pfourth.webp' },
-  { title: 'Trending Now', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038642495-a8dae01c0aa5-Pone.webp' },
-  { title: 'Limited Edition', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1782038642362-d7db064fef02-Pthird.webp' },
-];
 
 const INSTAGRAM_REELS = [
   {
@@ -124,7 +114,7 @@ const HeroCarousel = () => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 2000);
-    
+
     return () => clearInterval(timer);
   }, []);
 
@@ -138,42 +128,42 @@ const HeroCarousel = () => {
 
   const handleTouchEnd = () => {
     if (!touchStartX.current || !touchEndX.current) return;
-    
+
     const distance = touchStartX.current - touchEndX.current;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
-    
+
     if (isLeftSwipe) {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     } else if (isRightSwipe) {
       setCurrentSlide((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
     }
-    
+
     touchStartX.current = null;
     touchEndX.current = null;
   };
 
   return (
-    <section 
-      className="hp-hero" 
+    <section
+      className="hp-hero"
       id="hp-hero"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {HERO_SLIDES.map((slide, idx) => (
-        <div 
+        <div
           key={slide.id}
           className={`hp-hero__slide ${idx === currentSlide ? 'hp-hero__slide--active' : ''}`}
         >
           <Link to="/shop" className="block w-full h-full">
             <img
-            src={slide.src}
-            alt={slide.alt}
-            className="hp-hero__img"
-            loading={idx === 0 ? "eager" : "lazy"}
-            decoding={idx === 0 ? "sync" : "async"}
-          />
+              src={slide.src}
+              alt={slide.alt}
+              className="hp-hero__img"
+              loading={idx === 0 ? "eager" : "lazy"}
+              decoding={idx === 0 ? "sync" : "async"}
+            />
           </Link>
         </div>
       ))}
@@ -239,7 +229,7 @@ const ShopByCategories = () => {
     >
       <h2 className="hp-shop__heading">Shop By Categories</h2>
       <p className="hp-shop__subheading">Explore our exclusive collections tailored for your lifestyle</p>
-      
+
       <div className="hp-promo-cards" style={{ marginTop: '40px' }}>
         {CATEGORY_CARDS.map((card, idx) => (
           <Link to={card.to} key={idx} className="hp-promo-card block cursor-pointer transition-transform hover:scale-[1.02]" style={{ background: '#f5f5f5', aspectRatio: '9/16' }}>
@@ -269,29 +259,6 @@ const ShopByCategories = () => {
   );
 };
 
-const PromoCards = () => {
-  const [ref, visible] = useReveal();
-
-  return (
-    <section
-      ref={ref}
-      className={`hp-promo-cards hp-reveal ${visible ? 'hp-reveal--visible' : ''}`}
-      id="hp-promo-cards"
-    >
-      {PROMO_CARDS.map((card) => (
-        <Link to="/shop" key={card.title} className="hp-promo-card block cursor-pointer transition-transform hover:scale-[1.02]">
-          <img
-            src={card.src}
-            alt={card.title}
-            className="hp-promo-card__img"
-            loading="lazy"
-            decoding="async"
-          />
-        </Link>
-      ))}
-    </section>
-  );
-};
 
 // ═══════════════════════════════════════════════════════════════════════
 // SECTION 7 — Instagram
@@ -470,9 +437,6 @@ const Index = () => {
       {/* SECTION 5 — Shop By Categories */}
       <ShopByCategories />
 
-      {/* SECTION 6 — Promotional Cards */}
-      <PromoCards />
-
       {/* SECTION 7 — Instagram */}
       <InstagramSection />
 
@@ -487,15 +451,6 @@ const Index = () => {
 
       {/* SECTION 9 — Shop The Look */}
       <ShopTheLook />
-
-      {/* SECTION 10 — Full-width luxury banner (mobile: 50vh) */}
-      <FullBleedImage
-        src={PROMO_FULL_5}
-        alt="Luxury fashion — elegant editorial"
-        id="hp-promo-5"
-        mobileHeight="70"
-        to="/shop"
-      />
 
       {/* SECTION 11 — Footer (untouched) */}
       <Footer />

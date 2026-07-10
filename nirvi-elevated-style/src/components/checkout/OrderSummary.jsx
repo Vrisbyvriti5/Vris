@@ -60,11 +60,38 @@ const OrderSummary = ({
         <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#6b7280]">Items ({items.length})</p>
         <div className="space-y-2">
           {items.map((item) => (
-            <div key={item.id} className="flex items-start justify-between gap-3 text-sm">
-              <p className="line-clamp-1 text-[#4b5563]">
-                {item.name} x {item.quantity}
-              </p>
-              <p className="shrink-0 font-semibold text-[#111827]">Rs {formatPriceINR(item.lineTotal)}</p>
+            <div key={item.id} className="space-y-1">
+              <div className="flex items-start justify-between gap-3 text-sm">
+                <p className="line-clamp-1 text-[#4b5563]">
+                  {item.name} x {item.quantity}
+                </p>
+                <p className="shrink-0 font-semibold text-[#111827]">Rs {formatPriceINR(item.lineTotal)}</p>
+              </div>
+              {item.is_custom || item.customization ? (
+                <div className="rounded-lg border border-[#5b2c8d]/20 bg-[#f5f0fa] px-2.5 py-2 text-[11px] font-medium text-[#5b2c8d] space-y-0.5">
+                  <p className="font-extrabold uppercase tracking-wider text-[#5b2c8d] text-[10px]">
+                    ✦ Customized
+                  </p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[11px] text-[#4b2a7a]">
+                    {item.custom_bust   != null && <span>Bust: {item.custom_bust}"</span>}
+                    {item.custom_waist  != null && <span>Waist: {item.custom_waist}"</span>}
+                    {item.custom_hips   != null && <span>Hips: {item.custom_hips}"</span>}
+                    {item.custom_length != null && <span>Length: {item.custom_length}"</span>}
+                    {(item.custom_color || item.customization?.color?.name) ? (
+                      <span className="col-span-2 flex items-center gap-1.5">
+                        Color:&nbsp;
+                        {item.customization?.color?.hex ? (
+                          <span
+                            className="inline-block h-3 w-3 rounded-full border border-black/10"
+                            style={{ backgroundColor: item.customization.color.hex }}
+                          />
+                        ) : null}
+                        {item.custom_color || item.customization?.color?.name}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
@@ -227,7 +254,7 @@ const OrderSummary = ({
           <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#2563eb]">
             <Truck size={14} /> Free Delivery
           </p>
-          <p className="mt-1 text-sm text-[#6b7280]">Free delivery on orders above Rs 299.</p>
+          <p className="mt-1 text-sm text-[#6b7280]">Free delivery on orders above Rs 2999.</p>
         </div>
         <div className="rounded-xl border border-[#fff1d8] bg-[#fffaf0] p-3">
           <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#b45309]">

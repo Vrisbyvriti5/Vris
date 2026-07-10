@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
-import { usersAPI, ordersAPI } from '@/lib/api';
+import { usersAPI, ordersAPI, customizationsAPI } from '@/lib/api';
 import { useAdminAuth } from '@/context/AdminAuthContext';
 
 const AdminDataContext = createContext(undefined);
@@ -26,10 +26,13 @@ export const AdminDataProvider = ({ children }) => {
   const { isAuthenticated } = useAdminAuth();
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [customizations, setCustomizations] = useState([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [customizationsLoading, setCustomizationsLoading] = useState(false);
   const [usersError, setUsersError] = useState('');
   const [ordersError, setOrdersError] = useState('');
+  const [customizationsError, setCustomizationsError] = useState('');
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
 
   const fetchUsers = useCallback(async () => {
@@ -135,21 +138,50 @@ export const AdminDataProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  const refreshAll = useCallback(async () => {
+  const fetchCustomizations = useCallback(async () => {
     if (!isAuthenticated) {
-      return;
+      setCustomizations([]);
+      setCustomizationsError('');
+      return [];
     }
 
-    await Promise.all([fetchUsers(), fetchOrders()]);
-    setLastUpdatedAt(new Date().toISOString());
-  }, [isAuthenticated, fetchUsers, fetchOrders]);
+    setCustomizationsLoading(true);
+    try {
+      const res = await customizationsAPI.getAll();
+      setCustomizations(res.data || []);
+      setCustomizationsError('');
+      return res.data || [];
+    } catch (err) {
+      console.error('Failed to fetch customizations:', err);
+      setCustomizationsError(err.data?.message || err.message || 'Failed to load customizations.');
+      return [];
+    } finally {
+      setCustomizationsLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  const refreshAll = useCallback(async () => {
+    setUsersLoading(true);
+    setOrdersLoading(true);
+    setCustomizationsLoading(true);
+    try {
+      await Promise.all([fetchUsers(), fetchOrders(), fetchCustomizations()]);
+      setLastUpdatedAt(new Date().toISOString());
+    } finally {
+      setUsersLoading(false);
+      setOrdersLoading(false);
+      setCustomizationsLoading(false);
+    }
+  }, [fetchUsers, fetchOrders, fetchCustomizations]);
 
   useEffect(() => {
     if (!isAuthenticated) {
       setUsers([]);
       setOrders([]);
+      setCustomizations([]);
       setUsersError('');
       setOrdersError('');
+      setCustomizationsError('');
       setLastUpdatedAt(null);
       return undefined;
     }
@@ -216,24 +248,53 @@ export const AdminDataProvider = ({ children }) => {
     }
   };
 
-  const loading = usersLoading || ordersLoading;
-  const error = usersError || ordersError;
+
+  const updateCustomizationStatus = async (orderId, status) => {
+    try {
+      const res = await customizationsAPI.updateStatus(orderId, status);
+      // Update in our customizations array (and theoretically it updates the main order too)
+      setCustomizations((prev) =>
+        prev.map((c) =>
+          String(c.order_id) === String(orderId) ? { ...c, status: res.data?.status || status } : c
+        )
+      );
+      // Also update the main orders array if it exists
+      setOrders((prev) =>
+        prev.map((o) =>
+          String(o.id) === String(orderId) ? { ...o, status: res.data?.status || status } : o
+        )
+      );
+      setLastUpdatedAt(new Date().toISOString());
+      return res.data;
+    } catch (err) {
+      console.error('Failed to update customization status:', err);
+      throw err;
+    }
+  };
+
+  const loading = usersLoading || ordersLoading || customizationsLoading;
+  const error = usersError || ordersError || customizationsError;
 
   const value = {
     users,
     orders,
+    customizations,
     loading,
     usersLoading,
     ordersLoading,
+    customizationsLoading,
     usersError,
     ordersError,
+    customizationsError,
     error,
     lastUpdatedAt,
     updateOrderStatus,
+    updateCustomizationStatus,
     deleteUser,
     updateUserRole,
     refreshUsers: fetchUsers,
     refreshOrders: fetchOrders,
+    refreshCustomizations: fetchCustomizations,
     refreshAll,
   };
 

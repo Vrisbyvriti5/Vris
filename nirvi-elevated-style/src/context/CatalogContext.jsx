@@ -62,6 +62,11 @@ const buildProductFormData = (input) => {
       return;
     }
 
+    if (key === 'customizeColors' && Array.isArray(value)) {
+      formData.append('customizeColors', JSON.stringify(value));
+      return;
+    }
+
     if (value instanceof File) {
       formData.append('images', value);
       return;

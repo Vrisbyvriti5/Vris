@@ -44,6 +44,7 @@ const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminProducts = lazy(() => import("./pages/admin/AdminProducts"));
 const AdminProductFormPage = lazy(() => import("./pages/admin/AdminProductFormPage"));
 const AdminOrders = lazy(() => import("./pages/admin/AdminOrders"));
+const AdminCustomizations = lazy(() => import("./pages/admin/AdminCustomizations"));
 const AdminUserRequests = lazy(() => import("./pages/admin/AdminUserRequests"));
 const AdminUsers = lazy(() => import("./pages/admin/AdminUsers"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
@@ -111,6 +112,7 @@ const App = () => (
                             <Route path="products/new" element={<AdminProductFormPage />} />
                             <Route path="products/:productId/edit" element={<AdminProductFormPage />} />
                             <Route path="orders" element={<AdminOrders />} />
+                            <Route path="customizations" element={<AdminCustomizations />} />
                             <Route path="user-requests" element={<AdminUserRequests />} />
                             <Route path="users" element={<AdminUsers />} />
                             <Route path="settings" element={<AdminSettings />} />

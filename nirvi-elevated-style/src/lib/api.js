@@ -342,3 +342,17 @@ export const contactRequestsAPI = {
       body: JSON.stringify({ status }),
     }),
 };
+
+// ── Customizations API (admin) ────────────────────────────────────────────
+export const customizationsAPI = {
+  getAll: () => request('/customizations'),
+
+  getById: (id) => request(`/customizations/${id}`),
+
+  updateStatus: (orderId, status) =>
+    request(`/customizations/${orderId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    }),
+};
+

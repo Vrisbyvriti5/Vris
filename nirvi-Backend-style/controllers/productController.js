@@ -216,7 +216,21 @@ const createProduct = async (req, res) => {
       sku,
       featured,
       sizes,
+      customizeColors: rawCustomizeColors,
     } = req.body;
+
+    // Parse customizeColors — sent as JSON string from FormData
+    let customizeColors;
+    if (rawCustomizeColors !== undefined) {
+      try {
+        customizeColors = typeof rawCustomizeColors === 'string'
+          ? JSON.parse(rawCustomizeColors)
+          : rawCustomizeColors;
+        if (!Array.isArray(customizeColors)) customizeColors = [];
+      } catch {
+        customizeColors = [];
+      }
+    }
 
     if (!name || (!price && !mrp)) {
       return res.status(400).json({
@@ -265,6 +279,7 @@ const createProduct = async (req, res) => {
       sku,
       featured: featured === 'true' || featured === true,
       sizes: Array.isArray(sizes) ? sizes : (typeof sizes === 'string' ? [sizes] : []),
+      customizeColors,
     });
 
     res.set('Cache-Control', 'no-store');
@@ -344,6 +359,18 @@ const updateProduct = async (req, res) => {
         updateData.sizes = [updateData.sizes];
       } else {
         updateData.sizes = [];
+      }
+    }
+
+    // Parse customizeColors from FormData JSON string
+    if (updateData.customizeColors !== undefined) {
+      try {
+        updateData.customizeColors = typeof updateData.customizeColors === 'string'
+          ? JSON.parse(updateData.customizeColors)
+          : updateData.customizeColors;
+        if (!Array.isArray(updateData.customizeColors)) updateData.customizeColors = [];
+      } catch {
+        updateData.customizeColors = [];
       }
     }
 

@@ -61,10 +61,27 @@ const create = async (userId, orderData) => {
 
     // Insert each order item
     for (const item of items) {
+      const isCustom = Boolean(item.is_custom);
       await connection.query(
-        `INSERT INTO vris_order_items (order_id, product_id, name, size, price, quantity, image)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [orderId, item.productId || item.product_id, item.name, item.size || null, item.price, item.quantity, item.image || null],
+        `INSERT INTO vris_order_items
+          (order_id, product_id, name, size, price, quantity, image,
+           is_custom, custom_bust, custom_waist, custom_hips, custom_length, custom_color)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          orderId,
+          item.productId || item.product_id,
+          item.name,
+          item.size || null,
+          item.price,
+          item.quantity,
+          item.image || null,
+          isCustom ? 1 : 0,
+          isCustom ? (item.custom_bust || null) : null,
+          isCustom ? (item.custom_waist || null) : null,
+          isCustom ? (item.custom_hips || null) : null,
+          isCustom ? (item.custom_length || null) : null,
+          isCustom ? (item.custom_color || null) : null,
+        ],
       );
     }
 
