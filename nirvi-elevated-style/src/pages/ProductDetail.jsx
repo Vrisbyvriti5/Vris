@@ -1073,13 +1073,7 @@ const ProductDetail = () => {
                       <span className="mt-0.5 text-xs font-medium text-muted-foreground">Secure transaction</span>
                     </div>
                   </div>
-                  <div className="flex gap-3">
-                    <ShieldCheck size={18} className="mt-0.5 shrink-0 text-[#e0b090]" />
-                    <div className="flex flex-col leading-tight">
-                      <span className="text-[13px] font-bold text-foreground">Warranty</span>
-                      <span className="mt-0.5 text-xs font-medium text-muted-foreground">1 Year Warranty</span>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
