@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, Mail, Phone, UserRound } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -288,7 +288,7 @@ const Login = () => {
                     onClick={() => switchMode(true)}
                     className={[
                       'rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] transition-all duration-300',
-                      isLogin ? 'bg-white text-[#e0b090] shadow-sm' : 'text-[#7b7b85] hover:text-[#e0b090]',
+                      isLogin ? 'bg-white text-black shadow-sm' : 'text-[#7b7b85] hover:text-black',
                     ].join(' ')}
                   >
                     Login
@@ -298,7 +298,7 @@ const Login = () => {
                     onClick={() => switchMode(false)}
                     className={[
                       'rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] transition-all duration-300',
-                      !isLogin ? 'bg-white text-[#e0b090] shadow-sm' : 'text-[#7b7b85] hover:text-[#e0b090]',
+                      !isLogin ? 'bg-white text-black shadow-sm' : 'text-[#7b7b85] hover:text-black',
                     ].join(' ')}
                   >
                     Sign Up
@@ -318,7 +318,7 @@ const Login = () => {
                     >
                       <div className="space-y-1.5">
                         <label htmlFor="login-email" className="sr-only">Email</label>
-                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#ebd1c1]">
+                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-black focus-within:ring-2 focus-within:ring-gray-300">
                           <Mail size={16} className="text-[#a1a1aa]" aria-hidden="true" />
                           <input
                             id="login-email"
@@ -337,7 +337,7 @@ const Login = () => {
 
                       <div className="space-y-1.5">
                         <label htmlFor="login-password" className="sr-only">Password</label>
-                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#ebd1c1]">
+                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-black focus-within:ring-2 focus-within:ring-gray-300">
                           <Lock size={16} className="text-[#a1a1aa]" aria-hidden="true" />
                           <input
                             id="login-password"
@@ -353,7 +353,7 @@ const Login = () => {
                           <button
                             type="button"
                             onClick={() => setShowLoginPassword((current) => !current)}
-                            className="text-[#9ca3af] transition-colors hover:text-[#e0b090]"
+                            className="text-[#9ca3af] transition-colors hover:text-black"
                             aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
                           >
                             {showLoginPassword ? <EyeOff size={17} /> : <Eye size={17} />}
@@ -366,7 +366,7 @@ const Login = () => {
                         <Link
                           to="/forgot-password"
                           state={{ email: loginValues.email }}
-                          className="text-xs font-semibold uppercase tracking-[0.13em] text-[#7b7b85] transition-colors hover:text-[#e0b090]"
+                          className="text-xs font-semibold uppercase tracking-[0.13em] text-[#7b7b85] transition-colors hover:text-black"
                         >
                           Forgot Password?
                         </Link>
@@ -377,7 +377,7 @@ const Login = () => {
                         disabled={submitting || oauthRedirecting}
                         whileHover={submitting || oauthRedirecting ? undefined : { scale: 1.01 }}
                         whileTap={submitting || oauthRedirecting ? undefined : { scale: 0.99 }}
-                        className="w-full rounded-xl bg-[#e0b090] px-4 py-3 text-sm font-extrabold uppercase tracking-[0.22em] text-white transition-all duration-300 hover:bg-[#d6a382] disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.22em] text-white transition-all duration-300 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {submitting ? 'LOGGING IN...' : 'LOGIN'}
                       </motion.button>
@@ -410,7 +410,7 @@ const Login = () => {
                         <button
                           type="button"
                           onClick={() => switchMode(false)}
-                          className="font-semibold text-[#e0b090] transition-colors hover:text-[#d6a382]"
+                          className="font-semibold text-black transition-colors hover:text-gray-600"
                         >
                           Sign Up
                         </button>
@@ -428,7 +428,7 @@ const Login = () => {
                     >
                       <div className="space-y-1.5">
                         <label htmlFor="signup-name" className="sr-only">Full Name</label>
-                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#ebd1c1]">
+                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-black focus-within:ring-2 focus-within:ring-gray-300">
                           <UserRound size={16} className="text-[#a1a1aa]" aria-hidden="true" />
                           <input
                             id="signup-name"
@@ -447,7 +447,7 @@ const Login = () => {
 
                       <div className="space-y-1.5">
                         <label htmlFor="signup-email" className="sr-only">Email</label>
-                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#ebd1c1]">
+                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-black focus-within:ring-2 focus-within:ring-gray-300">
                           <Mail size={16} className="text-[#a1a1aa]" aria-hidden="true" />
                           <input
                             id="signup-email"
@@ -466,7 +466,7 @@ const Login = () => {
 
                       <div className="space-y-1.5">
                         <label htmlFor="signup-phone" className="sr-only">Mobile Number (Optional)</label>
-                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#ebd1c1]">
+                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-black focus-within:ring-2 focus-within:ring-gray-300">
                           <Phone size={16} className="text-[#a1a1aa]" aria-hidden="true" />
                           <input
                             id="signup-phone"
@@ -485,7 +485,7 @@ const Login = () => {
 
                       <div className="space-y-1.5">
                         <label htmlFor="signup-password" className="sr-only">Password</label>
-                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#ebd1c1]">
+                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-black focus-within:ring-2 focus-within:ring-gray-300">
                           <Lock size={16} className="text-[#a1a1aa]" aria-hidden="true" />
                           <input
                             id="signup-password"
@@ -501,7 +501,7 @@ const Login = () => {
                           <button
                             type="button"
                             onClick={() => setShowSignupPassword((current) => !current)}
-                            className="text-[#9ca3af] transition-colors hover:text-[#e0b090]"
+                            className="text-[#9ca3af] transition-colors hover:text-black"
                             aria-label={showSignupPassword ? 'Hide password' : 'Show password'}
                           >
                             {showSignupPassword ? <EyeOff size={17} /> : <Eye size={17} />}
@@ -512,7 +512,7 @@ const Login = () => {
 
                       <div className="space-y-1.5">
                         <label htmlFor="signup-confirm-password" className="sr-only">Confirm Password</label>
-                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#ebd1c1]">
+                        <div className="flex items-center rounded-lg border border-gray-300 bg-[#f9fafb] px-3 transition-colors focus-within:border-black focus-within:ring-2 focus-within:ring-gray-300">
                           <Lock size={16} className="text-[#a1a1aa]" aria-hidden="true" />
                           <input
                             id="signup-confirm-password"
@@ -528,7 +528,7 @@ const Login = () => {
                           <button
                             type="button"
                             onClick={() => setShowSignupConfirmPassword((current) => !current)}
-                            className="text-[#9ca3af] transition-colors hover:text-[#e0b090]"
+                            className="text-[#9ca3af] transition-colors hover:text-black"
                             aria-label={showSignupConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                           >
                             {showSignupConfirmPassword ? <EyeOff size={17} /> : <Eye size={17} />}
@@ -542,7 +542,7 @@ const Login = () => {
                         disabled={submitting || oauthRedirecting}
                         whileHover={submitting || oauthRedirecting ? undefined : { scale: 1.01 }}
                         whileTap={submitting || oauthRedirecting ? undefined : { scale: 0.99 }}
-                        className="w-full rounded-xl bg-[#e0b090] px-4 py-3 text-sm font-extrabold uppercase tracking-[0.22em] text-white transition-all duration-300 hover:bg-[#d6a382] disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.22em] text-white transition-all duration-300 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {submitting ? 'CREATING ACCOUNT...' : 'SIGN UP'}
                       </motion.button>
@@ -552,7 +552,7 @@ const Login = () => {
                         <button
                           type="button"
                           onClick={() => switchMode(true)}
-                          className="font-semibold text-[#e0b090] transition-colors hover:text-[#d6a382]"
+                          className="font-semibold text-black transition-colors hover:text-gray-600"
                         >
                           Login
                         </button>
@@ -565,11 +565,11 @@ const Login = () => {
 
                 {isAdminAuthenticated && (
                   <div className="mt-5 rounded-2xl border border-[#ffd6e1] bg-[#fff2f6] px-4 py-4 text-center">
-                    <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#e0b090]">Admin Access</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.22em] text-black">Admin Access</p>
                     <p className="mt-2 text-sm text-[#71717a] font-body">Your admin session is active.</p>
                     <Link
                       to="/admin"
-                      className="mt-3 inline-flex items-center justify-center rounded-full border border-[#e0b090] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#e0b090] transition-colors hover:bg-[#e0b090] hover:text-white"
+                      className="mt-3 inline-flex items-center justify-center rounded-full border border-black px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-black transition-colors hover:bg-black hover:text-white"
                     >
                       Go to Admin Dashboard
                     </Link>

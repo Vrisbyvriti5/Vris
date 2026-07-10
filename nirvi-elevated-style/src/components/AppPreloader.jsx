@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+﻿import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 /* ─── Critical images to preload before revealing the site ───────────────
    We preload the first 2 hero slides + first secondary slide so the above-
@@ -154,11 +154,11 @@ const AppPreloader = ({ children }) => {
                 fontSize: '42px',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
-                color: '#e0b090',
+                color: '#000000',
                 lineHeight: 1,
                 userSelect: 'none',
                 WebkitUserSelect: 'none',
-                background: 'linear-gradient(165deg, #e0b090 0%, #ebd1c1 38%, #e0b090 52%, #d6a382 100%)',
+                background: 'linear-gradient(165deg, #111827 0%, #374151 38%, #111827 52%, #000000 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',

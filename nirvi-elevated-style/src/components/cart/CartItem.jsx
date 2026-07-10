@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Minus, Plus, Trash2, Truck } from 'lucide-react';
 import { formatPriceINR } from '@/lib/pricing';
@@ -22,7 +22,7 @@ const CartItem = ({
             type="checkbox"
             checked={checked}
             onChange={onToggle}
-            className="h-4 w-4 rounded border-[#d1d5db] text-[#e0b090] focus:ring-[#ffc6d6]"
+            className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
             aria-label={`Select ${item.name}`}
           />
         </div>
@@ -39,7 +39,7 @@ const CartItem = ({
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <Link to={`/product/${item.id}`} className="line-clamp-1 text-sm font-semibold text-[#111827] hover:text-[#e0b090]">
+              <Link to={`/product/${item.id}`} className="line-clamp-1 text-sm font-semibold text-[#111827] hover:text-black">
                 {item.name}
               </Link>
               <p className="mt-1 line-clamp-1 text-sm text-[#6b7280]">{item.shortDescription}</p>
@@ -50,7 +50,7 @@ const CartItem = ({
               type="button"
               onClick={onRemove}
               disabled={!canEdit}
-              className="rounded-md p-1.5 text-[#ef4444] transition-colors hover:bg-[#fbf5f1] hover:text-[#dc2626] disabled:cursor-not-allowed disabled:opacity-45"
+              className="rounded-md p-1.5 text-[#ef4444] transition-colors hover:bg-gray-50 hover:text-[#dc2626] disabled:cursor-not-allowed disabled:opacity-45"
               aria-label="Remove item"
             >
               <Trash2 size={16} />
@@ -103,7 +103,7 @@ const CartItem = ({
             <p className="text-lg font-bold text-[#111827]">Rs {formatPriceINR(item.unitPrice)}</p>
             {item.pricing.hasDiscount ? <p className="text-sm text-[#9ca3af] line-through">Rs {formatPriceINR(item.pricing.mrp)}</p> : null}
             {item.pricing.hasDiscount ? (
-              <span className="rounded-md bg-[#fbf5f1] px-2 py-0.5 text-xs font-semibold text-[#e0b090]">
+              <span className="rounded-md bg-gray-50 px-2 py-0.5 text-xs font-semibold text-black">
                 {item.pricing.discountLabel}% OFF
               </span>
             ) : null}

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Gift, HeartHandshake, RotateCcw, ShieldCheck, Tag, Truck } from 'lucide-react';
 import { formatPriceINR, formatSignedPriceINR } from '@/lib/pricing';
 import CouponInput from '@/components/checkout/CouponInput';
@@ -152,7 +152,7 @@ const OrderSummary = ({
             type="checkbox"
             checked={giftingEnabled}
             onChange={(event) => onToggleGifting(event.target.checked)}
-            className="h-4 w-4 rounded border-[#d1d5db] text-[#e0b090] focus:ring-[#ffc6d6]"
+            className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
           />
           Add gift wrap and personalized message for Rs 35
         </label>
@@ -168,7 +168,7 @@ const OrderSummary = ({
                   className={[
                     'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
                     normalizedGiftingMessage === template.message
-                      ? 'border-[#e0b090] bg-[#fbf5f1] text-[#e0b090]'
+                      ? 'border-black bg-gray-50 text-black'
                       : 'border-[#d1d5db] text-[#374151] hover:border-[#ffccd9]',
                   ].join(' ')}
                 >
@@ -180,7 +180,7 @@ const OrderSummary = ({
               value={giftingMessage}
               onChange={(event) => onGiftingMessageChange(event.target.value.slice(0, 240))}
               placeholder="Enter your gift message (optional)"
-              className="min-h-20 w-full rounded-lg border border-[#fbcfe8] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+              className="min-h-20 w-full rounded-lg border border-[#fbcfe8] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
             />
             <p className="text-xs text-[#6b7280]">{giftingMessage.length}/240 characters</p>
           </div>
@@ -197,7 +197,7 @@ const OrderSummary = ({
             type="checkbox"
             checked={donationEnabled}
             onChange={(event) => onToggleDonation(event.target.checked)}
-            className="h-4 w-4 rounded border-[#d1d5db] text-[#e0b090] focus:ring-[#ffc6d6]"
+            className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
           />
           Donate and make a difference
         </label>
@@ -212,7 +212,7 @@ const OrderSummary = ({
                 className={[
                   'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
                   donationAmount === amount
-                    ? 'border-[#e0b090] bg-[#fbf5f1] text-[#e0b090]'
+                    ? 'border-black bg-gray-50 text-black'
                     : 'border-[#d1d5db] text-[#374151] hover:border-[#ffccd9]',
                 ].join(' ')}
               >
@@ -236,7 +236,7 @@ const OrderSummary = ({
         type="button"
         disabled={ctaDisabled}
         onClick={onCta}
-        className="mt-4 w-full rounded-xl bg-[#e0b090] px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-[#d6a382] disabled:cursor-not-allowed disabled:opacity-55"
+        className="mt-4 w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-55"
       >
         {ctaLabel}
       </button>

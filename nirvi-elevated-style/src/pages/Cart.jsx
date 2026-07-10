@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Trash2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -499,13 +499,25 @@ const Cart = () => {
               <p className="mt-4 text-base text-[#6b7280]">Your cart is currently empty.</p>
               <Link
                 to="/shop"
-                className="mt-6 inline-flex rounded-xl bg-[#e0b090] px-8 py-3 text-xs font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-[#d6a382]"
+                className="mt-6 inline-flex rounded-xl bg-black px-8 py-3 text-xs font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-gray-800"
               >
                 Continue Shopping
               </Link>
             </div>
           ) : (
             <>
+              {/* Mobile-only top Place Order button */}
+              <div className="block lg:hidden mb-4">
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  disabled={!canProceedToCheckout}
+                  className="w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-55"
+                >
+                  Place Order
+                </button>
+              </div>
+
               <div className="grid gap-6 lg:grid-cols-[minmax(0,1.72fr)_minmax(340px,1fr)] lg:gap-8">
                 <section className="space-y-4">
                   <AddressSection
@@ -522,7 +534,7 @@ const Cart = () => {
                           type="checkbox"
                           checked={allSelected}
                           onChange={toggleSelectAll}
-                          className="h-4 w-4 rounded border-[#d1d5db] text-[#e0b090] focus:ring-[#ffc6d6]"
+                          className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
                         />
                         {selectedCount}/{totalCount} Items Selected
                       </label>
@@ -531,7 +543,7 @@ const Cart = () => {
                         <button
                           type="button"
                           onClick={handleRemoveSelectedItems}
-                          className="inline-flex items-center gap-1 rounded-lg border border-[#f3d0da] px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#ef4444] transition-colors hover:bg-[#fbf5f1]"
+                          className="inline-flex items-center gap-1 rounded-lg border border-[#f3d0da] px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#ef4444] transition-colors hover:bg-gray-50"
                         >
                           <Trash2 size={14} /> Remove
                         </button>
@@ -618,7 +630,7 @@ const Cart = () => {
                     </div>
                     <Link
                       to="/shop"
-                      className="hidden text-xs font-bold uppercase tracking-[0.16em] text-[#e0b090] transition-colors hover:text-[#d6a382] sm:inline-flex"
+                      className="hidden text-xs font-bold uppercase tracking-[0.16em] text-black transition-colors hover:text-gray-600 sm:inline-flex"
                     >
                       Explore More
                     </Link>

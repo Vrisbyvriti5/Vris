@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ChevronDown, X } from 'lucide-react';
 import { useCatalog } from '@/context/CatalogContext';
 import { useFilter } from '@/context/FilterContext';
@@ -38,9 +38,9 @@ const FilterDropdown = ({ label, isOpen, onToggle, onClose, hasActive, children 
         className={cn(
           'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium tracking-wide transition-colors rounded-sm border',
           isOpen
-            ? 'border-[#e0b090] text-[#e0b090]'
+            ? 'border-black text-black'
             : hasActive
-              ? 'border-[#e0b090]/40 text-[#e0b090]'
+              ? 'border-black/40 text-black'
               : 'border-transparent text-gray-700 hover:text-gray-900'
         )}
       >
@@ -65,14 +65,14 @@ const CheckItem = ({ label, checked, onChange }) => (
   <label
     className={cn(
       'flex items-center gap-2.5 px-3 py-[7px] cursor-pointer transition-colors hover:bg-gray-50',
-      checked && 'bg-[#e0b090]/5'
+      checked && 'bg-black/5'
     )}
   >
     <input type="checkbox" checked={checked} onChange={onChange} className="sr-only" />
     <div
       className={cn(
         'w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-all flex-shrink-0',
-        checked ? 'bg-[#e0b090] border-[#e0b090]' : 'border-gray-300 bg-white'
+        checked ? 'bg-black border-black' : 'border-gray-300 bg-white'
       )}
     >
       {checked && (
@@ -81,7 +81,7 @@ const CheckItem = ({ label, checked, onChange }) => (
         </svg>
       )}
     </div>
-    <span className={cn('text-xs text-gray-700 capitalize', checked && 'text-[#e0b090] font-medium')}>
+    <span className={cn('text-xs text-gray-700 capitalize', checked && 'text-black font-medium')}>
       {label}
     </span>
   </label>
@@ -94,18 +94,18 @@ const RadioItem = ({ label, checked, onChange }) => (
     onClick={onChange}
     className={cn(
       'flex w-full items-center gap-2.5 px-3 py-[7px] cursor-pointer transition-colors hover:bg-gray-50',
-      checked && 'bg-[#e0b090]/5'
+      checked && 'bg-black/5'
     )}
   >
     <div
       className={cn(
         'w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-all flex-shrink-0',
-        checked ? 'border-[#e0b090]' : 'border-gray-300'
+        checked ? 'border-black' : 'border-gray-300'
       )}
     >
-      {checked && <div className="w-1.5 h-1.5 rounded-full bg-[#e0b090]" />}
+      {checked && <div className="w-1.5 h-1.5 rounded-full bg-black" />}
     </div>
-    <span className={cn('text-xs text-gray-700', checked && 'text-[#e0b090] font-medium')}>
+    <span className={cn('text-xs text-gray-700', checked && 'text-black font-medium')}>
       {label}
     </span>
   </button>
@@ -200,7 +200,7 @@ const HorizontalFilterBar = ({ productCount, sortValue, onSortChange, sortOption
                 <button
                   type="button"
                   onClick={() => setRating(selectedRating)}
-                  className="w-full text-left px-3 py-[7px] text-xs text-[#e0b090] font-medium hover:bg-gray-50 transition-colors"
+                  className="w-full text-left px-3 py-[7px] text-xs text-black font-medium hover:bg-gray-50 transition-colors"
                 >
                   Clear
                 </button>
@@ -248,7 +248,7 @@ const HorizontalFilterBar = ({ productCount, sortValue, onSortChange, sortOption
           <select
             value={sortValue}
             onChange={(e) => onSortChange(e.target.value)}
-            className="h-7 rounded border border-gray-200 bg-gray-50 px-2.5 pr-7 text-xs text-gray-700 outline-none transition-colors focus:border-[#e0b090] appearance-none cursor-pointer"
+            className="h-7 rounded border border-gray-200 bg-gray-50 px-2.5 pr-7 text-xs text-gray-700 outline-none transition-colors focus:border-black appearance-none cursor-pointer"
             style={{
               backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")',
               backgroundRepeat: 'no-repeat',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { BadgePercent } from 'lucide-react';
 
 const OFFERS = [
@@ -26,7 +26,7 @@ const OffersSection = () => {
       <button
         type="button"
         onClick={() => setShowAllOffers((prev) => !prev)}
-        className="mt-3 text-sm font-semibold text-[#e0b090] transition-colors hover:text-[#d6a382]"
+        className="mt-3 text-sm font-semibold text-black transition-colors hover:text-gray-600"
       >
         {showAllOffers ? 'Show Less' : 'Show More'}
       </button>

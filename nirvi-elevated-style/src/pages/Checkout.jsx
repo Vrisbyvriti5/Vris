@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+﻿import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CreditCard, MapPin, PackageCheck } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -637,7 +637,7 @@ const Checkout = () => {
             order_id: razorpayOrder.id,
             name: 'VRIS',
             description: 'Order payment',
-            theme: { color: '#e0b090' },
+            theme: { color: '#000000' },
             handler: async (response) => {
               try {
                 await ordersAPI.verifyRazorpayPayment({
@@ -783,7 +783,7 @@ const Checkout = () => {
               <div className="rounded-xl border border-[#ebedf0] bg-white p-4 shadow-sm">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex gap-3">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#fbf5f1] text-[#e0b090]">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gray-50 text-black">
                       <MapPin size={16} />
                     </span>
                     <div>
@@ -803,7 +803,7 @@ const Checkout = () => {
                   <button
                     type="button"
                     onClick={handleFocusAddressSection}
-                    className="shrink-0 rounded-lg border border-[#ebd1c1] px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#e0b090] transition-colors hover:bg-[#fbf5f1]"
+                    className="shrink-0 rounded-lg border border-gray-200 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-gray-50"
                   >
                     Change
                   </button>
@@ -845,6 +845,18 @@ const Checkout = () => {
             <div key={step} id={`${step}-section`} className={activeSectionClasses}>
               {step === 'address' ? (
                 <>
+                  {/* Mobile-only top Continue button */}
+                  <div className="block lg:hidden mb-6">
+                    <button
+                      type="button"
+                      disabled={!hasSelectedAddress}
+                      onClick={handleContinueToItems}
+                      className="w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-55"
+                    >
+                      Continue to Order Summary
+                    </button>
+                  </div>
+
                   <div className="border-b border-[#ebedf0] pb-6">
                     <h2 className="inline-flex items-center gap-2 text-2xl font-bold text-[#111827] sm:text-3xl">
                       <MapPin size={22} /> Delivery Address
@@ -870,19 +882,19 @@ const Checkout = () => {
 
                     <form onSubmit={handleSaveAddress} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <input
-                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
                         placeholder="Full Name"
                         value={addressForm.fullName}
                         onChange={(e) => setAddressForm((prev) => ({ ...prev, fullName: e.target.value }))}
                       />
                       <input
-                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
                         placeholder="Mobile Number"
                         value={addressForm.mobile}
                         onChange={(e) => setAddressForm((prev) => ({ ...prev, mobile: e.target.value }))}
                       />
                       <input
-                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
                         placeholder="Pincode"
                         value={addressForm.pincode}
                         onChange={async (e) => {
@@ -905,25 +917,25 @@ const Checkout = () => {
                         }}
                       />
                       <input
-                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
                         placeholder="City"
                         value={addressForm.city}
                         onChange={(e) => setAddressForm((prev) => ({ ...prev, city: e.target.value }))}
                       />
                       <input
-                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
                         placeholder="State"
                         value={addressForm.state}
                         onChange={(e) => setAddressForm((prev) => ({ ...prev, state: e.target.value }))}
                       />
                       <input
-                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+                        className="h-11 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
                         placeholder="Landmark (Optional)"
                         value={addressForm.landmark}
                         onChange={(e) => setAddressForm((prev) => ({ ...prev, landmark: e.target.value }))}
                       />
                       <textarea
-                        className="min-h-24 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1] sm:col-span-2"
+                        className="min-h-24 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300 sm:col-span-2"
                         placeholder="Full Address"
                         value={addressForm.fullAddress}
                         onChange={(e) => setAddressForm((prev) => ({ ...prev, fullAddress: e.target.value }))}
@@ -950,7 +962,7 @@ const Checkout = () => {
                                 className={[
                                   'rounded-xl border p-3 transition-colors',
                                   isSelected
-                                    ? 'border-[#e0b090] bg-[#fff5f8]'
+                                    ? 'border-black bg-[#fff5f8]'
                                     : 'border-[#ebedf0] bg-[#fafafa]',
                                 ].join(' ')}
                               >
@@ -963,7 +975,7 @@ const Checkout = () => {
                                     <span className="flex items-center gap-2">
                                       <span className="text-sm font-semibold text-[#111827]">{address.fullName}</span>
                                       {isSelected ? (
-                                        <span className="rounded-full bg-[#e0b090] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                                        <span className="rounded-full bg-black px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
                                           Selected
                                         </span>
                                       ) : null}
@@ -1002,6 +1014,18 @@ const Checkout = () => {
 
               {step === 'items' ? (
                 <>
+                  {/* Mobile-only top Proceed to Payment button */}
+                  <div className="block lg:hidden mb-6">
+                    <button
+                      type="button"
+                      disabled={checkoutItemsWithAvailability.length === 0}
+                      onClick={handleContinueToPayment}
+                      className="w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-55"
+                    >
+                      Proceed to Payment
+                    </button>
+                  </div>
+
                   <div className="border-b border-[#ebedf0] pb-6">
                     <h2 className="inline-flex items-center gap-2 text-2xl font-bold text-[#111827] sm:text-3xl">
                       <PackageCheck size={22} /> Order Summary
@@ -1012,7 +1036,7 @@ const Checkout = () => {
                   <div className="mt-8 space-y-4">
                     {checkoutItemsWithAvailability.length === 0 ? (
                       <div className="rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] p-6 text-sm text-[#6b7280]">
-                        No items selected for checkout. <Link to="/shop" className="font-semibold text-[#e0b090] hover:underline">Continue shopping</Link>
+                        No items selected for checkout. <Link to="/shop" className="font-semibold text-black hover:underline">Continue shopping</Link>
                       </div>
                     ) : (
                       checkoutItemsWithAvailability.map((item) => (
@@ -1052,6 +1076,18 @@ const Checkout = () => {
 
               {step === 'payment' ? (
                 <>
+                  {/* Mobile-only top Pay Now button */}
+                  <div className="block lg:hidden mb-6">
+                    <button
+                      type="button"
+                      disabled={primaryAction.disabled}
+                      onClick={handlePlaceOrder}
+                      className="w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-55"
+                    >
+                      {isLoadingPaymentSdk ? 'Loading Payment...' : isProcessingPayment ? 'Processing...' : 'Pay Now'}
+                    </button>
+                  </div>
+
                   <div className="border-b border-[#ebedf0] pb-6">
                     <h2 className="inline-flex items-center gap-2 text-2xl font-bold text-[#111827] sm:text-3xl">
                       <CreditCard size={22} /> Payment
@@ -1066,8 +1102,8 @@ const Checkout = () => {
                         className={[
                           'flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors',
                           paymentMethod === option.id
-                            ? 'border-[#e0b090] bg-[#fbf5f1]'
-                            : 'border-[#ebedf0] bg-[#fafafa] hover:border-[#ebd1c1]',
+                            ? 'border-black bg-gray-50'
+                            : 'border-[#ebedf0] bg-[#fafafa] hover:border-gray-200',
                         ].join(' ')}
                       >
                         <input

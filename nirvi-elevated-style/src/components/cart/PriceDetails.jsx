@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Gift, HeartHandshake, Percent, ShieldCheck, Ticket } from 'lucide-react';
 import { formatPriceINR, formatSignedPriceINR } from '@/lib/pricing';
 
@@ -62,13 +62,13 @@ const PriceDetails = ({
             value={couponCode}
             onChange={(event) => onCouponCodeChange(event.target.value.toUpperCase())}
             placeholder="Enter coupon code"
-            className="h-10 flex-1 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+            className="h-10 flex-1 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
           />
           <button
             type="button"
             onClick={onApplyCoupon}
             disabled={isApplyingCoupon || selectedCount === 0}
-            className="h-10 rounded-lg border border-[#e0b090] px-3 text-xs font-bold uppercase tracking-[0.14em] text-[#e0b090] transition-colors hover:bg-[#fbf5f1] disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-10 rounded-lg border border-black px-3 text-xs font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isApplyingCoupon ? 'Applying' : 'Apply'}
           </button>
@@ -103,7 +103,7 @@ const PriceDetails = ({
             type="checkbox"
             checked={giftingEnabled}
             onChange={(event) => onToggleGifting(event.target.checked)}
-            className="h-4 w-4 rounded border-[#d1d5db] text-[#e0b090] focus:ring-[#ffc6d6]"
+            className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
           />
           Add gift wrap and personalized message for Rs 35
         </label>
@@ -119,7 +119,7 @@ const PriceDetails = ({
                   className={[
                     'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
                     normalizedGiftingMessage === template.message
-                      ? 'border-[#e0b090] bg-[#fbf5f1] text-[#e0b090]'
+                      ? 'border-black bg-gray-50 text-black'
                       : 'border-[#d1d5db] text-[#374151] hover:border-[#ffccd9]',
                   ].join(' ')}
                 >
@@ -131,7 +131,7 @@ const PriceDetails = ({
               value={giftingMessage}
               onChange={(event) => onGiftingMessageChange(event.target.value.slice(0, 240))}
               placeholder="Add a personalized message (optional)"
-              className="min-h-20 w-full rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+              className="min-h-20 w-full rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
             />
             <p className="text-xs text-[#6b7280]">{giftingMessage.length}/240 characters</p>
           </div>
@@ -148,7 +148,7 @@ const PriceDetails = ({
             type="checkbox"
             checked={donationEnabled}
             onChange={(event) => onToggleDonate(event.target.checked)}
-            className="h-4 w-4 rounded border-[#d1d5db] text-[#e0b090] focus:ring-[#ffc6d6]"
+            className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
           />
           Donate and make a difference
         </label>
@@ -163,7 +163,7 @@ const PriceDetails = ({
                 className={[
                   'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
                   donationAmount === amount
-                    ? 'border-[#e0b090] bg-[#fbf5f1] text-[#e0b090]'
+                    ? 'border-black bg-gray-50 text-black'
                     : 'border-[#d1d5db] text-[#374151] hover:border-[#ffccd9]',
                 ].join(' ')}
               >
@@ -226,7 +226,7 @@ const PriceDetails = ({
           type="button"
           onClick={onPlaceOrder}
           disabled={placeOrderDisabled}
-          className="mt-4 w-full rounded-xl bg-[#e0b090] px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-[#d6a382] disabled:cursor-not-allowed disabled:opacity-55"
+          className="mt-4 w-full rounded-xl bg-black px-4 py-3 text-sm font-extrabold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.01] hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-55"
         >
           Place Order
         </button>

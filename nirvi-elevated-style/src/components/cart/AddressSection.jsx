@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { MapPin } from 'lucide-react';
 
 const AddressSection = ({ address, onChangeAddress }) => {
@@ -30,7 +30,7 @@ const AddressSection = ({ address, onChangeAddress }) => {
         <button
           type="button"
           onClick={onChangeAddress}
-          className="rounded-lg border border-[#e0b090] px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#e0b090] transition-colors hover:bg-[#fbf5f1]"
+          className="rounded-lg border border-black px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-gray-50"
         >
           {hasAddress ? 'Change Address' : 'Add Address'}
         </button>

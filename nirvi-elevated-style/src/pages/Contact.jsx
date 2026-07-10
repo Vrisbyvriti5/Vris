@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
@@ -25,10 +25,10 @@ const supportCards = [
   {
     icon: Mail,
     title: 'Email VRIS',
-    detail: 'Vrisbyvriti5@gmail.com',
+    detail: 'vrisbyvriti5@gmail.com',
     note: 'Care questions & custom requests.',
-    href: 'mailto:Vrisbyvriti5@gmail.com',
-    color: 'bg-[#e0b090]/10 text-[#e0b090]',
+    href: 'mailto:vrisbyvriti5@gmail.com',
+    color: 'bg-black/10 text-black',
   },
   {
     icon: MessageSquare,
@@ -109,11 +109,11 @@ const Contact = () => {
               />
             </div>
             <div className="relative z-10 max-w-3xl">
-              <span className="inline-block rounded-full bg-[#e0b090]/20 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[#e0b090]">
+              <span className="inline-block rounded-full bg-black/20 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-black">
                 Contact & Support
               </span>
               <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#111827] sm:text-5xl">
-                We're here for <span className="text-[#e0b090]">anything</span> you need.
+                We're here for <span className="text-black">anything</span> you need.
               </h1>
               <p className="mt-4 text-base leading-7 text-[#6b7280] max-w-xl font-light">
                 Whether it's an order update, a style question, or just saying hello, we're ready to help you with the VRIS experience.
@@ -148,7 +148,7 @@ const Contact = () => {
                         <p className="mt-1 text-base font-semibold text-[#4b5563]">{card.detail}</p>
                         <p className="mt-1 text-xs text-[#9ca3af]">{card.note}</p>
                       </div>
-                      <ArrowRight className="text-gray-300 group-hover:text-[#e0b090] transition-colors" size={20} />
+                      <ArrowRight className="text-gray-300 group-hover:text-black transition-colors" size={20} />
                     </a>
                   );
                 })}
@@ -159,7 +159,7 @@ const Contact = () => {
                 <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#111827] mb-6">Store Details</h4>
                 <div className="space-y-6">
                   <div className="flex gap-4">
-                    <Clock className="text-[#e0b090] shrink-0" size={20} />
+                    <Clock className="text-black shrink-0" size={20} />
                     <div>
                       <p className="text-sm font-bold text-[#111827]">Studio Hours</p>
                       <p className="mt-1 text-sm text-[#6b7280]">Monday – Friday: 10am – 7pm</p>
@@ -167,7 +167,7 @@ const Contact = () => {
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    <MapPin className="text-[#e0b090] shrink-0" size={20} />
+                    <MapPin className="text-black shrink-0" size={20} />
                     <div>
                       <p className="text-sm font-bold text-[#111827]">Our Base</p>
                       <p className="mt-1 text-sm text-[#6b7280]">Panipat</p>
@@ -219,7 +219,7 @@ const Contact = () => {
                       placeholder="Jane Doe"
                       value={formData.name}
                       onChange={updateField('name')}
-                      className="h-14 w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 text-sm transition-all focus:border-[#e0b090] focus:bg-white focus:ring-4 focus:ring-[#e0b090]/5 outline-none"
+                      className="h-14 w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 text-sm transition-all focus:border-black focus:bg-white focus:ring-4 focus:ring-black/5 outline-none"
                     />
                   </div>
                   <div className="space-y-2">
@@ -229,7 +229,7 @@ const Contact = () => {
                       placeholder="jane@example.com"
                       value={formData.email}
                       onChange={updateField('email')}
-                      className="h-14 w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 text-sm transition-all focus:border-[#e0b090] focus:bg-white focus:ring-4 focus:ring-[#e0b090]/5 outline-none"
+                      className="h-14 w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 text-sm transition-all focus:border-black focus:bg-white focus:ring-4 focus:ring-black/5 outline-none"
                     />
                   </div>
                 </div>
@@ -241,7 +241,7 @@ const Contact = () => {
                     placeholder="How can we help?"
                     value={formData.subject}
                     onChange={updateField('subject')}
-                    className="h-14 w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 text-sm transition-all focus:border-[#e0b090] focus:bg-white focus:ring-4 focus:ring-[#e0b090]/5 outline-none"
+                    className="h-14 w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 text-sm transition-all focus:border-black focus:bg-white focus:ring-4 focus:ring-black/5 outline-none"
                   />
                 </div>
 
@@ -252,7 +252,7 @@ const Contact = () => {
                     rows={5}
                     value={formData.message}
                     onChange={updateField('message')}
-                    className="w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 py-4 text-sm transition-all focus:border-[#e0b090] focus:bg-white focus:ring-4 focus:ring-[#e0b090]/5 outline-none resize-none"
+                    className="w-full rounded-2xl border border-[#ebedf0] bg-[#f9fafb] px-5 py-4 text-sm transition-all focus:border-black focus:bg-white focus:ring-4 focus:ring-black/5 outline-none resize-none"
                   />
                 </div>
 

@@ -66,7 +66,7 @@ const ShippingReturns = () => {
                 Need help with your order? Feel free to DM us or contact our support team—we're always happy to help!
               </p>
               <p className="mt-4 font-bold text-black uppercase tracking-wider">
-                Support Email: <a href="mailto:Vrisbyvriti5@gmail.com" className="underline hover:text-[#e0b090] transition-colors">Vrisbyvriti5@gmail.com</a>
+                Support Email: <a href="mailto:vrisbyvriti5@gmail.com" className="underline hover:text-black transition-colors lowercase">vrisbyvriti5@gmail.com</a>
               </p>
               <p className="mt-1 font-bold text-black uppercase tracking-wider">
                 Helpline: +91 86071 87086

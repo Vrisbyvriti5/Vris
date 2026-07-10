@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, X, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -22,7 +22,7 @@ const CartDrawer = ({ onClose }) => {
       <SheetHeader className="px-6 py-4 border-b border-gray-100 space-y-0">
         <div className="flex items-center justify-between">
           <SheetTitle className="text-xl font-bold flex items-center gap-2">
-            <ShoppingBag size={20} className="text-[#e0b090]" />
+            <ShoppingBag size={20} className="text-black" />
             Your Bag <span className="text-gray-400 font-medium">({totalItems})</span>
           </SheetTitle>
         </div>
@@ -133,7 +133,7 @@ const CartDrawer = ({ onClose }) => {
             <div className="grid gap-3 pt-2">
               <Button 
                 onClick={handleCheckout}
-                className="w-full bg-[#e0b090] hover:bg-[#d6a382] text-white rounded-xl py-6 text-sm font-bold uppercase tracking-[0.15em] shadow-[0_4px_12px_rgba(224,176,144,0.3)] transition-all active:scale-[0.98]"
+                className="w-full bg-black hover:bg-gray-800 text-white rounded-xl py-6 text-sm font-bold uppercase tracking-[0.15em] shadow-[0_4px_12px_rgba(224,176,144,0.3)] transition-all active:scale-[0.98]"
               >
                 Proceed to Checkout
                 <ArrowRight size={16} className="ml-2" />

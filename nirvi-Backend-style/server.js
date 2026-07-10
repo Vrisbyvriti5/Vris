@@ -36,6 +36,7 @@ const requestBodyLimit = process.env.REQUEST_BODY_LIMIT || '20mb';
 app.use(cors({
   origin: [
     "http://localhost:5173",
+    "http://localhost:8080",
     "https://vrisbyvriti.com",
     "https://www.vrisbyvriti.com"
   ],

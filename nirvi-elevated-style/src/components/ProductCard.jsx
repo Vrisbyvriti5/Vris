@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -193,7 +193,7 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         aria-label={`View details for ${product.name}`}
-        className="relative cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden transition-all duration-300 ease-out hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090] focus-visible:ring-offset-2 flex h-auto min-h-full flex-col justify-between"
+        className="relative cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden transition-all duration-300 ease-out hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 flex h-auto min-h-full flex-col justify-between"
       >
 
         {/* ── Image Section ── */}
@@ -246,7 +246,7 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
 
           {/* Discount badge */}
           {pricing.hasDiscount && !outOfStock && (
-            <span className="absolute left-4 top-4 rounded-full bg-[#e0b090] px-2.5 py-1 text-[10px] font-bold text-white shadow-md">
+            <span className="absolute left-4 top-4 rounded-full bg-black px-2.5 py-1 text-[10px] font-bold text-white shadow-md">
               -{pricing.discountLabel}%
             </span>
           )}
@@ -307,7 +307,7 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
                 type="button"
                 onClick={handleAddToCartClick}
                 disabled={isAddingToCart}
-                className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs sm:text-[12px] font-bold uppercase tracking-widest bg-[#e0b090] text-white shadow-[0_2px_8px_rgba(224,176,144,0.35)] transition-all duration-200 hover:bg-[#d6a382] hover:shadow-[0_4px_16px_rgba(224,176,144,0.45)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs sm:text-[12px] font-bold uppercase tracking-widest bg-black text-white shadow-[0_2px_8px_rgba(224,176,144,0.35)] transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_4px_16px_rgba(224,176,144,0.45)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <ShoppingCart size={13} className="shrink-0" />
                 <span className="truncate">{isAddingToCart ? '...' : ctaLabel}</span>

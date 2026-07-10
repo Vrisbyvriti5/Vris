@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { Minus, Plus, Trash2, Truck } from 'lucide-react';
 import { formatPriceINR } from '@/lib/pricing';
@@ -30,7 +30,7 @@ const CartItem = ({
             <div className="min-w-0 flex-1">
               <Link
                 to={`/product/${item.id}`}
-                className="line-clamp-2 text-sm font-semibold text-[#1f2937] transition-colors hover:text-[#e0b090]"
+                className="line-clamp-2 text-sm font-semibold text-[#1f2937] transition-colors hover:text-black"
               >
                 {item.name}
               </Link>
@@ -41,7 +41,7 @@ const CartItem = ({
               type="button"
               onClick={onRemove}
               disabled={!canEdit}
-              className="rounded-md p-1.5 text-[#ef4444] transition-colors hover:bg-[#fbf5f1] hover:text-[#dc2626] disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-md p-1.5 text-[#ef4444] transition-colors hover:bg-gray-50 hover:text-[#dc2626] disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Remove item"
             >
               <Trash2 size={16} />
@@ -52,7 +52,7 @@ const CartItem = ({
             <p className="text-base font-bold text-[#111827]">Rs {formatPriceINR(item.unitPrice)}</p>
             {hasDiscount ? <p className="text-sm text-[#9ca3af] line-through">Rs {formatPriceINR(item.pricing.mrp)}</p> : null}
             {hasDiscount ? (
-              <span className="rounded-md bg-[#fbf5f1] px-2 py-0.5 text-xs font-semibold text-[#e0b090]">
+              <span className="rounded-md bg-gray-50 px-2 py-0.5 text-xs font-semibold text-black">
                 {item.pricing.discountLabel}% OFF
               </span>
             ) : null}

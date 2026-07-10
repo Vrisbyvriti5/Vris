@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 /**
  * NirviLoader — Premium ultra-minimal loading animation.
@@ -56,7 +56,7 @@ const NirviLoader = () => (
         font-size: 42px;
         font-weight: 600;
         letter-spacing: 0.04em;
-        color: #e0b090;
+        color: #000000;
         line-height: 1;
         user-select: none;
         -webkit-user-select: none;
@@ -64,10 +64,10 @@ const NirviLoader = () => (
         /* Glossy / reflective sheen */
         background: linear-gradient(
           165deg,
-          #e0b090 0%,
-          #ebd1c1 38%,
-          #e0b090 52%,
-          #d6a382 100%
+          #000000 0%,
+          #374151 38%,
+          #000000 52%,
+          #111827 100%
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;

@@ -658,7 +658,7 @@ const ProductDetail = () => {
             <div className="flex flex-col gap-3 rounded-[16px] border border-black/8 bg-white p-3 lg:p-4 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
               <div className="group relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-lg bg-background/40">
                 {pricing?.hasDiscount ? (
-                  <div className="absolute left-3.5 top-3.5 z-10 rounded-full bg-[#e0b090] px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white shadow-[0_6px_16px_rgba(224,176,144,0.25)]">
+                  <div className="absolute left-3.5 top-3.5 z-10 rounded-full bg-black px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white shadow-[0_6px_16px_rgba(224,176,144,0.25)]">
                     -{pricing?.discountLabel || 0}% Off
                   </div>
                 ) : null}
@@ -676,7 +676,7 @@ const ProductDetail = () => {
                       type="button"
                       onClick={() => setActiveImage(image)}
                       aria-label={`Go to product image ${index + 1}`}
-                      className={`h-1.5 rounded-full transition-all ${activeImage === image ? 'w-5 bg-[#e0b090]' : 'w-1.5 bg-black/20 hover:bg-black/40'}`}
+                      className={`h-1.5 rounded-full transition-all ${activeImage === image ? 'w-5 bg-black' : 'w-1.5 bg-black/20 hover:bg-black/40'}`}
                     />
                   ))}
                 </div>
@@ -690,7 +690,7 @@ const ProductDetail = () => {
                       type="button"
                       onClick={() => setActiveImage(image)}
                       aria-label={`View product image ${index + 1}`}
-                      className={`h-[80px] w-[64px] shrink-0 overflow-hidden rounded-md border bg-white p-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm ${activeImage === image ? 'border-[#e0b090] shadow-[0_4px_12px_rgba(224,176,144,0.15)]' : 'border-black/8 hover:border-[#e0b090]/60'
+                      className={`h-[80px] w-[64px] shrink-0 overflow-hidden rounded-md border bg-white p-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm ${activeImage === image ? 'border-black shadow-[0_4px_12px_rgba(224,176,144,0.15)]' : 'border-black/8 hover:border-black/60'
                         }`}
                     >
                       <img src={image} alt={`${product?.name || 'Product'} ${index + 1}`} className="h-full w-full rounded-[4px] object-cover" loading={index < 5 ? 'eager' : 'lazy'} />
@@ -721,13 +721,13 @@ const ProductDetail = () => {
             className="self-start xl:col-span-1"
           >
             <div className="flex items-start justify-between gap-4">
-              <span className="inline-flex h-7 items-center rounded-md border border-[#e0b090]/35 bg-[#fbf5f1] px-2.5 text-[10px] font-extrabold uppercase tracking-wide text-[#e0b090]">
+              <span className="inline-flex h-7 items-center rounded-md border border-black/35 bg-gray-50 px-2.5 text-[10px] font-extrabold uppercase tracking-wide text-black">
                 Best Seller
               </span>
               <button
                 type="button"
                 onClick={() => toggle(product?.id)}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#e0b090]/50 hover:shadow-md"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-black/50 hover:shadow-md"
                 aria-label={isWishlisted(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'}
               >
                 <Heart size={20} className={isWishlisted(product?.id) ? 'fill-[#ff3f6c] text-[#ff3f6c]' : ''} />
@@ -753,7 +753,7 @@ const ProductDetail = () => {
                 {pricing?.hasDiscount ? (
                   <>
                     <span className="pb-1 text-base font-semibold text-muted-foreground line-through">₹{formatPriceINR(pricing?.mrp || 0)}</span>
-                    <span className="mb-1 inline-flex h-7 items-center rounded-full bg-[#fbf5f1] px-3 text-xs font-extrabold uppercase tracking-wide text-[#e0b090]">
+                    <span className="mb-1 inline-flex h-7 items-center rounded-full bg-gray-50 px-3 text-xs font-extrabold uppercase tracking-wide text-black">
                       {pricing?.discountLabel || 0}% Off
                     </span>
                   </>
@@ -761,9 +761,6 @@ const ProductDetail = () => {
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-3 text-xs font-bold">
                 <span className="text-[#03a685]">Inclusive of all taxes</span>
-                <span className={`rounded-full px-2.5 py-1 ${isInStock ? 'bg-[#eafaf5] text-[#038767]' : 'bg-destructive/10 text-destructive'}`}>
-                  {isInStock ? `In stock (${stockValue} available)` : 'Currently unavailable'}
-                </span>
               </div>
             </div>
 
@@ -775,7 +772,7 @@ const ProductDetail = () => {
                   onClick={() => setShowSizeChart(true)}
                   aria-haspopup="dialog"
                   aria-label="Open size chart"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e0b090] underline underline-offset-2 decoration-dotted hover:text-[#c89070] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090] rounded"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-black underline underline-offset-2 decoration-dotted hover:text-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/><path d="M7 3v3M12 3v3M17 3v3"/></svg>
                   Size Chart
@@ -847,7 +844,7 @@ const ProductDetail = () => {
                         ref={sizeChartCloseRef}
                         onClick={() => setShowSizeChart(false)}
                         aria-label="Close size chart"
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-muted-foreground shadow-sm transition-all hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090]"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-muted-foreground shadow-sm transition-all hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
                       >
                         <X size={18} />
                       </button>
@@ -858,7 +855,7 @@ const ProductDetail = () => {
                       {/* Body part labels */}
                       <div className="mb-4 flex flex-wrap gap-3">
                         {['Bust', 'Waist', 'Hips'].map((label) => (
-                          <span key={label} className="inline-flex items-center gap-1.5 rounded-full bg-[#fbf5f1] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#e0b090]">
+                          <span key={label} className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-black">
                             {label}
                           </span>
                         ))}
@@ -898,7 +895,7 @@ const ProductDetail = () => {
                                   aria-selected={isActive}
                                   className={`border-t border-black/5 transition-colors ${
                                     isActive
-                                      ? 'bg-[#fbf5f1] font-bold'
+                                      ? 'bg-gray-50 font-bold'
                                       : idx % 2 === 0 ? 'bg-white hover:bg-[#fafafa]' : 'bg-[#f9f9f9] hover:bg-[#f5f5f5]'
                                   }`}
                                 >
@@ -920,7 +917,7 @@ const ProductDetail = () => {
                       </div>
 
                       {/* Note */}
-                      <p className="mt-4 rounded-xl border border-[#e0b090]/25 bg-[#fbf5f1] px-4 py-3 text-[12px] leading-relaxed text-[#8a6a50]">
+                      <p className="mt-4 rounded-xl border border-black/25 bg-gray-50 px-4 py-3 text-[12px] leading-relaxed text-[#8a6a50]">
                         <span className="font-bold">Note: </span>
                         All measurements are in inches. If your measurements fall between two sizes, choose the larger size for a more comfortable fit.
                       </p>
@@ -991,14 +988,14 @@ const ProductDetail = () => {
                 type="button"
                 disabled={!isInStock || remainingStock <= 0}
                 onClick={handleBuyNow}
-                className="inline-flex h-12 items-center justify-center rounded-xl border border-[#e0b090] bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-[#e0b090] shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#fbf5f1] hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-12 items-center justify-center rounded-xl border border-black bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-black shadow-sm transition-all hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Buy Now
               </button>
               <button
                 type="button"
                 onClick={() => setShowCustomize(true)}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-[#e0b090] bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-[#e0b090] shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#fbf5f1] hover:shadow-md active:scale-[0.98]"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-black bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-black shadow-sm transition-all hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
                 aria-haspopup="dialog"
                 aria-label="Customize this product"
               >
@@ -1008,7 +1005,7 @@ const ProductDetail = () => {
               <button
                 type="button"
                 onClick={() => toggle(product?.id)}
-                className="hidden h-12 w-12 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#e0b090]/50 sm:flex"
+                className="hidden h-12 w-12 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-black/50 sm:flex"
                 aria-label={isWishlisted(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'}
               >
                 <Heart size={19} className={isWishlisted(product?.id) ? 'fill-[#ff3f6c] text-[#ff3f6c]' : ''} />
@@ -1036,21 +1033,21 @@ const ProductDetail = () => {
               <div className="flex">
                 <div className="flex flex-1 flex-col gap-4 border-r border-black/5 pr-3 sm:pr-4">
                   <div className="flex gap-3">
-                    <Package size={18} className="mt-0.5 shrink-0 text-[#e0b090]" />
+                    <Package size={18} className="mt-0.5 shrink-0 text-black" />
                     <div className="flex flex-col leading-tight">
                       <span className="text-[13px] font-bold text-foreground">Ships from</span>
                       <span className="mt-0.5 text-xs font-medium text-muted-foreground">VRIS</span>
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <Store size={18} className="mt-0.5 shrink-0 text-[#e0b090]" />
+                    <Store size={18} className="mt-0.5 shrink-0 text-black" />
                     <div className="flex flex-col leading-tight">
                       <span className="text-[13px] font-bold text-foreground">Sold by</span>
                       <span className="mt-0.5 text-xs font-medium leading-[1.1rem] text-muted-foreground">VRISBYVRITI<br />Pvt Ltd</span>
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <Gift size={18} className="mt-0.5 shrink-0 text-[#e0b090]" />
+                    <Gift size={18} className="mt-0.5 shrink-0 text-black" />
                     <div className="flex flex-col leading-tight">
                       <span className="text-[13px] font-bold text-foreground">Gift Options</span>
                       <span className="mt-0.5 text-xs font-medium text-muted-foreground">Available at checkout</span>
@@ -1060,14 +1057,14 @@ const ProductDetail = () => {
 
                 <div className="flex flex-1 flex-col gap-4 pl-4 sm:pl-5">
                   <div className="flex gap-3">
-                    <Package size={18} className="mt-0.5 shrink-0 text-[#e0b090]" />
+                    <Package size={18} className="mt-0.5 shrink-0 text-black" />
                     <div className="flex flex-col leading-tight">
                       <span className="text-[13px] font-bold text-foreground">Packaging</span>
                       <span className="mt-0.5 text-xs font-medium leading-[1.1rem] text-muted-foreground">Ships in secure product packaging</span>
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <CreditCard size={18} className="mt-0.5 shrink-0 text-[#e0b090]" />
+                    <CreditCard size={18} className="mt-0.5 shrink-0 text-black" />
                     <div className="flex flex-col leading-tight">
                       <span className="text-[13px] font-bold text-foreground">Payment</span>
                       <span className="mt-0.5 text-xs font-medium text-muted-foreground">Secure transaction</span>
@@ -1103,7 +1100,7 @@ const ProductDetail = () => {
                   <button
                     type="button"
                     onClick={handlePincodeActionClick}
-                    className="shrink-0 text-[10px] font-extrabold uppercase tracking-wide text-[#e0b090] hover:underline"
+                    className="shrink-0 text-[10px] font-extrabold uppercase tracking-wide text-black hover:underline"
                   >
                     Change
                   </button>
@@ -1121,19 +1118,19 @@ const ProductDetail = () => {
               </div>
               <ul className="mt-2.5 space-y-1.5 text-[11px] leading-tight text-foreground">
                 <li className="flex gap-1.5">
-                  <BadgePercent size={13} className="mt-0.5 shrink-0 text-[#e0b090]" />
-                  <span><span className="font-extrabold text-[#e0b090]">Coupon:</span> Extra 10% off above ₹499 (Code: VRIS10)</span>
+                  <BadgePercent size={13} className="mt-0.5 shrink-0 text-black" />
+                  <span><span className="font-extrabold text-black">Coupon:</span> Extra 10% off above ₹499 (Code: VRIS10)</span>
                 </li>
                 <li className="flex gap-1.5">
-                  <CreditCard size={13} className="mt-0.5 shrink-0 text-[#e0b090]" />
-                  <span><span className="font-extrabold text-[#e0b090]">Bank:</span> 5% Cashback on Axis Bank Credit Card</span>
+                  <CreditCard size={13} className="mt-0.5 shrink-0 text-black" />
+                  <span><span className="font-extrabold text-black">Bank:</span> 5% Cashback on Axis Bank Credit Card</span>
                 </li>
                 <li className="flex gap-1.5">
-                  <WalletCards size={13} className="mt-0.5 shrink-0 text-[#e0b090]" />
-                  <span><span className="font-extrabold text-[#e0b090]">Wallet:</span> Flat ₹150 Cashback on Paytm</span>
+                  <WalletCards size={13} className="mt-0.5 shrink-0 text-black" />
+                  <span><span className="font-extrabold text-black">Wallet:</span> Flat ₹150 Cashback on Paytm</span>
                 </li>
               </ul>
-              <button type="button" className="mt-2 inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wide text-[#e0b090] hover:underline">
+              <button type="button" className="mt-2 inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wide text-black hover:underline">
                 View all offers <ArrowRight size={10} />
               </button>
             </div>
@@ -1181,14 +1178,11 @@ const ProductDetail = () => {
                 {pricing?.hasDiscount ? (
                   <>
                     <span className="text-lg text-muted-foreground line-through font-body">MRP ₹{formatPriceINR(pricing?.mrp || 0)}</span>
-                    <span className="text-lg font-bold text-[#e0b090] font-body">({pricing?.discountLabel || 0}% OFF)</span>
+                    <span className="text-lg font-bold text-black font-body">({pricing?.discountLabel || 0}% OFF)</span>
                   </>
                 ) : null}
               </div>
               <p className="text-xs text-[#03a685] font-bold mt-1 tracking-wide font-body">inclusive of all taxes</p>
-              <p className={`mt-2 text-sm font-medium font-body ${isInStock ? 'text-foreground' : 'text-destructive'}`}>
-                {isInStock ? `In stock (${stockValue} available)` : 'Currently unavailable'}
-              </p>
             </div>
 
             <div className="mt-6 flex items-center gap-4">
@@ -1230,7 +1224,7 @@ const ProductDetail = () => {
                     handleAddToCart();
                   }
                 }}
-                className={`flex-1 py-3.5 rounded-md text-white text-sm font-bold tracking-wide uppercase transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm ${cartItem ? 'bg-[#03a685] hover:bg-[#028b6f]' : 'bg-[#e0b090] hover:bg-[#d6a382]'
+                className={`flex-1 py-3.5 rounded-md text-white text-sm font-bold tracking-wide uppercase transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm ${cartItem ? 'bg-[#03a685] hover:bg-[#028b6f]' : 'bg-black hover:bg-gray-800'
                   }`}
               >
                 <ShoppingBag size={18} /> {cartItem ? 'Added' : 'Add to Cart'}
@@ -1274,13 +1268,13 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={handlePincodeActionClick}
-                  className="font-medium text-foreground hover:underline hover:text-[#e0b090] cursor-pointer bg-transparent border-none p-0"
+                  className="font-medium text-foreground hover:underline hover:text-black cursor-pointer bg-transparent border-none p-0"
                 >
                   {hasDeliveryPincode ? deliveryPincode : 'ADD Pincode'}
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                Seller: <span className="font-bold text-[#e0b090]">VRIS</span>
+                Seller: <span className="font-bold text-black">VRIS</span>
               </div>
             </div>
 
@@ -1296,7 +1290,7 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={handlePincodeActionClick}
-                  className="text-xs font-bold text-[#e0b090] uppercase tracking-wide hover:underline bg-transparent border-none p-0 cursor-pointer"
+                  className="text-xs font-bold text-black uppercase tracking-wide hover:underline bg-transparent border-none p-0 cursor-pointer"
                 >
                   {hasDeliveryPincode ? 'Change' : 'ADD'}
                 </button>
@@ -1327,16 +1321,16 @@ const ProductDetail = () => {
               </div>
               <ul className="space-y-2 text-sm font-body text-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#e0b090] shrink-0 mt-1.5"></span>
-                  <span><span className="font-bold text-[#e0b090]">Coupon:</span> Extra 10% off on orders above ₹499 (Code: VRIS10)</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0 mt-1.5"></span>
+                  <span><span className="font-bold text-black">Coupon:</span> Extra 10% off on orders above ₹499 (Code: VRIS10)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#e0b090] shrink-0 mt-1.5"></span>
-                  <span><span className="font-bold text-[#e0b090]">Bank Offer:</span> 5% Unlimited Cashback on Axis Bank Credit Card</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0 mt-1.5"></span>
+                  <span><span className="font-bold text-black">Bank Offer:</span> 5% Unlimited Cashback on Axis Bank Credit Card</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#e0b090] shrink-0 mt-1.5"></span>
-                  <span><span className="font-bold text-[#e0b090]">Cashback:</span> Flat ₹150 Cashback on Paytm Wallet</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0 mt-1.5"></span>
+                  <span><span className="font-bold text-black">Cashback:</span> Flat ₹150 Cashback on Paytm Wallet</span>
                 </li>
               </ul>
             </div>
@@ -1355,7 +1349,7 @@ const ProductDetail = () => {
             { icon: Headphones, title: 'Dedicated Support', text: 'Customer care' },
           ].map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex h-[80px] max-h-[80px] items-center gap-3 rounded-xl border border-black/10 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fbf5f1] text-[#e0b090]">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-50 text-black">
                 <Icon size={16} />
               </span>
               <span>
@@ -1429,7 +1423,7 @@ const ProductDetail = () => {
                         {user && String(user.id) === String(review.userId) && (
                           <div className="flex items-center gap-3">
                             <button onClick={() => handleEditReview(review)} className="text-xs text-[#03a685] font-semibold hover:underline">Edit</button>
-                            <button onClick={() => setDeletingReviewId(review.id)} className="text-xs text-[#e0b090] font-semibold hover:underline">Delete</button>
+                            <button onClick={() => setDeletingReviewId(review.id)} className="text-xs text-black font-semibold hover:underline">Delete</button>
                           </div>
                         )}
                       </div>
@@ -1461,7 +1455,7 @@ const ProductDetail = () => {
               </h3>
               {!isAuthenticated ? (
                 <p className="text-sm text-muted-foreground font-body">
-                  <Link to="/login" className="font-semibold text-[#e0b090] underline">Login</Link> to submit your rating and review.
+                  <Link to="/login" className="font-semibold text-black underline">Login</Link> to submit your rating and review.
                 </p>
               ) : (
                 <form onSubmit={handleReviewSubmit} className="space-y-4">
@@ -1484,7 +1478,7 @@ const ProductDetail = () => {
                               onBlur={() => setHoverRating(0)}
                               aria-checked={reviewForm.rating === starValue}
                               role="radio"
-                              className={`p-1 transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090] rounded-full transform ${isSelected ? 'hover:scale-100 cursor-pointer' : 'hover:scale-110 active:scale-95'} ${isActive ? `text-[#fbbf24] ${isLocked ? 'opacity-60' : ''}` : 'text-muted-foreground/30'}`}
+                              className={`p-1 transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-full transform ${isSelected ? 'hover:scale-100 cursor-pointer' : 'hover:scale-110 active:scale-95'} ${isActive ? `text-[#fbbf24] ${isLocked ? 'opacity-60' : ''}` : 'text-muted-foreground/30'}`}
                               aria-label={`${starValue} Star${starValue > 1 ? 's' : ''}`}
                             >
                               <Star
@@ -1522,7 +1516,7 @@ const ProductDetail = () => {
                     <button
                       type="submit"
                       disabled={isSubmittingReview}
-                      className={`flex-1 rounded-md px-4 py-3 text-sm font-bold tracking-wide uppercase text-white transition-colors disabled:opacity-60 shadow-sm ${editingReviewId ? 'bg-[#111827] hover:bg-[#1f2937]' : 'bg-[#e0b090] hover:bg-[#d6a382]'}`}
+                      className={`flex-1 rounded-md px-4 py-3 text-sm font-bold tracking-wide uppercase text-white transition-colors disabled:opacity-60 shadow-sm ${editingReviewId ? 'bg-[#111827] hover:bg-[#1f2937]' : 'bg-black hover:bg-gray-800'}`}
                     >
                       {isSubmittingReview ? (editingReviewId ? 'Updating...' : 'Submitting...') : (editingReviewId ? 'Update Review' : 'Submit Review')}
                     </button>
@@ -1571,7 +1565,7 @@ const ProductDetail = () => {
               className="fixed top-1/2 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-[380px] rounded-3xl bg-background p-0 shadow-[0_25px_60px_rgba(0,0,0,0.25)] border border-border/60 overflow-hidden"
             >
               {/* Gradient accent top strip */}
-              <div className="h-1 w-full bg-gradient-to-r from-[#e0b090] via-[#ff6b8a] to-[#e0b090]" />
+              <div className="h-1 w-full bg-gradient-to-r from-black via-gray-700 to-black" />
               <div className="p-7 text-center">
                 <motion.div
                   initial={{ scale: 0.5, rotate: -10 }}
@@ -1592,7 +1586,7 @@ const ProductDetail = () => {
                   </button>
                   <button
                     onClick={handleDeleteConfirm}
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#e0b090] to-[#d6a382] py-3 text-sm font-bold uppercase tracking-wide text-white transition-all duration-200 hover:shadow-[0_4px_16px_rgba(224,176,144,0.35)] active:scale-[0.97]"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-black to-gray-800 py-3 text-sm font-bold uppercase tracking-wide text-white transition-all duration-200 hover:shadow-[0_4px_16px_rgba(0,0,0,0.25)] active:scale-[0.97]"
                   >
                     Delete
                   </button>
@@ -1623,12 +1617,12 @@ const ProductDetail = () => {
               className="fixed top-1/2 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-[400px] rounded-3xl bg-background p-0 shadow-[0_25px_60px_rgba(0,0,0,0.25)] border border-border/60 overflow-hidden"
             >
               {/* Gradient accent top strip */}
-              <div className="h-1 w-full bg-gradient-to-r from-[#e0b090] via-[#ff6b8a] to-[#e0b090]" />
+              <div className="h-1 w-full bg-gradient-to-r from-black via-gray-700 to-black" />
               <div className="p-7">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#e0b090]/10 to-[#e0b090]/20 dark:from-[#e0b090]/30 dark:to-[#e0b090]/20 shadow-sm">
-                      <MapPin size={18} className="text-[#e0b090]" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-black/10 to-black/20 shadow-sm">
+                      <MapPin size={18} className="text-black" />
                     </div>
                     <h3 className="font-display text-lg font-bold text-foreground">Delivery Pincode</h3>
                   </div>
@@ -1642,7 +1636,7 @@ const ProductDetail = () => {
                 </div>
                 <p className="text-sm text-muted-foreground font-body mb-5 ml-[52px]">Check delivery availability for your area.</p>
                 <div className="flex items-center gap-2.5">
-                  <div className="flex-1 flex items-center rounded-xl border border-border/80 bg-muted/30 px-4 py-3 focus-within:border-[#e0b090] focus-within:ring-2 focus-within:ring-[#e0b090]/10 transition-all duration-200">
+                  <div className="flex-1 flex items-center rounded-xl border border-border/80 bg-muted/30 px-4 py-3 focus-within:border-black focus-within:ring-2 focus-within:ring-black/10 transition-all duration-200">
                     <input
                       ref={pincodeInputRef}
                       type="text"
@@ -1665,7 +1659,7 @@ const ProductDetail = () => {
                     type="button"
                     disabled={pincodeSaving || pincodeInput.trim().length !== 6}
                     onClick={handleSavePincode}
-                    className="shrink-0 px-6 py-3 rounded-xl bg-gradient-to-r from-[#e0b090] to-[#d6a382] text-white text-sm font-bold uppercase tracking-wide transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm hover:shadow-[0_4px_16px_rgba(224,176,144,0.35)] active:scale-[0.97]"
+                    className="shrink-0 px-6 py-3 rounded-xl bg-gradient-to-r from-black to-gray-800 text-white text-sm font-bold uppercase tracking-wide transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm hover:shadow-[0_4px_16px_rgba(0,0,0,0.25)] active:scale-[0.97]"
                   >
                     {pincodeSaving ? (
                       <span className="flex items-center gap-2">
@@ -1702,7 +1696,7 @@ const ProductDetail = () => {
                 <img src={primaryImage} alt="" className="hidden h-11 w-11 rounded-xl border border-black/10 object-cover shadow-sm sm:block" />
                 <div className="min-w-0">
                   <p className="truncate text-xs font-extrabold text-foreground sm:text-sm">{product?.name || 'Product'}</p>
-                  <p className="text-sm font-extrabold text-[#e0b090]">₹{formatPriceINR(finalPrice)}</p>
+                  <p className="text-sm font-extrabold text-black">₹{formatPriceINR(finalPrice)}</p>
                 </div>
               </div>
               <button

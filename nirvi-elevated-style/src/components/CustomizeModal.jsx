@@ -104,7 +104,7 @@ const CustomizeModal = ({ product, isOpen, onClose, onCheckout }) => {
             {/* ── Header ── */}
             <div className="flex shrink-0 items-center justify-between border-b border-black/8 bg-white px-5 py-4 sm:px-6">
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#e0b090] to-[#c88b5a] text-white shadow-sm">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-black to-gray-700 text-white shadow-sm">
                   <Ruler size={17} />
                 </span>
                 <div>
@@ -123,7 +123,7 @@ const CustomizeModal = ({ product, isOpen, onClose, onCheckout }) => {
                 type="button"
                 onClick={handleClose}
                 aria-label="Close customization panel"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-muted-foreground shadow-sm transition-all hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090]"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-muted-foreground shadow-sm transition-all hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
               >
                 <X size={18} />
               </button>
@@ -133,8 +133,8 @@ const CustomizeModal = ({ product, isOpen, onClose, onCheckout }) => {
             <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6">
               {/* Product name chip */}
               {product?.name ? (
-                <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-[#e0b090]/30 bg-[#fbf5f1] px-3 py-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#c88b5a]">
+                <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-black/30 bg-gray-50 px-3 py-1.5">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-black">
                     {product.name}
                   </span>
                 </div>
@@ -166,7 +166,7 @@ const CustomizeModal = ({ product, isOpen, onClose, onCheckout }) => {
                         className={`w-full rounded-xl border px-3.5 py-2.5 text-sm font-semibold text-foreground outline-none transition-colors placeholder:text-muted-foreground/50 ${
                           errors[key]
                             ? 'border-destructive bg-destructive/5 focus:border-destructive'
-                            : 'border-black/12 bg-white focus:border-[#e0b090]'
+                            : 'border-black/12 bg-white focus:border-black'
                         }`}
                       />
                       {measurements[key] && !errors[key] ? (
@@ -202,7 +202,7 @@ const CustomizeModal = ({ product, isOpen, onClose, onCheckout }) => {
                             setSelectedColor(color);
                             setErrors((prev) => ({ ...prev, color: undefined }));
                           }}
-                          className={`group relative flex flex-col items-center gap-1.5 transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b090] focus-visible:ring-offset-1 rounded-lg`}
+                          className={`group relative flex flex-col items-center gap-1.5 transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 rounded-lg`}
                         >
                           {/* Color dot */}
                           <span
@@ -273,7 +273,7 @@ const CustomizeModal = ({ product, isOpen, onClose, onCheckout }) => {
               ) : null}
 
               {/* Note */}
-              <p className="mt-5 rounded-xl border border-[#e0b090]/20 bg-[#fbf5f1] px-4 py-3 text-[12px] leading-relaxed text-[#8a6a50]">
+              <p className="mt-5 rounded-xl border border-black/20 bg-gray-50 px-4 py-3 text-[12px] leading-relaxed text-[#8a6a50]">
                 <span className="font-bold">Note: </span>
                 All measurements should be body measurements (not garment measurements). For the best fit, measure over light clothing.
               </p>

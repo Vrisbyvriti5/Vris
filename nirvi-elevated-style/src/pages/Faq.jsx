@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -47,13 +47,13 @@ const AccordionItem = ({ question, answer, isOpen, onClick, isFirst, isLast }) =
         className="flex w-full items-center justify-between px-6 py-5 text-left transition-all"
         aria-expanded={isOpen}
       >
-        <span className={`text-[13px] font-bold uppercase tracking-widest transition-colors ${isOpen ? 'text-[#e0b090]' : 'text-black'}`}>
+        <span className={`text-[13px] font-bold uppercase tracking-widest transition-colors ${isOpen ? 'text-black' : 'text-black'}`}>
           {question}
         </span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className={isOpen ? 'text-[#e0b090]' : 'text-gray-400'}
+          className={isOpen ? 'text-black' : 'text-gray-400'}
         >
           <ChevronDown size={18} />
         </motion.div>

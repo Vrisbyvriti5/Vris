@@ -37,7 +37,7 @@ const Footer = () => {
               </p>
               <p className="inline-flex items-center gap-2">
                 <Mail size={16} />
-                Vrisbyvriti5@gmail.com
+                vrisbyvriti5@gmail.com
               </p>
               <p className="inline-flex items-center gap-2">
                 <MapPin size={16} />

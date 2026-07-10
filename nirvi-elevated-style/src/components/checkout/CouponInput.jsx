@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 const CouponInput = ({
   code,
@@ -19,13 +19,13 @@ const CouponInput = ({
           value={code}
           onChange={(event) => onCodeChange(event.target.value.toUpperCase())}
           placeholder="Enter coupon code"
-          className="h-11 flex-1 rounded-lg border border-[#d1d5db] bg-white px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#e0b090] focus:ring-2 focus:ring-[#ebd1c1]"
+          className="h-11 flex-1 rounded-lg border border-[#d1d5db] bg-white px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
         />
         <button
           type="button"
           onClick={onApply}
           disabled={disabled || isApplying}
-          className="h-11 rounded-lg border border-[#e0b090] px-4 text-xs font-bold uppercase tracking-[0.14em] text-[#e0b090] transition-colors hover:bg-[#fbf5f1] disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-11 rounded-lg border border-black px-4 text-xs font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isApplying ? 'Applying' : 'Apply'}
         </button>

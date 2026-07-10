@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Package } from 'lucide-react';
@@ -65,9 +65,9 @@ const OrderTimeline = ({ status }) => {
                     <span
                       className={`flex h-8 w-8 items-center justify-center rounded-full border text-[11px] font-bold transition-colors ${
                         isCompleted
-                          ? 'border-[#e0b090] bg-[#e0b090] text-white'
+                          ? 'border-black bg-black text-white'
                           : 'border-[#d1d5db] bg-white text-[#9ca3af]'
-                      } ${isCurrent ? 'ring-4 ring-[#ebd1c1]' : ''}`}
+                      } ${isCurrent ? 'ring-4 ring-gray-300' : ''}`}
                     >
                       {index + 1}
                     </span>
@@ -77,7 +77,7 @@ const OrderTimeline = ({ status }) => {
                   </div>
 
                   {index !== ORDER_FLOW.length - 1 ? (
-                    <span className={`mx-2 h-[2px] flex-1 rounded-full transition-colors ${connectorActive ? 'bg-[#e0b090]' : 'bg-[#e5e7eb]'}`} />
+                    <span className={`mx-2 h-[2px] flex-1 rounded-full transition-colors ${connectorActive ? 'bg-black' : 'bg-[#e5e7eb]'}`} />
                   ) : null}
                 </div>
               );
@@ -181,7 +181,7 @@ const Orders = () => {
                     </div>
                     <div>
                       <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#6b7280]">Total</p>
-                      <p className="mt-1.5 text-sm sm:text-base font-extrabold text-[#e0b090]">₹{finalTotal.toFixed(2)}</p>
+                      <p className="mt-1.5 text-sm sm:text-base font-extrabold text-black">₹{finalTotal.toFixed(2)}</p>
                     </div>
                   </div>
 
@@ -250,7 +250,7 @@ const Orders = () => {
                         <div className="my-2 border-t border-[#d1d5db]"></div>
                         <div className="flex justify-between font-bold text-[#111827] text-base">
                           <span>Total Paid</span>
-                          <span className="text-[#e0b090]">₹{finalTotal.toFixed(2)}</span>
+                          <span className="text-black">₹{finalTotal.toFixed(2)}</span>
                         </div>
                       </div>
 
