@@ -504,7 +504,6 @@ const ProductForm = ({
         discount_percent: discountPercent,
         stock: Number(formData.stock),
         imageUrls,
-        imagesFiles: formData.imageFiles,
         sizes: formData.sizes,
         customizeColors: formData.customizeColors,
       });
