@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CreditCard, MapPin, PackageCheck } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -865,6 +865,66 @@ const Checkout = () => {
                   </div>
 
                   <div className="mt-8">
+                    {savedAddresses.length > 0 ? (
+                      <div className="mb-8 border-b border-[#ebedf0] pb-6">
+                        <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#6b7280]">Saved Addresses</p>
+                        <div className="mt-3 space-y-3">
+                          {savedAddresses.map((address) => {
+                            const isSelected = String(selectedAddressId) === String(address.id);
+
+                            return (
+                              <div
+                                key={address.id}
+                                className={[
+                                  'rounded-xl border p-3 transition-colors',
+                                  isSelected
+                                    ? 'border-black bg-[#fff5f8]'
+                                    : 'border-[#ebedf0] bg-[#fafafa]',
+                                ].join(' ')}
+                              >
+                                <div className="flex items-start justify-between gap-3">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleSelectSavedAddress(address.id)}
+                                    className="flex-1 text-left"
+                                  >
+                                    <span className="flex items-center gap-2">
+                                      <span className="text-sm font-semibold text-[#111827]">{address.fullName}</span>
+                                      {isSelected ? (
+                                        <span className="rounded-full bg-black px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                                          Selected
+                                        </span>
+                                      ) : null}
+                                    </span>
+                                    <p className="mt-1 text-xs text-[#6b7280]">
+                                      {address.fullAddress}, {address.city}, {address.state} - {address.pincode}
+                                    </p>
+                                  </button>
+
+                                  <div className="flex shrink-0 items-center gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleEditAddress(address)}
+                                      className="text-xs font-bold uppercase tracking-[0.12em] text-[#2563eb] transition-colors hover:text-[#1d4ed8]"
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDeleteAddress(address.id)}
+                                      className="text-xs font-bold uppercase tracking-[0.12em] text-[#dc2626] transition-colors hover:text-[#b91c1c]"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : null}
+
                     <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                       <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#6b7280]">
                         {editingAddressId ? 'Edit Address' : 'Add New Address'}
@@ -949,65 +1009,7 @@ const Checkout = () => {
                       </button>
                     </form>
 
-                    {savedAddresses.length > 0 ? (
-                      <div className="mt-8 border-t border-[#ebedf0] pt-6">
-                        <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#6b7280]">Saved Addresses</p>
-                        <div className="mt-3 space-y-3">
-                          {savedAddresses.map((address) => {
-                            const isSelected = String(selectedAddressId) === String(address.id);
 
-                            return (
-                              <div
-                                key={address.id}
-                                className={[
-                                  'rounded-xl border p-3 transition-colors',
-                                  isSelected
-                                    ? 'border-black bg-[#fff5f8]'
-                                    : 'border-[#ebedf0] bg-[#fafafa]',
-                                ].join(' ')}
-                              >
-                                <div className="flex items-start justify-between gap-3">
-                                  <button
-                                    type="button"
-                                    onClick={() => handleSelectSavedAddress(address.id)}
-                                    className="flex-1 text-left"
-                                  >
-                                    <span className="flex items-center gap-2">
-                                      <span className="text-sm font-semibold text-[#111827]">{address.fullName}</span>
-                                      {isSelected ? (
-                                        <span className="rounded-full bg-black px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
-                                          Selected
-                                        </span>
-                                      ) : null}
-                                    </span>
-                                    <p className="mt-1 text-xs text-[#6b7280]">
-                                      {address.fullAddress}, {address.city}, {address.state} - {address.pincode}
-                                    </p>
-                                  </button>
-
-                                  <div className="flex shrink-0 items-center gap-2">
-                                    <button
-                                      type="button"
-                                      onClick={() => handleEditAddress(address)}
-                                      className="text-xs font-bold uppercase tracking-[0.12em] text-[#2563eb] transition-colors hover:text-[#1d4ed8]"
-                                    >
-                                      Edit
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => handleDeleteAddress(address.id)}
-                                      className="text-xs font-bold uppercase tracking-[0.12em] text-[#dc2626] transition-colors hover:text-[#b91c1c]"
-                                    >
-                                      Delete
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ) : null}
                   </div>
                 </>
               ) : null}
