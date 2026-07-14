@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CreditCard, MapPin, PackageCheck } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
@@ -16,7 +17,6 @@ import OrderSummary from '@/components/checkout/OrderSummary';
 
 const PAYMENT_OPTIONS = [
   { id: 'razorpay', label: 'Razorpay (UPI / Card / Net Banking / Wallets)' },
-  { id: 'cod', label: 'Cash on Delivery (COD)' },
 ];
 
 const emptyAddress = {
@@ -29,7 +29,7 @@ const emptyAddress = {
   landmark: '',
 };
 
-const deliveryChargeFor = (subtotal) => (subtotal >= 2999 || subtotal === 0 ? 0 : 49);
+const deliveryChargeFor = (subtotal) => (subtotal >= 2999 || subtotal === 0 ? 0 : 99);
 
 const getDeliveryEstimate = (index) => {
   const estimateDate = new Date();
@@ -351,8 +351,9 @@ const Checkout = () => {
   const hasSelectedAddress = Boolean(selectedAddress);
   const canEditCheckoutItems = checkoutSource === 'cart';
 
-  const handleApplyCoupon = async () => {
-    const normalizedCode = String(couponCode || '').trim().toUpperCase();
+  const handleApplyCoupon = async (quickCode) => {
+    const codeToUse = typeof quickCode === 'string' ? quickCode : couponCode;
+    const normalizedCode = String(codeToUse || '').trim().toUpperCase();
 
     if (!normalizedCode) {
       setCouponError('Enter a coupon code first.');
@@ -384,6 +385,17 @@ const Checkout = () => {
       setCheckoutCoupon(normalizedCoupon);
       setCouponCode(couponData.code || normalizedCode);
       setCouponMessage(`Coupon Applied: ${normalizedCoupon.code}`);
+
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      toast({
+        title: "🎉 Coupon Applied Successfully",
+        description: normalizedCoupon.discountPercent ? `${normalizedCoupon.discountPercent}% Discount Applied` : 'Discount Applied',
+        duration: 2000
+      });
     } catch (err) {
       setAppliedCoupon(null);
       clearCheckoutCoupon();

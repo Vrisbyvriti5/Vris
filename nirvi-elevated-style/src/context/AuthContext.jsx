@@ -5,16 +5,24 @@ const AuthContext = createContext(undefined);
 const AUTH_STORAGE_KEY = 'vris-user';
 
 const readStoredUser = () => {
-  const raw = localStorage.getItem(AUTH_STORAGE_KEY);
-  return raw ? JSON.parse(raw) : null;
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
+  }
 };
 
 const persistUser = (nextUser) => {
-  if (!nextUser) {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-    return;
+  try {
+    if (!nextUser) {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      return;
+    }
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextUser));
+  } catch (err) {
+    // Ignore storage errors (e.g. quota exceeded or blocked)
   }
-  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextUser));
 };
 
 export const AuthProvider = ({ children }) => {

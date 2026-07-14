@@ -12,7 +12,7 @@ const loadAdminSession = () => {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : null;
-  } catch {
+  } catch (err) {
     return null;
   }
 };
@@ -21,12 +21,15 @@ export const AdminAuthProvider = ({ children }) => {
   const [admin, setAdmin] = useState(loadAdminSession);
 
   useEffect(() => {
-    if (!admin) {
-      window.localStorage.removeItem(STORAGE_KEY);
-      return;
+    try {
+      if (!admin) {
+        window.localStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(admin));
+    } catch (err) {
+      // Ignore
     }
-
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(admin));
   }, [admin]);
 
   const login = async ({ email, password }) => {

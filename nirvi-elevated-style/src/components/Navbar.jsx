@@ -489,7 +489,7 @@ const Navbar = () => {
             type="text"
             value={mobileSearchValue}
             onChange={(e) => setMobileSearchValue(e.target.value)}
-            placeholder="Search for products, brands and more"
+            placeholder="Search for products"
             className={mobileSearchInputClass}
           />
           {mobileSearchValue ? (

@@ -1,7 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 import { Gift, HeartHandshake, Percent, ShieldCheck, Ticket } from 'lucide-react';
 import { formatPriceINR, formatSignedPriceINR } from '@/lib/pricing';
-
+import CouponInput from '@/components/checkout/CouponInput';
 const DONATION_OPTIONS = [10, 20, 50, 100];
 const GREETING_TEMPLATES = [
   {
@@ -53,45 +53,17 @@ const PriceDetails = ({
 
   return (
     <aside className="sticky top-20 space-y-4">
-      <section className="rounded-xl border border-[#ebedf0] bg-white p-4 shadow-sm">
-        <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#6b7280]">
-          <Ticket size={14} /> Apply Coupons
-        </p>
-        <div className="mt-3 flex gap-2">
-          <input
-            value={couponCode}
-            onChange={(event) => onCouponCodeChange(event.target.value.toUpperCase())}
-            placeholder="Enter coupon code"
-            className="h-10 flex-1 rounded-lg border border-[#d1d5db] bg-[#f9fafb] px-3 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
-          />
-          <button
-            type="button"
-            onClick={onApplyCoupon}
-            disabled={isApplyingCoupon || selectedCount === 0}
-            className="h-10 rounded-lg border border-black px-3 text-xs font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isApplyingCoupon ? 'Applying' : 'Apply'}
-          </button>
-        </div>
-
-        {appliedCoupon ? (
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-[#ecfdf3] px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#047857]">
-              Coupon Applied: {appliedCoupon.code}
-            </span>
-            <button
-              type="button"
-              onClick={onRemoveCoupon}
-              className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6b7280] transition-colors hover:text-[#111827]"
-            >
-              Remove Coupon
-            </button>
-          </div>
-        ) : null}
-
-        {couponMessage ? <p className="mt-2 text-xs font-medium text-[#059669]">{couponMessage}</p> : null}
-        {couponError ? <p className="mt-2 text-xs font-medium text-[#dc2626]">{couponError}</p> : null}
-      </section>
+      <CouponInput
+        code={couponCode}
+        onCodeChange={onCouponCodeChange}
+        onApply={onApplyCoupon}
+        onRemove={onRemoveCoupon}
+        isApplying={isApplyingCoupon}
+        disabled={selectedCount === 0}
+        appliedCoupon={appliedCoupon}
+        message={couponMessage}
+        error={couponError}
+      />
 
       <section className="rounded-xl border border-[#ebedf0] bg-white p-4 shadow-sm">
         <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#6b7280]">

@@ -1,6 +1,8 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Trash2 } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { useToast } from '@/components/ui/use-toast';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
@@ -42,6 +44,7 @@ const buildDeliveryEstimate = (offset) => {
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { items, increment, decrement, removeItem, updateSize } = useCart();
   const {
     selectedAddress,
@@ -266,7 +269,7 @@ const Cart = () => {
     const rawCouponDiscount = Number(appliedCoupon?.discountAmount || 0);
     const couponDiscount = Number(Math.max(0, Math.min(rawCouponDiscount, selectedSubtotal)).toFixed(2));
     const subtotal = Number((selectedSubtotal - couponDiscount).toFixed(2));
-    const shippingFee = subtotal === 0 || subtotal >= SHIPPING_FREE_THRESHOLD ? 0 : 49;
+    const shippingFee = subtotal === 0 || subtotal >= SHIPPING_FREE_THRESHOLD ? 0 : 99;
     const donationValue = donationEnabled ? donationAmount : 0;
     const giftingValue = giftingEnabled ? giftingAmount : 0;
     const totalAmount = Number((subtotal + shippingFee + donationValue + giftingValue).toFixed(2));
@@ -344,8 +347,9 @@ const Cart = () => {
     ));
   };
 
-  const handleApplyCoupon = async () => {
-    const normalizedCode = String(couponCode || '').trim().toUpperCase();
+  const handleApplyCoupon = async (quickCode) => {
+    const codeToUse = typeof quickCode === 'string' ? quickCode : couponCode;
+    const normalizedCode = String(codeToUse || '').trim().toUpperCase();
 
     if (!normalizedCode) {
       setCouponError('Enter a coupon code first.');
@@ -377,6 +381,17 @@ const Cart = () => {
 
       setCouponCode(couponData.code || normalizedCode);
       setCouponMessage(`Coupon Applied: ${normalizedCoupon.code}`);
+      
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      toast({
+        title: "🎉 Coupon Applied Successfully",
+        description: normalizedCoupon.discountPercent ? `${normalizedCoupon.discountPercent}% Discount Applied` : 'Discount Applied',
+        duration: 2000
+      });
     } catch (err) {
       setAppliedCoupon(null);
       clearCheckoutCoupon();

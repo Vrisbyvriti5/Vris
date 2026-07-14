@@ -1,4 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
+
+const AVAILABLE_COUPONS = [
+  { code: 'VRIS20', description: 'Get 20% OFF on your first order' }
+];
 
 const CouponInput = ({
   code,
@@ -23,13 +27,39 @@ const CouponInput = ({
         />
         <button
           type="button"
-          onClick={onApply}
+          onClick={() => onApply()}
           disabled={disabled || isApplying}
           className="h-11 rounded-lg border border-black px-4 text-xs font-bold uppercase tracking-[0.14em] text-black transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isApplying ? 'Applying' : 'Apply'}
         </button>
       </div>
+
+      {!appliedCoupon && (
+        <div className="mt-4 space-y-2">
+          {AVAILABLE_COUPONS.map((coupon) => (
+            <div key={coupon.code} className="flex items-center justify-between rounded-lg border border-[#d1d5db] bg-white p-3 shadow-sm">
+              <div>
+                <span className="rounded bg-[#fef08a] px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-[#854d0e]">
+                  {coupon.code}
+                </span>
+                <p className="mt-1 text-[11px] text-[#6b7280]">{coupon.description}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  onCodeChange(coupon.code);
+                  setTimeout(() => onApply(coupon.code), 0);
+                }}
+                disabled={disabled || isApplying}
+                className="text-xs font-bold uppercase tracking-wider text-[#047857] hover:text-[#065f46]"
+              >
+                Apply
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {appliedCoupon ? (
         <div className="mt-3 flex flex-wrap items-center gap-2">
