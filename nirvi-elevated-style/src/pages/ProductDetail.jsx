@@ -27,6 +27,7 @@ import {
   Search,
   ShieldCheck,
   ShoppingBag,
+  Share2,
   Star,
   Store,
   Tag,
@@ -445,6 +446,32 @@ const ProductDetail = () => {
     });
   };
 
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = product?.name || 'VRIS Product';
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          url
+        });
+      } catch (err) {
+        console.error('Error sharing', err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        toast({
+          title: 'Link Copied',
+          description: 'Product link copied to clipboard.',
+        });
+      } catch (err) {
+        console.error('Error copying link', err);
+      }
+    }
+  };
+
   const handlePincodeActionClick = useCallback(() => {
     if (!isAuthenticated) {
       toast({
@@ -724,14 +751,24 @@ const ProductDetail = () => {
               <span className="inline-flex h-7 items-center rounded-md border border-black/35 bg-gray-50 px-2.5 text-[10px] font-extrabold uppercase tracking-wide text-black">
                 Best Seller
               </span>
-              <button
-                type="button"
-                onClick={() => toggle(product?.id)}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-black/50 hover:shadow-md"
-                aria-label={isWishlisted(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'}
-              >
-                <Heart size={20} className={isWishlisted(product?.id) ? 'fill-[#ff3f6c] text-[#ff3f6c]' : ''} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-black/50 hover:shadow-md"
+                  aria-label="Share product"
+                >
+                  <Share2 size={20} className="text-foreground" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggle(product?.id)}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-black/50 hover:shadow-md"
+                  aria-label={isWishlisted(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                >
+                  <Heart size={20} className={isWishlisted(product?.id) ? 'fill-[#ff3f6c] text-[#ff3f6c]' : ''} />
+                </button>
+              </div>
             </div>
 
             <h1 className="mt-3 font-display text-[clamp(28px,2.4vw,36px)] font-bold leading-tight text-foreground">{product?.name || 'Product'}</h1>
