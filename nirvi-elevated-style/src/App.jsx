@@ -14,6 +14,7 @@ import { AdminDataProvider } from "@/context/AdminDataContext";
 import { AdminAuthProvider } from "@/context/AdminAuthContext";
 import ScrollToTop from "./components/ScrollToTop";
 import FloatingWhatsAppButton from "./components/FloatingWhatsAppButton";
+import PixelTracker from "./components/PixelTracker";
 import { AdminProtectedRoute, AdminPublicRoute } from "./components/admin/AdminRoute";
 import VRISLoader from "./components/VRISLoader";
 import AppPreloader from "./components/AppPreloader";
@@ -68,6 +69,7 @@ const App = () => (
                     <Sonner />
                     <BrowserRouter>
                       <ScrollToTop />
+                      <PixelTracker />
                       <FloatingWhatsAppButton />
                       <Suspense fallback={<RouteFallback />}>
                         <Routes>
