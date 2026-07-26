@@ -10,6 +10,78 @@
 
 const CURRENCY = 'INR';
 
+// ─── Initialization ─────────────────────────────────────────
+
+let _initialized = false;
+
+/**
+ * Loads the Meta Pixel SDK and initializes it with the Pixel ID
+ * from VITE_META_PIXEL_ID.  Safe to call multiple times — only
+ * runs once.
+ */
+export const initializePixel = () => {
+  try {
+    if (_initialized) return;
+    if (typeof window === 'undefined') return;
+
+    const pixelId = import.meta.env.VITE_META_PIXEL_ID;
+    if (!pixelId) {
+      if (import.meta.env.DEV) {
+        console.warn('[Meta Pixel] VITE_META_PIXEL_ID is not set — skipping initialization.');
+      }
+      return;
+    }
+
+    // If fbq already exists (e.g. from a <script> in index.html), just init
+    if (typeof window.fbq === 'function') {
+      window.fbq('init', pixelId);
+      _initialized = true;
+      debugLog('Initialized (existing fbq)', { pixelId });
+      return;
+    }
+
+    // Bootstrap the fbq stub exactly as Meta's base code does
+    const fbq = function () {
+      fbq.callMethod
+        ? fbq.callMethod.apply(fbq, arguments)
+        : fbq.queue.push(arguments);
+    };
+    if (!window._fbq) window._fbq = fbq;
+    fbq.push = fbq;
+    fbq.loaded = true;
+    fbq.version = '2.0';
+    fbq.queue = [];
+    window.fbq = fbq;
+
+    // Load the SDK script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    script.onerror = () => {
+      if (import.meta.env.DEV) {
+        console.warn('[Meta Pixel] Failed to load fbevents.js — ads may be blocked.');
+      }
+    };
+
+    const firstScript = document.getElementsByTagName('script')[0];
+    if (firstScript && firstScript.parentNode) {
+      firstScript.parentNode.insertBefore(script, firstScript);
+    } else {
+      document.head.appendChild(script);
+    }
+
+    // Initialize with the Pixel ID
+    window.fbq('init', pixelId);
+    _initialized = true;
+
+    debugLog('Initialized', { pixelId });
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.warn('[Meta Pixel] Initialization error:', err);
+    }
+  }
+};
+
 // ─── Helpers ────────────────────────────────────────────────
 
 /** Returns true when the Meta Pixel base code is loaded and ready. */
@@ -38,7 +110,7 @@ const generateEventId = () => {
 const debugLog = (eventName, data, eventId) => {
   try {
     if (import.meta.env.DEV) {
-      console.log(`[Meta Pixel] ${eventName}`, { ...data, eventID: eventId });
+      console.log(`[Meta Pixel] ${eventName}`, { ...data, ...(eventId ? { eventID: eventId } : {}) });
     }
   } catch {
     // Silently ignore

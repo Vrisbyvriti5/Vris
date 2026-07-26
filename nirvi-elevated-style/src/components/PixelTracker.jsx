@@ -1,12 +1,20 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { pageView } from '../analytics/metaPixel';
+import { initializePixel, pageView } from '../analytics/metaPixel';
+
+let pixelBooted = false;
 
 export default function PixelTracker() {
   const location = useLocation();
   const previousPathRef = useRef(null);
 
   useEffect(() => {
+    // Initialize the Meta Pixel SDK once on first mount
+    if (!pixelBooted) {
+      initializePixel();
+      pixelBooted = true;
+    }
+
     // Build a key from pathname + search to detect actual navigations
     const currentKey = `${location.pathname}${location.search}`;
 
