@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -6,6 +6,7 @@ import { useWishlist } from '@/context/WishlistContext';
 import { formatPriceINR, getProductPricing } from '@/lib/pricing';
 import { getEntityStock, isOutOfStock } from '@/lib/stock';
 import { useToast } from '@/components/ui/use-toast';
+import { addToCart as trackAddToCart, addToWishlist as trackAddToWishlist } from '@/analytics/metaPixel';
 
 const ADD_TO_CART_TOAST_DURATION = 1500;
 
@@ -60,6 +61,10 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
 
   const handleWishlistToggle = (event) => {
     event.stopPropagation();
+    // Meta Pixel: fire AddToWishlist only when adding (not removing)
+    if (!isWishlisted(productId)) {
+      trackAddToWishlist({ id: productId, name: product.name, price: pricing.finalPrice });
+    }
     toggle(productId);
   };
 
@@ -113,6 +118,8 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
       });
 
       if (wasAdded) {
+        // Meta Pixel: AddToCart after successful API response
+        trackAddToCart({ id: productId, name: product.name, price: pricing.finalPrice });
         toast({
           title: 'Added to cart',
           description: `${product.name} is now in your cart.`,

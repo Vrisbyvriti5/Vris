@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { viewContent, addToCart as trackAddToCart, addToWishlist as trackAddToWishlist, initiateCheckout as trackInitiateCheckout } from '@/analytics/metaPixel';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   AlertCircle,
@@ -276,6 +277,20 @@ const ProductDetail = () => {
     }
   }, [product]);
 
+  // ── Meta Pixel: ViewContent (once per product) ──
+  const viewContentFiredRef = useRef(null);
+  useEffect(() => {
+    if (!product?.id || productLoading) return;
+    if (viewContentFiredRef.current === String(product.id)) return;
+    viewContentFiredRef.current = String(product.id);
+    viewContent({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      price: finalPrice,
+    });
+  }, [product?.id, product?.name, product?.category, finalPrice, productLoading]);
+
   const fetchReviews = useCallback(async () => {
     if (!id) {
       return;
@@ -358,7 +373,7 @@ const ProductDetail = () => {
   const addSelectedQuantityToCart = () => {
     const quantityToAdd = Math.max(0, Math.min(qty, remainingStock));
     if (quantityToAdd > 0) {
-      addItem({
+      return addItem({
         id: product?.id, // CartContext logic will make this a composite key for local cart
         product_id: product?.id,
         name: product?.name || 'Product',
@@ -371,13 +386,17 @@ const ProductDetail = () => {
         availableSizes: availableSizes,
       });
     }
+    return false;
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!isInStock || remainingStock <= 0) {
       return;
     }
-    addSelectedQuantityToCart();
+    const wasAdded = await addSelectedQuantityToCart();
+    if (wasAdded) {
+      trackAddToCart({ id: product?.id, name: product?.name, price: finalPrice }, qty);
+    }
     toast({
       title: 'Added to cart',
       description: `${product?.name || 'Product'} has been added to your shopping bag.`,
@@ -391,6 +410,12 @@ const ProductDetail = () => {
     }
 
     const quantityToBuyNow = Math.max(1, Math.min(qty, remainingStock));
+
+    // Meta Pixel: InitiateCheckout for Buy Now flow
+    trackInitiateCheckout({
+      items: [{ product_id: product?.id, name: product?.name, price: finalPrice, quantity: quantityToBuyNow }],
+      totalPrice: finalPrice * quantityToBuyNow,
+    });
 
     startCheckout({
       source: 'buyNow',
@@ -413,6 +438,13 @@ const ProductDetail = () => {
   const handleCustomizeCheckout = (customizationData) => {
     setShowCustomize(false);
     const quantityToBuyNow = Math.max(1, Math.min(qty, Math.max(remainingStock, 1)));
+
+    // Meta Pixel: InitiateCheckout for customized Buy Now flow
+    trackInitiateCheckout({
+      items: [{ product_id: product?.id, name: product?.name, price: finalPrice, quantity: quantityToBuyNow }],
+      totalPrice: finalPrice * quantityToBuyNow,
+    });
+
     startCheckout({
       source: 'buyNow',
       item: {
@@ -762,7 +794,7 @@ const ProductDetail = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => toggle(product?.id)}
+                  onClick={() => { if (!isWishlisted(product?.id)) { trackAddToWishlist({ id: product?.id, name: product?.name, price: finalPrice }); } toggle(product?.id); }}
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-black/50 hover:shadow-md"
                   aria-label={isWishlisted(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'}
                 >
@@ -1041,7 +1073,7 @@ const ProductDetail = () => {
               </button>
               <button
                 type="button"
-                onClick={() => toggle(product?.id)}
+                onClick={() => { if (!isWishlisted(product?.id)) { trackAddToWishlist({ id: product?.id, name: product?.name, price: finalPrice }); } toggle(product?.id); }}
                 className="hidden h-12 w-12 items-center justify-center rounded-xl border border-black/10 bg-white text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-black/50 sm:flex"
                 aria-label={isWishlisted(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'}
               >
@@ -1276,7 +1308,7 @@ const ProductDetail = () => {
               </button>
               <button
                 type="button"
-                onClick={() => toggle(product?.id)}
+                onClick={() => { if (!isWishlisted(product?.id)) { trackAddToWishlist({ id: product?.id, name: product?.name, price: finalPrice }); } toggle(product?.id); }}
                 className="p-3.5 rounded-md border border-border bg-background text-foreground hover:border-foreground transition-colors flex items-center justify-center shadow-sm"
               >
                 <Heart size={18} className={isWishlisted(product?.id) ? 'fill-[#ff3f6c] text-[#ff3f6c]' : ''} />

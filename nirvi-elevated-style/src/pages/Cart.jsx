@@ -16,6 +16,7 @@ import { useCatalog } from '@/context/CatalogContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { couponsAPI } from '@/lib/api';
 import { getEntityStock } from '@/lib/stock';
+import { initiateCheckout as trackInitiateCheckout } from '@/analytics/metaPixel';
 
 const SHIPPING_FREE_THRESHOLD = 2999;
 
@@ -448,6 +449,17 @@ const Cart = () => {
     if (!canProceedToCheckout) {
       return;
     }
+
+    // Meta Pixel: InitiateCheckout
+    trackInitiateCheckout({
+      items: selectedItems.map((item) => ({
+        product_id: item.product_id || item.id,
+        name: item.name,
+        price: item.unitPrice,
+        quantity: item.quantity,
+      })),
+      totalPrice: pricingBreakdown.totalAmount,
+    });
 
     startCheckout({
       source: 'cart',

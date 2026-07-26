@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -8,6 +8,7 @@ import { useFilter } from '@/context/FilterContext';
 import HorizontalFilterBar from '@/components/HorizontalFilterBar';
 import { motion } from 'framer-motion';
 import { productsAPI } from '@/lib/api';
+import { search as trackSearch } from '@/analytics/metaPixel';
 
 const normalizeCategory = (value) => String(value || '').trim().toLowerCase();
 const SORT_OPTIONS = [
@@ -110,6 +111,16 @@ const Shop = () => {
       isDisposed = true;
     };
   }, [backendSort, query]);
+
+  // ── Meta Pixel: Search (only on query change, not keystrokes) ──
+  const lastTrackedSearchRef = useRef('');
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) return;
+    if (lastTrackedSearchRef.current === trimmed) return;
+    lastTrackedSearchRef.current = trimmed;
+    trackSearch(trimmed);
+  }, [query]);
 
   const filteredProducts = useMemo(() => {
     const filtered = products.filter((product) => {

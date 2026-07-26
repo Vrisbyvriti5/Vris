@@ -1,18 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { initializePixel, trackPageView } from '../analytics/metaPixel';
-
-let initialized = false;
+import { pageView } from '../analytics/metaPixel';
 
 export default function PixelTracker() {
   const location = useLocation();
+  const previousPathRef = useRef(null);
 
   useEffect(() => {
-    if (!initialized) {
-      initializePixel();
-      initialized = true;
+    // Build a key from pathname + search to detect actual navigations
+    const currentKey = `${location.pathname}${location.search}`;
+
+    // Skip if this is the same page (prevents duplicate fires)
+    if (previousPathRef.current === currentKey) {
+      return;
     }
-    trackPageView();
+
+    previousPathRef.current = currentKey;
+    pageView();
   }, [location.pathname, location.search]);
 
   return null;

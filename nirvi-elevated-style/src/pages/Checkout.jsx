@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CreditCard, MapPin, PackageCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -14,6 +14,7 @@ import { formatPriceINR } from '@/lib/pricing';
 import { useToast } from '@/components/ui/use-toast';
 import CartItem from '@/components/checkout/CartItem';
 import OrderSummary from '@/components/checkout/OrderSummary';
+import { purchase as trackPurchase } from '@/analytics/metaPixel';
 
 const PAYMENT_OPTIONS = [
   { id: 'razorpay', label: 'Razorpay (UPI / Card / Net Banking / Wallets)' },
@@ -129,6 +130,8 @@ const Checkout = () => {
   const [couponMessage, setCouponMessage] = useState('');
   const [couponError, setCouponError] = useState('');
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  // Guard against duplicate Purchase pixel events (e.g. from double-clicks)
+  const purchaseFiredRef = useRef(null);
   const isMobileViewport = useCallback(() => {
     if (typeof window === 'undefined') {
       return false;
@@ -701,6 +704,24 @@ const Checkout = () => {
           paymentStatus: 'Paid',
           paymentId: paymentResult.paymentId,
           razorpayOrderId: paymentResult.razorpayOrderId,
+        });
+      }
+
+      // ── Meta Pixel: Purchase (after payment verification + order saved) ──
+      // Guard: only fire once per order ID to prevent duplicate events
+      if (order?.id && purchaseFiredRef.current !== String(order.id)) {
+        purchaseFiredRef.current = String(order.id);
+        trackPurchase({
+          id: order.id,
+          total: finalTotal,
+          totals: { total: finalTotal },
+          items: checkoutItemsWithAvailability.map((item) => ({
+            product_id: item.product_id || item.id,
+            id: item.product_id || item.id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.unitPrice,
+          })),
         });
       }
 
