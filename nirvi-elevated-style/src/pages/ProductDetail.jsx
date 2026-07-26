@@ -277,19 +277,7 @@ const ProductDetail = () => {
     }
   }, [product]);
 
-  // ── Meta Pixel: ViewContent (once per product) ──
-  const viewContentFiredRef = useRef(null);
-  useEffect(() => {
-    if (!product?.id || productLoading) return;
-    if (viewContentFiredRef.current === String(product.id)) return;
-    viewContentFiredRef.current = String(product.id);
-    viewContent({
-      id: product.id,
-      name: product.name,
-      category: product.category,
-      price: finalPrice,
-    });
-  }, [product?.id, product?.name, product?.category, finalPrice, productLoading]);
+
 
   const fetchReviews = useCallback(async () => {
     if (!id) {
@@ -334,6 +322,20 @@ const ProductDetail = () => {
   const ratingTotal = Number(reviewCount || product?.reviewCount || 0);
   const cartQuantity = Number(cartItem?.quantity || 0);
   const sidebarPincode = hasDeliveryPincode ? deliveryPincode : '250002';
+
+  // ── Meta Pixel: ViewContent (once per product) ──
+  const viewContentFiredRef = useRef(null);
+  useEffect(() => {
+    if (!product?.id || productLoading) return;
+    if (viewContentFiredRef.current === String(product.id)) return;
+    viewContentFiredRef.current = String(product.id);
+    viewContent({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      price: finalPrice,
+    });
+  }, [product?.id, product?.name, product?.category, finalPrice, productLoading]);
 
 
   const customBannerItems = useMemo(() => {
