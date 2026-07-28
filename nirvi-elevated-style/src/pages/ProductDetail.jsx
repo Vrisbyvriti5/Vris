@@ -146,6 +146,7 @@ const ProductDetail = () => {
 
   // Customize modal state
   const [showCustomize, setShowCustomize] = useState(false);
+  const [showMoreDesc, setShowMoreDesc] = useState(false);
 
   // Fetch individual product if not found in catalog
   useEffect(() => {
@@ -240,7 +241,16 @@ const ProductDetail = () => {
   }, [product]);
 
   const availableSizes = useMemo(() => {
-    return Array.isArray(product?.sizes) && product?.sizes.length > 0 ? product.sizes : [];
+    if (!Array.isArray(product?.sizes) || product.sizes.length === 0) return [];
+    const sizeOrder = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '2XL', 'XXXL', '3XL', 'XXXXL', '4XL', 'XXXXXL', '5XL', 'XXXXXXL', '6XL'];
+    return [...product.sizes].sort((a, b) => {
+      const indexA = sizeOrder.indexOf(String(a).toUpperCase().trim());
+      const indexB = sizeOrder.indexOf(String(b).toUpperCase().trim());
+      if (indexA === -1 && indexB === -1) return String(a).localeCompare(String(b));
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    });
   }, [product]);
 
   useEffect(() => {
@@ -814,9 +824,20 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <p className="mt-3 max-h-[78px] overflow-hidden text-[15px] leading-6 text-muted-foreground">
-              {product?.description || product?.category || 'Designed for everyday personality, easy styling, and VRIS signature charm.'}
-            </p>
+            <div className="mt-3">
+              <p className={`text-[15px] leading-6 text-muted-foreground transition-all duration-300 ${!showMoreDesc ? 'line-clamp-3' : ''}`}>
+                {product?.description || product?.category || 'Designed for everyday personality, easy styling, and VRIS signature charm.'}
+              </p>
+              {String(product?.description || product?.category || 'Designed for everyday personality, easy styling, and VRIS signature charm.').length > 120 && (
+                <button
+                  type="button"
+                  onClick={() => setShowMoreDesc(!showMoreDesc)}
+                  className="mt-1 text-xs font-bold text-foreground underline underline-offset-4 decoration-dotted hover:text-black/70 focus:outline-none"
+                >
+                  {showMoreDesc ? 'Show less' : 'Show more'}
+                </button>
+              )}
+            </div>
 
             <div className="mt-4">
               <div className="flex flex-wrap items-end gap-3">
