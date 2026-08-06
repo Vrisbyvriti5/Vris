@@ -615,7 +615,7 @@ const ProductForm = ({
           <div className="space-y-3">
             <span className="text-sm font-semibold text-foreground">Available Sizes</span>
             <div className="flex flex-wrap gap-3">
-              {['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'].map((size) => (
+              {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'].map((size) => (
                 <label key={size} className="flex cursor-pointer items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted">
                   <input
                     type="checkbox"

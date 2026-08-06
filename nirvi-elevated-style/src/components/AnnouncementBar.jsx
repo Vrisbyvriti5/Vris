@@ -6,19 +6,19 @@ const AnnouncementBar = () => {
   const handleCopy = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    navigator.clipboard.writeText('VRIS20');
-    toast.success('Coupon code VRIS20 copied to clipboard!', { duration: 2000 });
+    navigator.clipboard.writeText('VRIS10');
+    toast.success('Coupon code VRIS10 copied to clipboard!', { duration: 2000 });
   };
 
   const messages = [
     { type: 'text', text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
-    { type: 'coupon', text: 'GET 20% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS20', icon: '🎁' },
+    { type: 'coupon', text: 'GET 10% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS10', icon: '🎁' },
     { type: 'text', text: 'FREE DELIVERY ON ORDERS ABOVE ₹2999', icon: '🚚' },
-    { type: 'coupon', text: 'GET 20% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS20', icon: '🎁' },
+    { type: 'coupon', text: 'GET 10% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS10', icon: '🎁' },
     { type: 'text', text: 'VRISBYVRITI OFFICIALLY LIVE', icon: '🎉' },
-    { type: 'coupon', text: 'GET 20% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS20', icon: '🎁' },
+    { type: 'coupon', text: 'GET 10% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS10', icon: '🎁' },
     { type: 'text', text: 'FREE DELIVERY ON ORDERS ABOVE ₹2999', icon: '🚚' },
-    { type: 'coupon', text: 'GET 20% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS20', icon: '🎁' },
+    { type: 'coupon', text: 'GET 10% OFF ON YOUR FIRST ORDER USING CODE', code: 'VRIS10', icon: '🎁' },
   ];
 
   const renderMessage = (msg, index) => {

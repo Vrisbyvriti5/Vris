@@ -19,7 +19,6 @@ const ORDER_STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancel
 const LEGACY_ORDER_STATUSES = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 const DEFAULT_COUPONS = [
   { code: 'VRIS10', discountPercent: 10, minOrderAmount: 499, expiresInDays: 180 },
-  { code: 'VRIS20', discountPercent: 20, minOrderAmount: 999, expiresInDays: 120 },
   { code: 'WELCOME15', discountPercent: 15, minOrderAmount: 699, expiresInDays: 365 },
 ];
 
@@ -233,7 +232,7 @@ const initDatabase = async () => {
       CREATE TABLE IF NOT EXISTS vris_product_sizes (
         id          INT           AUTO_INCREMENT PRIMARY KEY,
         product_id  INT           NOT NULL,
-        size        ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NOT NULL,
+        size        ENUM('XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NOT NULL,
         created_at  TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (product_id) REFERENCES vris_products(id) ON DELETE CASCADE,
         UNIQUE KEY unique_product_size (product_id, size)
@@ -247,7 +246,7 @@ const initDatabase = async () => {
         id          INT  AUTO_INCREMENT PRIMARY KEY,
         user_id     INT  NOT NULL,
         product_id  INT  NOT NULL,
-        size        ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL,
+        size        ENUM('XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL,
         quantity    INT  NOT NULL DEFAULT 1,
         created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -256,7 +255,7 @@ const initDatabase = async () => {
       )
     `);
     
-    await ensureColumnExists('vris_cart_items', 'size', "ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL");
+    await ensureColumnExists('vris_cart_items', 'size', "ENUM('XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL");
 
     // Drop old unique constraint and add new one
     try {
@@ -404,7 +403,7 @@ const initDatabase = async () => {
         order_id    INT           NOT NULL,
         product_id  INT           NOT NULL,
         name        VARCHAR(255)  NOT NULL,
-        size        ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL,
+        size        ENUM('XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL,
         price       DECIMAL(10,2) NOT NULL,
         quantity    INT           NOT NULL DEFAULT 1,
         image       VARCHAR(500),
@@ -412,7 +411,7 @@ const initDatabase = async () => {
         FOREIGN KEY (product_id) REFERENCES vris_products(id) ON DELETE CASCADE
       )
     `);
-    await ensureColumnExists('vris_order_items', 'size', "ENUM('S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL");
+    await ensureColumnExists('vris_order_items', 'size', "ENUM('XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL') NULL");
     console.log('✅  Table "vris_order_items" ready');
 
     console.log('\n🎉  All vris_* tables created successfully!');

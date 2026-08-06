@@ -216,10 +216,18 @@ const CATEGORY_CARDS = [
   { title: 'Skirts', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188503890-0f854ea8a047-carfour.webp', to: '/shop?cat=skirts' },
   { title: 'Dresses', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188504150-8d0d4fdff658-catthird.webp', to: '/shop?cat=dresses' },
   { title: 'Full Set', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188504221-7aebc1eca5ec-Catsecond.webp', to: '/shop?cat=full%20set' },
+  { title: 'Indo Western', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1786057854526-21523b0cb761-IMG_3843.webp', to: '/shop?cat=indo%20western' },
 ];
 
 const ShopByCategories = () => {
   const [ref, visible] = useReveal();
+  const scrollRef = useRef(null);
+
+  const scroll = (offset) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
 
   return (
     <section
@@ -230,30 +238,48 @@ const ShopByCategories = () => {
       <h2 className="hp-shop__heading">Shop By Categories</h2>
       <p className="hp-shop__subheading">Explore our exclusive collections tailored for your lifestyle</p>
 
-      <div className="hp-promo-cards" style={{ marginTop: '40px' }}>
-        {CATEGORY_CARDS.map((card, idx) => (
-          <Link to={card.to} key={idx} className="hp-promo-card block cursor-pointer transition-transform hover:scale-[1.02]" style={{ background: '#f5f5f5', aspectRatio: '9/16' }}>
-            {card.src ? (
-              <img
-                src={card.src}
-                alt={card.title}
-                className="hp-promo-card__img"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#eaeaea' }}>
-                <span style={{ fontFamily: 'var(--font-display, serif)', fontSize: '1rem', letterSpacing: '0.1em', color: '#888', textTransform: 'uppercase' }}>
-                  Image Placeholder
-                </span>
+      <div className="relative max-w-[1400px] mx-auto group" style={{ marginTop: '40px' }}>
+        <button
+          onClick={() => scroll(-400)}
+          className="absolute left-0 sm:-left-4 top-[40%] sm:top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full text-gray-800 opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        <div className="hp-shop__grid" ref={scrollRef}>
+          {CATEGORY_CARDS.map((card, idx) => (
+            <Link to={card.to} key={idx} className="hp-promo-card block cursor-pointer transition-transform hover:scale-[1.02]" style={{ background: '#f5f5f5', aspectRatio: '9/16' }}>
+              {card.src ? (
+                <img
+                  src={card.src}
+                  alt={card.title}
+                  className="hp-promo-card__img"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#eaeaea' }}>
+                  <span style={{ fontFamily: 'var(--font-display, serif)', fontSize: '1rem', letterSpacing: '0.1em', color: '#888', textTransform: 'uppercase' }}>
+                    Image Placeholder
+                  </span>
+                </div>
+              )}
+              <div className="hp-promo-card__overlay">
+                <h3 className="hp-promo-card__title">{card.title}</h3>
               </div>
-            )}
-            <div className="hp-promo-card__overlay">
-              <h3 className="hp-promo-card__title">{card.title}</h3>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
+
+        <button
+          onClick={() => scroll(400)}
+          className="absolute right-0 sm:-right-4 top-[40%] sm:top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full text-gray-800 opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+          aria-label="Scroll right"
+        >
+          <ChevronRight size={20} />
+        </button>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ export const PRODUCT_CATEGORIES = [
   'Skirts',
   'Dresses',
   'Full Set',
+  'Indo Western',
 ];
 
 const normalizeCategory = (value) => String(value || '').trim().toLowerCase();

@@ -2,7 +2,8 @@ const PRODUCT_CATEGORIES = [
   'Tops',
   'Skirts',
   'Dresses',
-  'Full Set'
+  'Full Set',
+  'Indo Western'
 ];
 
 const normalizeWhitespace = (value) => String(value || '').trim().replace(/\s+/g, ' ');

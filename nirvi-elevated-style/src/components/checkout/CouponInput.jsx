@@ -1,7 +1,7 @@
 import React from 'react';
 
 const AVAILABLE_COUPONS = [
-  { code: 'VRIS20', description: 'Get 20% OFF on your first order' }
+  { code: 'VRIS10', description: 'Get 10% OFF on your first order' }
 ];
 
 const CouponInput = ({

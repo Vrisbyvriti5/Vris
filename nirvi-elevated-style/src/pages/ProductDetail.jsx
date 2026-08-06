@@ -870,7 +870,7 @@ const ProductDetail = () => {
                   Size Chart
                 </button>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 {availableSizes.length > 0 ? (
                   availableSizes.map((size) => (
                     <button
@@ -891,6 +891,16 @@ const ProductDetail = () => {
                     Free Size
                   </div>
                 )}
+                <button
+                  type="button"
+                  onClick={() => setShowCustomize(true)}
+                  className="flex h-11 items-center justify-center gap-1.5 rounded-xl border border-black/10 bg-white px-4 text-sm font-bold uppercase text-foreground transition-all hover:border-foreground/50 hover:bg-muted"
+                  aria-haspopup="dialog"
+                  aria-label="Customize this product"
+                >
+                  <Ruler size={14} />
+                  Customize
+                </button>
               </div>
             </div>
 
@@ -1083,16 +1093,6 @@ const ProductDetail = () => {
                 className="inline-flex h-12 items-center justify-center rounded-xl border border-black bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-black shadow-sm transition-all hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Buy Now
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowCustomize(true)}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-black bg-white px-5 text-sm font-extrabold uppercase tracking-wide text-black shadow-sm transition-all hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
-                aria-haspopup="dialog"
-                aria-label="Customize this product"
-              >
-                <Ruler size={16} />
-                Customize
               </button>
               <button
                 type="button"
