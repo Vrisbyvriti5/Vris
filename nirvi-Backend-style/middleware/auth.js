@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const AUTH_COOKIE_NAME = 'nirvi_token';
+const AUTH_COOKIE_NAME = 'vris_token';
 
 /**
  * Verify JWT token from the Authorization header.

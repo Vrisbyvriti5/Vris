@@ -49,4 +49,16 @@ router.delete('/avatar', authenticate, deleteAvatar);
 router.post('/mobile/send-otp', authenticate, sendMobileVerificationOtp);
 router.post('/mobile/verify-otp', authenticate, verifyMobileOtp);
 
+// ── Token Refresh (silent re-issue) ──────────────────────────────────────────
+router.post('/refresh-token', authenticate, (req, res) => {
+  try {
+    const token = signTokenForUser(req.user);
+    setAuthCookie(res, token);
+    return res.json({ success: true, data: { token } });
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    return res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
 module.exports = router;

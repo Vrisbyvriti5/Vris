@@ -156,6 +156,11 @@ export const authAPI = {
       method: 'POST',
       body: JSON.stringify({ otp: String(otp || '').trim() }),
     }),
+
+  refreshToken: () =>
+    request('/auth/refresh-token', {
+      method: 'POST',
+    }),
 };
 
 // ── Products API ─────────────────────────────────────────────────────────────
