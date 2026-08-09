@@ -140,6 +140,7 @@
   .hp-promo-card__title {
     font-size: 0.75rem;
     letter-spacing: 0.12em;
+    line-height: 1.4;
   }
 
   .hp-promo-card__overlay {
@@ -261,6 +262,7 @@
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.2em;
+  line-height: 1.4;
   text-transform: uppercase;
   text-align: center;
   margin: 0;

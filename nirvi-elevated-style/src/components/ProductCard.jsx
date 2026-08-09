@@ -314,10 +314,12 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
                 type="button"
                 onClick={handleAddToCartClick}
                 disabled={isAddingToCart}
-                className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs sm:text-[12px] font-bold uppercase tracking-widest bg-black text-white shadow-[0_2px_8px_rgba(224,176,144,0.35)] transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_4px_16px_rgba(224,176,144,0.45)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="meta-add-to-cart-btn w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs sm:text-[12px] font-bold uppercase tracking-widest bg-black text-white shadow-[0_2px_8px_rgba(224,176,144,0.35)] transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_4px_16px_rgba(224,176,144,0.45)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <ShoppingCart size={13} className="shrink-0" />
-                <span className="truncate">{isAddingToCart ? '...' : ctaLabel}</span>
+                <span className="pointer-events-none flex items-center gap-2">
+                  <ShoppingCart size={13} className="shrink-0" />
+                  <span className="truncate">{isAddingToCart ? '...' : ctaLabel}</span>
+                </span>
               </button>
             ) : null}
 

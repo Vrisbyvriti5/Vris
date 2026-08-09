@@ -1067,6 +1067,7 @@ const ProductDetail = () => {
 
             <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
               <button
+                id="add-to-cart-button"
                 type="button"
                 disabled={(!isInStock || remainingStock <= 0) && !cartItem}
                 onClick={() => {
