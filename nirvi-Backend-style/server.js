@@ -94,7 +94,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/contact-requests', contactRequestRoutes);
 app.use('/api/customizations', customizationRoutes);
-app.use('/meta-catalog.json', metaCatalogRoute);
+app.use('/', metaCatalogRoute); // serves /meta-catalog.json and /meta-catalog.csv
 
 // ── 404 Handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {
