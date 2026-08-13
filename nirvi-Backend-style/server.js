@@ -26,6 +26,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
 const contactRequestRoutes = require('./routes/contactRequestRoutes');
 const customizationRoutes = require('./routes/customizationRoutes');
+const metaCatalogRoute = require('./routes/metaCatalogRoute');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -93,6 +94,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/contact-requests', contactRequestRoutes);
 app.use('/api/customizations', customizationRoutes);
+app.use('/meta-catalog.json', metaCatalogRoute);
 
 // ── 404 Handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {
