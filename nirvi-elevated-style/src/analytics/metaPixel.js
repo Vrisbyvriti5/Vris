@@ -5,6 +5,11 @@
  * never break UI.  Every event generates a unique `eventID` for
  * future Conversions API (CAPI) deduplication.
  *
+ * Dual-pixel: both VITE_META_PIXEL_ID and VITE_META_PIXEL_ID_2 are
+ * initialized through the single shared fbq instance.  Every
+ * fbq('track', ...) call automatically broadcasts to all initialized
+ * pixels — no per-event changes are needed.
+ *
  * Currency is always INR.
  */
 
@@ -15,9 +20,10 @@ const CURRENCY = 'INR';
 let _initialized = false;
 
 /**
- * Loads the Meta Pixel SDK and initializes it with the Pixel ID
- * from VITE_META_PIXEL_ID.  Safe to call multiple times — only
- * runs once.
+ * Loads the Meta Pixel SDK and initializes it with one or both Pixel IDs
+ * (VITE_META_PIXEL_ID and optionally VITE_META_PIXEL_ID_2).  Safe to call
+ * multiple times — only runs once.  Every subsequent fbq('track', ...)
+ * call automatically goes to all initialized pixels.
  */
 export const initializePixel = () => {
   try {
@@ -32,11 +38,14 @@ export const initializePixel = () => {
       return;
     }
 
+    const pixelId2 = import.meta.env.VITE_META_PIXEL_ID_2 || null;
+
     // If fbq already exists (e.g. from a <script> in index.html), just init
     if (typeof window.fbq === 'function') {
       window.fbq('init', pixelId);
+      if (pixelId2) window.fbq('init', pixelId2);
       _initialized = true;
-      debugLog('Initialized (existing fbq)', { pixelId });
+      debugLog('Initialized (existing fbq)', { pixelId, pixelId2 });
       return;
     }
 
@@ -53,7 +62,7 @@ export const initializePixel = () => {
     fbq.queue = [];
     window.fbq = fbq;
 
-    // Load the SDK script
+    // Load fbevents.js once — serves all initialized pixels
     const script = document.createElement('script');
     script.async = true;
     script.src = 'https://connect.facebook.net/en_US/fbevents.js';
@@ -70,11 +79,12 @@ export const initializePixel = () => {
       document.head.appendChild(script);
     }
 
-    // Initialize with the Pixel ID
+    // Initialize primary pixel, then secondary if configured
     window.fbq('init', pixelId);
+    if (pixelId2) window.fbq('init', pixelId2);
     _initialized = true;
 
-    debugLog('Initialized', { pixelId });
+    debugLog('Initialized', { pixelId, pixelId2 });
   } catch (err) {
     if (import.meta.env.DEV) {
       console.warn('[Meta Pixel] Initialization error:', err);
