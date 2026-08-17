@@ -18,6 +18,7 @@ import { purchase as trackPurchase } from '@/analytics/metaPixel';
 
 const PAYMENT_OPTIONS = [
   { id: 'razorpay', label: 'Razorpay (UPI / Card / Net Banking / Wallets)' },
+  { id: 'cod', label: 'Cash on Delivery' },
 ];
 
 const emptyAddress = {
@@ -99,7 +100,6 @@ const Checkout = () => {
     buyNowItem,
     selectedCartItemIds,
     checkoutCoupon,
-    checkoutDonation,
     checkoutGifting,
     savedAddresses,
     selectedAddressId,
@@ -108,8 +108,6 @@ const Checkout = () => {
     startCheckout,
     setCheckoutCoupon,
     clearCheckoutCoupon,
-    setCheckoutDonation,
-    clearCheckoutDonation,
     setCheckoutGifting,
     clearCheckoutGifting,
     saveAddress,
@@ -295,13 +293,7 @@ const Checkout = () => {
     const couponDiscount = Number(Math.max(0, Math.min(rawCouponDiscount, lineItemTotal)).toFixed(2));
     const subtotal = Number((lineItemTotal - couponDiscount).toFixed(2));
     const shipping = deliveryChargeFor(subtotal);
-    const donation = Boolean(checkoutDonation?.enabled)
-      ? Math.max(0, Number(checkoutDonation?.amount || 0))
-      : 0;
-    const gifting = Boolean(checkoutGifting?.enabled)
-      ? Math.max(0, Number(checkoutGifting?.amount || 35))
-      : 0;
-    const finalTotal = Number((subtotal + shipping + donation + gifting).toFixed(2));
+    const finalTotal = Number((subtotal + shipping).toFixed(2));
 
     return {
       productTotal,
@@ -309,11 +301,9 @@ const Checkout = () => {
       couponDiscount,
       subtotal,
       shipping,
-      donation,
-      gifting,
       finalTotal,
     };
-  }, [appliedCoupon, checkoutDonation, checkoutGifting, lineItemTotal, mrpTotal]);
+  }, [appliedCoupon, lineItemTotal, mrpTotal]);
 
   useEffect(() => {
     if (!appliedCoupon) {
@@ -335,8 +325,7 @@ const Checkout = () => {
         source: 'cart',
         selectedItemIds: selectedCartItemIds,
         appliedCoupon: checkoutCoupon,
-        appliedDonation: checkoutDonation,
-        appliedGifting: checkoutGifting,
+        appliedGifting: { enabled: false, amount: 0, message: String(checkoutGifting?.message || '') },
       };
     return <Navigate to="/login" replace state={{ redirectTo: '/checkout', checkoutPayload }} />;
   }
@@ -347,8 +336,6 @@ const Checkout = () => {
     couponDiscount,
     subtotal,
     shipping,
-    donation,
-    gifting,
     finalTotal,
   } = priceBreakdown;
   const hasSelectedAddress = Boolean(selectedAddress);
@@ -415,45 +402,8 @@ const Checkout = () => {
     setCouponError('');
   };
 
-  const handleToggleDonation = (enabled) => {
-    if (!enabled) {
-      clearCheckoutDonation();
-      return;
-    }
-
-    const currentAmount = Number(checkoutDonation?.amount || 10);
-    const normalizedAmount = Number.isFinite(currentAmount) && currentAmount > 0 ? currentAmount : 10;
-    setCheckoutDonation({ enabled: true, amount: normalizedAmount });
-  };
-
-  const handleSelectDonation = (amount) => {
-    const normalizedAmount = Number(amount);
-    if (!Number.isFinite(normalizedAmount) || normalizedAmount <= 0) {
-      return;
-    }
-
-    setCheckoutDonation({ enabled: true, amount: normalizedAmount });
-  };
-
-  const handleToggleGifting = (enabled) => {
-    if (!enabled) {
-      clearCheckoutGifting();
-      return;
-    }
-
-    setCheckoutGifting({
-      enabled: true,
-      amount: 35,
-      message: String(checkoutGifting?.message || ''),
-    });
-  };
-
-  const handleGiftingMessageChange = (message) => {
-    setCheckoutGifting({
-      enabled: true,
-      amount: 35,
-      message,
-    });
+  const handlePersonalMessageChange = (message) => {
+    setCheckoutGifting({ enabled: false, amount: 0, message });
   };
 
   const validateAddress = () => {
@@ -602,14 +552,6 @@ const Checkout = () => {
     setIsLoadingPaymentSdk(false);
     setAddressError('');
 
-    const giftingPayload = checkoutGifting?.enabled
-      ? {
-        enabled: true,
-        amount: 35,
-        message: String(checkoutGifting?.message || ''),
-      }
-      : null;
-
     try {
       let order;
 
@@ -626,11 +568,11 @@ const Checkout = () => {
       if (paymentMethod === 'cod') {
         order = await placeOrder({
           items: checkoutItemsWithAvailability,
-          subtotal: Number((subtotal + donation + gifting).toFixed(2)),
+          subtotal,
           deliveryCharge: shipping,
           total: finalTotal,
-          gifting: giftingPayload,
-          donation: checkoutDonation,
+          gifting: { enabled: false, amount: 0, message: String(checkoutGifting?.message || '') },
+          donation: null,
           selectedAddressOverride: selectedAddress,
           paymentMethodOverride: 'cod',
           paymentStatus: 'Pending',
@@ -694,11 +636,11 @@ const Checkout = () => {
 
         order = await placeOrder({
           items: checkoutItemsWithAvailability,
-          subtotal: Number((subtotal + donation + gifting).toFixed(2)),
+          subtotal,
           deliveryCharge: shipping,
           total: finalTotal,
-          gifting: giftingPayload,
-          donation: checkoutDonation,
+          gifting: { enabled: false, amount: 0, message: String(checkoutGifting?.message || '') },
+          donation: null,
           selectedAddressOverride: selectedAddress,
           paymentMethodOverride: 'razorpay',
           paymentStatus: 'Paid',
@@ -738,14 +680,10 @@ const Checkout = () => {
       }
 
       clearCheckoutCoupon();
-      clearCheckoutDonation();
       clearCheckoutGifting();
 
       navigate('/orders', {
-        state: {
-          orderId: order.id,
-          giftWrapAdded: Boolean(giftingPayload?.enabled),
-        },
+        state: { orderId: order.id },
       });
     } catch (err) {
       setAddressError(err.message || 'Failed to place order. Please try again.');
@@ -1183,18 +1121,11 @@ const Checkout = () => {
             subtotal={subtotal}
             productDiscount={productDiscount}
             couponDiscount={couponDiscount}
-            donationEnabled={Boolean(checkoutDonation?.enabled)}
-            donationAmount={donation}
-            giftingEnabled={Boolean(checkoutGifting?.enabled)}
-            giftingAmount={gifting}
-            giftingMessage={String(checkoutGifting?.message || '')}
             deliveryCharge={shipping}
             finalTotal={finalTotal}
             selectedAddress={selectedAddress}
-            onToggleDonation={handleToggleDonation}
-            onSelectDonation={handleSelectDonation}
-            onToggleGifting={handleToggleGifting}
-            onGiftingMessageChange={handleGiftingMessageChange}
+            personalMessage={String(checkoutGifting?.message || '')}
+            onPersonalMessageChange={handlePersonalMessageChange}
             couponProps={{
               code: couponCode,
               onCodeChange: setCouponCode,

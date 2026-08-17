@@ -22,7 +22,9 @@ const create = async (userId, orderData) => {
 
     const giftWrapEnabled = Boolean(gifting?.enabled);
     const giftWrapCharge = giftWrapEnabled ? Number(gifting?.amount || 0) : 0;
-    const giftWrapMessage = giftWrapEnabled ? String(gifting?.message || '').trim().slice(0, 240) : null;
+    // Store personalised message even when gift wrap is not selected (gift_wrap_enabled = 0)
+    const rawMessage = String(gifting?.message || '').trim().slice(0, 240);
+    const giftWrapMessage = rawMessage || null;
 
     const donationEnabled = Boolean(donation?.enabled);
     const donationAmount = donationEnabled ? Number(donation?.amount || 0) : 0;

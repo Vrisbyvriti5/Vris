@@ -23,19 +23,21 @@ const normalizeOrderStatus = (value) => {
 };
 
 const normalizeGiftingPayload = (gifting) => {
-  if (!gifting || !gifting.enabled) {
+  if (!gifting) {
     return null;
   }
 
-  const amount = Number(gifting.amount || 35);
-  const normalizedAmount = Number.isFinite(amount) && amount > 0 ? Number(amount.toFixed(2)) : 35;
   const message = String(gifting.message || '').trim().slice(0, 240);
 
-  return {
-    enabled: true,
-    amount: normalizedAmount,
-    message,
-  };
+  // If gift wrap is enabled, include amount; otherwise amount is 0 (personalised message only)
+  if (gifting.enabled) {
+    const amount = Number(gifting.amount || 35);
+    const normalizedAmount = Number.isFinite(amount) && amount > 0 ? Number(amount.toFixed(2)) : 35;
+    return { enabled: true, amount: normalizedAmount, message };
+  }
+
+  // No gift wrap selected — pass message only (stored in gift_wrap_message, gift_wrap_enabled=0)
+  return { enabled: false, amount: 0, message };
 };
 
 const normalizeDonationPayload = (donation) => {

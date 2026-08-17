@@ -91,7 +91,7 @@ const normalizeDonationPayload = (donation) => {
 };
 
 const normalizeGiftingPayload = (gifting) => {
-  if (!gifting || !gifting.enabled) {
+  if (!gifting) {
     return null;
   }
 
@@ -99,11 +99,13 @@ const normalizeGiftingPayload = (gifting) => {
     ? gifting.message.slice(0, 240)
     : '';
 
-  return {
-    enabled: true,
-    amount: DEFAULT_GIFT_WRAP_CHARGE,
-    message,
-  };
+  // Gift wrap enabled: include Rs 35 charge
+  if (gifting.enabled) {
+    return { enabled: true, amount: DEFAULT_GIFT_WRAP_CHARGE, message };
+  }
+
+  // Personalised message only — no charge, no wrap
+  return { enabled: false, amount: 0, message };
 };
 
 export const CheckoutProvider = ({ children }) => {
@@ -444,8 +446,9 @@ export const CheckoutProvider = ({ children }) => {
       throw new Error('Select a delivery address before placing the order.');
     }
 
-    const giftingPayload = normalizeGiftingPayload(gifting || checkoutGifting);
-    const donationPayload = normalizeDonationPayload(donation || checkoutDonation);
+    // Always build gifting payload so personalised message is preserved; donation is never sent from new checkout
+    const giftingPayload = normalizeGiftingPayload(gifting !== undefined ? gifting : checkoutGifting);
+    const donationPayload = null;
 
     // Call backend API
     const orderPayload = {

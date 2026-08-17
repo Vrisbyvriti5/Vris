@@ -50,13 +50,10 @@ const Cart = () => {
   const {
     selectedAddress,
     checkoutCoupon,
-    checkoutDonation,
     checkoutGifting,
     startCheckout,
     setCheckoutCoupon,
     clearCheckoutCoupon,
-    setCheckoutDonation,
-    clearCheckoutDonation,
     setCheckoutGifting,
     clearCheckoutGifting,
   } = useCheckout();
@@ -74,18 +71,7 @@ const Cart = () => {
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
 
-  const donationEnabled = Boolean(checkoutDonation?.enabled);
-  const donationAmount = useMemo(() => {
-    const amount = Number(checkoutDonation?.amount || 10);
-    return Number.isFinite(amount) && amount > 0 ? amount : 10;
-  }, [checkoutDonation]);
-
-  const giftingEnabled = Boolean(checkoutGifting?.enabled);
-  const giftingAmount = useMemo(() => {
-    const amount = Number(checkoutGifting?.amount || 35);
-    return Number.isFinite(amount) && amount > 0 ? amount : 35;
-  }, [checkoutGifting]);
-  const giftingMessage = String(checkoutGifting?.message || '');
+  const personalMessage = String(checkoutGifting?.message || '');
 
   const liveStockByProductId = useMemo(
     () => new Map(products.map((product) => [String(product.id), getEntityStock(product, 0)])),
@@ -271,9 +257,7 @@ const Cart = () => {
     const couponDiscount = Number(Math.max(0, Math.min(rawCouponDiscount, selectedSubtotal)).toFixed(2));
     const subtotal = Number((selectedSubtotal - couponDiscount).toFixed(2));
     const shippingFee = subtotal === 0 || subtotal >= SHIPPING_FREE_THRESHOLD ? 0 : 99;
-    const donationValue = donationEnabled ? donationAmount : 0;
-    const giftingValue = giftingEnabled ? giftingAmount : 0;
-    const totalAmount = Number((subtotal + shippingFee + donationValue + giftingValue).toFixed(2));
+    const totalAmount = Number((subtotal + shippingFee).toFixed(2));
     const youSaved = Number((productDiscount + couponDiscount).toFixed(2));
 
     return {
@@ -282,12 +266,10 @@ const Cart = () => {
       couponDiscount,
       subtotal,
       shippingFee,
-      donationValue,
-      giftingValue,
       totalAmount,
       youSaved,
     };
-  }, [appliedCoupon, donationAmount, donationEnabled, giftingAmount, giftingEnabled, selectedMrpTotal, selectedSubtotal]);
+  }, [appliedCoupon, selectedMrpTotal, selectedSubtotal]);
 
   const {
     productTotal,
@@ -465,51 +447,14 @@ const Cart = () => {
       source: 'cart',
       selectedItemIds: selectedItems.map((item) => String(item.id)),
       appliedCoupon,
-      appliedDonation: donationEnabled ? { enabled: true, amount: donationAmount } : null,
-      appliedGifting: giftingEnabled
-        ? { enabled: true, amount: giftingAmount, message: giftingMessage }
-        : null,
+      // Pass personalised message with enabled=false (no gift wrap charge)
+      appliedGifting: { enabled: false, amount: 0, message: personalMessage },
     });
     navigate('/checkout');
   };
 
-  const handleToggleDonation = (enabled) => {
-    if (!enabled) {
-      clearCheckoutDonation();
-      return;
-    }
-
-    setCheckoutDonation({ enabled: true, amount: donationAmount });
-  };
-
-  const handleSelectDonation = (amount) => {
-    const normalizedAmount = Number(amount);
-    if (!Number.isFinite(normalizedAmount) || normalizedAmount <= 0) {
-      return;
-    }
-
-    setCheckoutDonation({ enabled: true, amount: normalizedAmount });
-  };
-
-  const handleToggleGifting = (enabled) => {
-    if (!enabled) {
-      clearCheckoutGifting();
-      return;
-    }
-
-    setCheckoutGifting({
-      enabled: true,
-      amount: 35,
-      message: giftingMessage,
-    });
-  };
-
-  const handleGiftingMessageChange = (message) => {
-    setCheckoutGifting({
-      enabled: true,
-      amount: 35,
-      message,
-    });
+  const handlePersonalMessageChange = (message) => {
+    setCheckoutGifting({ enabled: false, amount: 0, message });
   };
 
   return (
@@ -623,11 +568,6 @@ const Cart = () => {
                   couponDiscount={couponDiscount}
                   subtotal={subtotal}
                   shippingFee={shippingFee}
-                  donationEnabled={donationEnabled}
-                  donationAmount={donationAmount}
-                  giftingEnabled={giftingEnabled}
-                  giftingAmount={giftingAmount}
-                  giftingMessage={giftingMessage}
                   totalAmount={totalAmount}
                   youSaved={youSaved}
                   deliveryInfo={deliveryInfo}
@@ -639,10 +579,8 @@ const Cart = () => {
                   appliedCoupon={appliedCoupon}
                   couponMessage={couponMessage}
                   couponError={couponError}
-                  onToggleDonate={handleToggleDonation}
-                  onSelectDonation={handleSelectDonation}
-                  onToggleGifting={handleToggleGifting}
-                  onGiftingMessageChange={handleGiftingMessageChange}
+                  personalMessage={personalMessage}
+                  onPersonalMessageChange={handlePersonalMessageChange}
                   onPlaceOrder={handleCheckout}
                   placeOrderDisabled={!canProceedToCheckout}
                 />

@@ -1,9 +1,8 @@
-﻿import React from 'react';
-import { Gift, HeartHandshake, RotateCcw, ShieldCheck, Tag, Truck } from 'lucide-react';
+import React from 'react';
+import { MessageSquare, RotateCcw, ShieldCheck, Tag, Truck } from 'lucide-react';
 import { formatPriceINR, formatSignedPriceINR } from '@/lib/pricing';
 import CouponInput from '@/components/checkout/CouponInput';
 
-const DONATION_OPTIONS = [10, 20, 50, 100];
 const GREETING_TEMPLATES = [
   {
     label: 'Birthday',
@@ -25,28 +24,21 @@ const OrderSummary = ({
   subtotal,
   productDiscount,
   couponDiscount,
-  donationEnabled,
-  donationAmount,
-  giftingEnabled,
-  giftingAmount,
-  giftingMessage,
   deliveryCharge,
   finalTotal,
   selectedAddress,
-  onToggleDonation,
-  onSelectDonation,
-  onToggleGifting,
-  onGiftingMessageChange,
+  personalMessage,
+  onPersonalMessageChange,
   couponProps,
   ctaLabel,
   ctaDisabled,
   onCta,
   note,
 }) => {
-  const normalizedGiftingMessage = String(giftingMessage || '').trim();
+  const normalizedMessage = String(personalMessage || '').trim();
   const estimatedDeliveryDate = new Date();
   estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 7);
-  
+
   const dayName = estimatedDeliveryDate.toLocaleDateString('en-US', { weekday: 'short' });
   const monthName = estimatedDeliveryDate.toLocaleDateString('en-US', { month: 'short' });
   const dayOfMonth = String(estimatedDeliveryDate.getDate()).padStart(2, '0');
@@ -126,101 +118,39 @@ const OrderSummary = ({
             {deliveryCharge === 0 ? 'Free' : formatSignedPriceINR(deliveryCharge, 'add')}
           </span>
         </div>
-
-        {giftingEnabled ? (
-          <div className="flex items-center justify-between">
-            <span className="text-[#6b7280]">Gift Wrap</span>
-            <span className="font-medium text-[#111827]">{formatSignedPriceINR(giftingAmount, 'add')}</span>
-          </div>
-        ) : null}
-
-        {donationEnabled ? (
-          <div className="flex items-center justify-between">
-            <span className="text-[#6b7280]">Donation</span>
-            <span className="font-medium text-[#111827]">{formatSignedPriceINR(donationAmount, 'add')}</span>
-          </div>
-        ) : null}
       </div>
 
+      {/* Personalised Message */}
       <div className="mt-4 rounded-xl border border-[#ffe3ec] bg-[#fff5f9] p-3">
         <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#e11d48]">
-          <Gift size={14} /> Gifting & Personalisation
+          <MessageSquare size={14} /> Personalised Message
         </p>
-
-        <label className="mt-2 flex items-center gap-2 text-sm text-[#374151]">
-          <input
-            type="checkbox"
-            checked={giftingEnabled}
-            onChange={(event) => onToggleGifting(event.target.checked)}
-            className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
-          />
-          Add gift wrap and personalized message for Rs 35
-        </label>
-
-        {giftingEnabled ? (
-          <div className="mt-2 space-y-1.5">
-            <div className="flex flex-wrap gap-2">
-              {GREETING_TEMPLATES.map((template) => (
-                <button
-                  key={template.label}
-                  type="button"
-                  onClick={() => onGiftingMessageChange(template.message)}
-                  className={[
-                    'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
-                    normalizedGiftingMessage === template.message
-                      ? 'border-black bg-gray-50 text-black'
-                      : 'border-[#d1d5db] text-[#374151] hover:border-[#ffccd9]',
-                  ].join(' ')}
-                >
-                  {template.label}
-                </button>
-              ))}
-            </div>
-            <textarea
-              value={giftingMessage}
-              onChange={(event) => onGiftingMessageChange(event.target.value.slice(0, 240))}
-              placeholder="Enter your gift message (optional)"
-              className="min-h-20 w-full rounded-lg border border-[#fbcfe8] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
-            />
-            <p className="text-xs text-[#6b7280]">{giftingMessage.length}/240 characters</p>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="mt-3 rounded-xl border border-[#fef3c7] bg-[#fffbeb] p-3">
-        <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-[#a16207]">
-          <HeartHandshake size={14} /> Support Transformative Social Work
-        </p>
-
-        <label className="mt-2 flex items-center gap-2 text-sm text-[#374151]">
-          <input
-            type="checkbox"
-            checked={donationEnabled}
-            onChange={(event) => onToggleDonation(event.target.checked)}
-            className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-gray-300"
-          />
-          Donate and make a difference
-        </label>
-
-        {donationEnabled ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {DONATION_OPTIONS.map((amount) => (
-              <button
-                key={amount}
-                type="button"
-                onClick={() => onSelectDonation(amount)}
-                className={[
-                  'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
-                  donationAmount === amount
-                    ? 'border-black bg-gray-50 text-black'
-                    : 'border-[#d1d5db] text-[#374151] hover:border-[#ffccd9]',
-                ].join(' ')}
-              >
-                Rs {amount}
-              </button>
-            ))}
-          </div>
-        ) : null}
+        <p className="mt-1 text-xs text-[#6b7280]">Add a personalised message (optional)</p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {GREETING_TEMPLATES.map((template) => (
+            <button
+              key={template.label}
+              type="button"
+              onClick={() => onPersonalMessageChange(template.message)}
+              className={[
+                'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
+                normalizedMessage === template.message
+                  ? 'border-black bg-gray-50 text-black'
+                  : 'border-[#d1d5db] text-[#374151] hover:border-[#ffccd9]',
+              ].join(' ')}
+            >
+              {template.label}
+            </button>
+          ))}
+        </div>
+        <textarea
+          value={personalMessage}
+          onChange={(event) => onPersonalMessageChange(event.target.value.slice(0, 240))}
+          placeholder="Enter your message here..."
+          rows={3}
+          className="mt-2 min-h-[72px] w-full rounded-lg border border-[#fbcfe8] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-black focus:ring-2 focus:ring-gray-300"
+        />
+        <p className="mt-1 text-xs text-[#9ca3af]">{String(personalMessage || '').length}/240</p>
       </div>
 
       <CouponInput {...couponProps} />
