@@ -120,6 +120,7 @@ export const AdminDataProvider = ({ children }) => {
           items: (order.items || []).map((item) => ({
             productId: String(item.product_id),
             name: item.name || 'Untitled Product',
+            size: item.size || null,
             quantity: Number(item.quantity || 0),
             price: Number(item.price || 0),
           })),

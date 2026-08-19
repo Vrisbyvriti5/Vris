@@ -152,7 +152,7 @@ const AdminOrders = () => {
                   )}
                 </td>
                 <td className="py-4 pr-4 text-sm text-muted-foreground font-body">
-                  {order.items.map((item) => `${item.name} x${item.quantity}`).join(', ')}
+                  {order.items.map((item) => `${item.name}${item.size ? ` (${item.size})` : ''} x${item.quantity}`).join(', ')}
                 </td>
                 <td className="py-4 pr-4 text-sm font-medium text-foreground">{formatCurrency(order.totalPrice)}</td>
                 <td className="py-4 pr-4 text-sm text-foreground">{order.paymentStatus || 'Pending'}</td>
@@ -227,7 +227,7 @@ const AdminOrders = () => {
             ) : null}
 
             <p className="mt-4 text-sm text-muted-foreground font-body">
-              {order.items.map((item) => `${item.name} x${item.quantity}`).join(', ')}
+              {order.items.map((item) => `${item.name}${item.size ? ` (${item.size})` : ''} x${item.quantity}`).join(', ')}
             </p>
             {order.gifting?.enabled ? (
               <p className="mt-3 rounded-xl border border-[#ffe3ec] bg-[#fff5f9] px-3 py-2 text-xs text-[#6b7280] font-body">
