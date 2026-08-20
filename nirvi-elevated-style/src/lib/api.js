@@ -205,17 +205,21 @@ export const productsAPI = {
     cache: 'no-store',
   }),
 
-  addReview: (id, rating, comment) =>
-    request(`/products/${id}/reviews`, {
-      method: 'POST',
-      body: JSON.stringify({ rating, comment }),
-    }),
+  addReview: (id, rating, comment, images = []) => {
+    const fd = new FormData();
+    fd.append('rating', rating);
+    fd.append('comment', comment);
+    images.forEach((file) => fd.append('reviewImages', file));
+    return request(`/products/${id}/reviews`, { method: 'POST', body: fd });
+  },
 
-  updateReview: (productId, reviewId, rating, comment) =>
-    request(`/products/${productId}/reviews/${reviewId}`, {
-      method: 'PUT',
-      body: JSON.stringify({ rating, comment }),
-    }),
+  updateReview: (productId, reviewId, rating, comment, images = []) => {
+    const fd = new FormData();
+    fd.append('rating', rating);
+    fd.append('comment', comment);
+    images.forEach((file) => fd.append('reviewImages', file));
+    return request(`/products/${productId}/reviews/${reviewId}`, { method: 'PUT', body: fd });
+  },
 
   deleteReview: (productId, reviewId) =>
     request(`/products/${productId}/reviews/${reviewId}`, { method: 'DELETE' }),

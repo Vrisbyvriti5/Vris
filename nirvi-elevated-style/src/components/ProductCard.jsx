@@ -21,7 +21,8 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
   const [isHovered, setIsHovered] = useState(false);
 
   const productId = String(product?.id ?? product?.product_id ?? '');
-  const cartItem = items.find((i) => String(i.id) === productId);
+  // Items fetched from the DB use cart_item_id as `id`, so match by product_id field first
+  const cartItem = items.find((i) => String(i.product_id) === productId || String(i.id) === productId);
   const primaryImage = product.image || product.images?.[0] || '/placeholder.svg';
   const galleryImages = product.images || (product.image ? [product.image] : ['/placeholder.svg']);
   const pricing = getProductPricing(product);
@@ -110,6 +111,7 @@ const ProductCard = ({ product, index = 0, ctaLabel = 'Add to Cart', eagerCount 
     try {
       const wasAdded = await addItem({
         id: productId,
+        product_id: productId,  // explicitly pass product_id so API call uses the correct integer ID
         name: product.name,
         price: pricing.finalPrice,
         image: primaryImage,

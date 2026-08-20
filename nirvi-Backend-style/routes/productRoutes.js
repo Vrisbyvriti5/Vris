@@ -21,13 +21,17 @@ const productUploadFields = upload.fields([
   { name: 'image', maxCount: 1 },
 ]);
 
+const reviewUploadFields = upload.fields([
+  { name: 'reviewImages', maxCount: 5 },
+]);
+
 // ── Public Routes ────────────────────────────────────────────────────────────
 router.get('/', noStore, getAllProducts);
 router.get('/categories', publicCache(3600, 7200), getCategories);
 router.get('/:id/reviews', noStore, getProductReviews);
 router.get('/:id', noStore, getProductById);
-router.post('/:id/reviews', authenticate, addProductReview);
-router.put('/:id/reviews/:reviewId', authenticate, updateProductReview);
+router.post('/:id/reviews', authenticate, reviewUploadFields, addProductReview);
+router.put('/:id/reviews/:reviewId', authenticate, reviewUploadFields, updateProductReview);
 router.delete('/:id/reviews/:reviewId', authenticate, deleteProductReview);
 
 // ── Admin-Only Routes ────────────────────────────────────────────────────────

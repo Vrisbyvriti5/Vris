@@ -7,6 +7,7 @@ const normalizeReviewRow = (row) => ({
   userName: row.user_name,
   rating: Number(row.rating),
   comment: row.comment,
+  images: (() => { try { return Array.isArray(row.images) ? row.images : (row.images ? JSON.parse(row.images) : []); } catch { return []; } })(),
   createdAt: row.created_at,
   updatedAt: row.updated_at,
 });
@@ -62,7 +63,7 @@ const upsert = async ({ productId, userId, rating, comment }) => {
   return findByProductAndUser(productId, userId);
 };
 
-const insert = async ({ productId, userId, rating, comment }) => {
+const insert = async ({ productId, userId, rating, comment, images = [] }) => {
   try {
     // Attempt to drop the unique index to allow multiple reviews if it hasn't been dropped yet
     await pool.query('ALTER TABLE vris_reviews DROP INDEX unique_product_user_review');
@@ -71,20 +72,21 @@ const insert = async ({ productId, userId, rating, comment }) => {
   }
 
   const [result] = await pool.query(
-    `INSERT INTO vris_reviews (product_id, user_id, rating, comment)
-     VALUES (?, ?, ?, ?)`,
-    [productId, userId, rating, comment]
+    `INSERT INTO vris_reviews (product_id, user_id, rating, comment, images)
+     VALUES (?, ?, ?, ?, ?)`,
+    [productId, userId, rating, comment, JSON.stringify(images)]
   );
 
   return findById(result.insertId);
 };
 
-const update = async (reviewId, userId, { rating, comment }) => {
+const update = async (reviewId, userId, { rating, comment, images }) => {
+  const hasImages = Array.isArray(images);
   const [result] = await pool.query(
     `UPDATE vris_reviews
-     SET rating = ?, comment = ?, updated_at = CURRENT_TIMESTAMP
+     SET rating = ?, comment = ?, ${hasImages ? 'images = ?, ' : ''}updated_at = CURRENT_TIMESTAMP
      WHERE id = ? AND user_id = ?`,
-    [rating, comment, reviewId, userId]
+    hasImages ? [rating, comment, JSON.stringify(images), reviewId, userId] : [rating, comment, reviewId, userId]
   );
 
   if (result.affectedRows === 0) return null;

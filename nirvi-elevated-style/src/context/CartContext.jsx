@@ -122,6 +122,9 @@ export const CartProvider = ({ children }) => {
     if (isAuthenticated) {
       try {
         await cartAPI.addItem(parseInt(item.product_id || item.id, 10), quantityToAdd, itemSize);
+        // Re-fetch to get real cart_item_id from DB — avoids stale IDs breaking
+        // subsequent increment/decrement/remove calls in CartDrawer
+        fetchCart();
       } catch (err) {
         console.error('Failed to add to cart:', err);
         fetchCart(); // re-sync on failure

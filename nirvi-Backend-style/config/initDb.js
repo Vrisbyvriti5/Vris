@@ -339,6 +339,7 @@ const initDatabase = async () => {
         user_id     INT           NOT NULL,
         rating      TINYINT       NOT NULL,
         comment     TEXT,
+        images      JSON          NULL DEFAULT NULL,
         created_at  TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
         updated_at  TIMESTAMP     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (product_id) REFERENCES vris_products(id) ON DELETE CASCADE,

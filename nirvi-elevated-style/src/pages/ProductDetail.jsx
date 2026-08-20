@@ -127,6 +127,7 @@ const ProductDetail = () => {
   const [averageRating, setAverageRating] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
   const [reviewForm, setReviewForm] = useState({ rating: 0, comment: '' });
+  const [reviewImages, setReviewImages] = useState([]);
   const [hoverRating, setHoverRating] = useState(0);
   const [formError, setFormError] = useState('');
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
@@ -606,14 +607,15 @@ const ProductDetail = () => {
 
     try {
       if (editingReviewId) {
-        await productsAPI.updateReview(product?.id, editingReviewId, rating, comment);
+        await productsAPI.updateReview(product?.id, editingReviewId, rating, comment, reviewImages);
         setEditingReviewId(null);
         toast({ title: 'Review updated', description: 'Your review was updated successfully.' });
       } else {
-        await productsAPI.addReview(product?.id, rating, comment);
+        await productsAPI.addReview(product?.id, rating, comment, reviewImages);
         toast({ title: 'Review submitted', description: 'Thanks for sharing your feedback.' });
       }
       setReviewForm({ rating: 0, comment: '' });
+      setReviewImages([]);
       setFormError('');
       await fetchReviews();
       await refreshProducts();
@@ -1504,6 +1506,13 @@ const ProductDetail = () => {
                       <div className="flex items-center gap-2 mb-2">
                         <p className="text-sm font-body text-foreground">{review.comment}</p>
                       </div>
+                      {review.images && review.images.length > 0 ? (
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {review.images.map((src, i) => (
+                            <img key={i} src={src} alt={`Review image ${i + 1}`} className="h-20 w-20 rounded-lg object-cover border border-border cursor-pointer hover:opacity-90 transition-opacity" onClick={() => window.open(src, '_blank')} />
+                          ))}
+                        </div>
+                      ) : null}
                       <div className="flex items-center gap-2 text-xs text-muted-foreground font-body mt-3">
                         <span className="font-medium text-foreground">{review.userName}</span>
                         <span>|</span>
@@ -1585,6 +1594,38 @@ const ProductDetail = () => {
                       className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-foreground shadow-sm"
                     />
                   </label>
+
+                  <div className="block space-y-2">
+                    <span className="text-xs font-bold uppercase tracking-wide text-foreground">Photos <span className="font-normal text-muted-foreground normal-case">(optional, up to 5)</span></span>
+                    <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border bg-muted/30 px-4 py-2 text-sm text-muted-foreground hover:border-foreground hover:text-foreground transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="sr-only"
+                        onChange={(e) => {
+                          const picked = Array.from(e.target.files || []).slice(0, 5 - reviewImages.length);
+                          setReviewImages((prev) => [...prev, ...picked].slice(0, 5));
+                          e.target.value = '';
+                        }}
+                      />
+                      + Add Photos
+                    </label>
+                    {reviewImages.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {reviewImages.map((file, i) => (
+                          <div key={i} className="relative">
+                            <img src={URL.createObjectURL(file)} alt={`Preview ${i + 1}`} className="h-16 w-16 rounded-lg object-cover border border-border" />
+                            <button
+                              type="button"
+                              onClick={() => setReviewImages((prev) => prev.filter((_, idx) => idx !== i))}
+                              className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-white text-[10px] leading-none"
+                            >✕</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
                   <div className="flex gap-3">
                     <button

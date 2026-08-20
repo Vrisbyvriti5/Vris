@@ -503,11 +503,34 @@ const addProductReview = async (req, res) => {
       });
     }
 
+    // Upload review images to S3 if provided
+    let imageUrls = [];
+    const rawFiles = req.files?.reviewImages || [];
+    if (rawFiles.length > 0) {
+      const { convertFilesToWebp } = require('../utils/imageProcessor');
+      const { uploadBufferToS3 } = require('../config/upload');
+      const bucket = process.env.AWS_BUCKET_NAME || process.env.AWS_S3_BUCKET_NAME;
+      const region = process.env.AWS_REGION;
+      const converted = await convertFilesToWebp(rawFiles);
+      for (const file of converted) {
+        const suffix = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const key = `reviews/review-${suffix}.webp`;
+        const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+        const s3 = require('../config/upload').s3;
+        await s3.send(new PutObjectCommand({
+          Bucket: bucket, Key: key, Body: file.buffer,
+          ContentType: 'image/webp', CacheControl: 'public, max-age=31536000, immutable',
+        }));
+        imageUrls.push(`https://${bucket}.s3.${region}.amazonaws.com/${key}`);
+      }
+    }
+
     const savedReview = await ReviewModel.insert({
       productId: req.params.id,
       userId: req.user.id,
       rating,
       comment,
+      images: imageUrls,
     });
 
     const summary = await ReviewModel.getSummaryByProductId(req.params.id);
@@ -545,7 +568,29 @@ const updateProductReview = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Review comment must be at least 3 characters long.' });
     }
 
-    const updatedReview = await ReviewModel.update(req.params.reviewId, req.user.id, { rating, comment });
+    // Upload new review images to S3 if provided
+    let images;
+    const rawFiles = req.files?.reviewImages || [];
+    if (rawFiles.length > 0) {
+      const { convertFilesToWebp } = require('../utils/imageProcessor');
+      const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+      const s3 = require('../config/upload').s3;
+      const bucket = process.env.AWS_BUCKET_NAME || process.env.AWS_S3_BUCKET_NAME;
+      const region = process.env.AWS_REGION;
+      const converted = await convertFilesToWebp(rawFiles);
+      images = [];
+      for (const file of converted) {
+        const suffix = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const key = `reviews/review-${suffix}.webp`;
+        await s3.send(new PutObjectCommand({
+          Bucket: bucket, Key: key, Body: file.buffer,
+          ContentType: 'image/webp', CacheControl: 'public, max-age=31536000, immutable',
+        }));
+        images.push(`https://${bucket}.s3.${region}.amazonaws.com/${key}`);
+      }
+    }
+
+    const updatedReview = await ReviewModel.update(req.params.reviewId, req.user.id, { rating, comment, images });
     if (!updatedReview) {
       return res.status(404).json({ success: false, message: 'Review not found or not authorized.' });
     }
