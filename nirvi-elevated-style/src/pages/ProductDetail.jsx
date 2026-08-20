@@ -1214,18 +1214,7 @@ const ProductDetail = () => {
                   <BadgePercent size={13} className="mt-0.5 shrink-0 text-black" />
                   <span><span className="font-extrabold text-black">Coupon:</span> Extra 10% off above ₹499 (Code: VRIS10)</span>
                 </li>
-                <li className="flex gap-1.5">
-                  <CreditCard size={13} className="mt-0.5 shrink-0 text-black" />
-                  <span><span className="font-extrabold text-black">Bank:</span> 5% Cashback on Axis Bank Credit Card</span>
-                </li>
-                <li className="flex gap-1.5">
-                  <WalletCards size={13} className="mt-0.5 shrink-0 text-black" />
-                  <span><span className="font-extrabold text-black">Wallet:</span> Flat ₹150 Cashback on Paytm</span>
-                </li>
               </ul>
-              <button type="button" className="mt-2 inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wide text-black hover:underline">
-                View all offers <ArrowRight size={10} />
-              </button>
             </div>
 
           </motion.aside>
@@ -1416,14 +1405,6 @@ const ProductDetail = () => {
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0 mt-1.5"></span>
                   <span><span className="font-bold text-black">Coupon:</span> Extra 10% off on orders above ₹499 (Code: VRIS10)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0 mt-1.5"></span>
-                  <span><span className="font-bold text-black">Bank Offer:</span> 5% Unlimited Cashback on Axis Bank Credit Card</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0 mt-1.5"></span>
-                  <span><span className="font-bold text-black">Cashback:</span> Flat ₹150 Cashback on Paytm Wallet</span>
                 </li>
               </ul>
             </div>
