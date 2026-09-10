@@ -271,10 +271,10 @@ export const ordersAPI = {
       body: JSON.stringify(orderData),
     }),
 
-  createRazorpayOrder: (amount) =>
+  createRazorpayOrder: (amount, checkoutSnapshot) =>
     request('/orders/razorpay/create-order', {
       method: 'POST',
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({ amount, checkoutSnapshot }),
     }),
 
   verifyRazorpayPayment: (payload) =>

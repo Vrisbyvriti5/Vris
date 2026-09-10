@@ -4,6 +4,7 @@ const {
   placeOrder,
   createRazorpayOrder,
   verifyRazorpayPayment,
+  razorpayWebhook,
   getMyOrders,
   getOrderById,
   getAllOrders,
@@ -11,7 +12,10 @@ const {
 } = require('../controllers/orderController');
 const { authenticate, authorizeAdmin } = require('../middleware/auth');
 
-// All order routes require authentication
+// ── Public: Razorpay webhook (no auth — Razorpay calls this server-to-server) ─
+router.post('/razorpay/webhook', razorpayWebhook);
+
+// All other order routes require authentication
 router.use(authenticate);
 
 // ── Admin Routes (must be BEFORE parameterised routes) ───────────────────────

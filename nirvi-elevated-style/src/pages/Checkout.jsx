@@ -578,7 +578,13 @@ const Checkout = () => {
           paymentStatus: 'Pending',
         });
       } else {
-        const createOrderData = await ordersAPI.createRazorpayOrder(finalTotal);
+        const checkoutSnapshot = {
+          items: checkoutItemsWithAvailability,
+          deliveryCharge: shipping,
+          address: selectedAddress,
+          gifting: { enabled: false, amount: 0, message: String(checkoutGifting?.message || '') },
+        };
+        const createOrderData = await ordersAPI.createRazorpayOrder(finalTotal, checkoutSnapshot);
         const razorpayOrder = createOrderData.data.order;
         const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
 

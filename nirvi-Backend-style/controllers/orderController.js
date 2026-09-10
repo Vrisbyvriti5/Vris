@@ -145,6 +145,19 @@ const placeOrder = async (req, res) => {
       });
     }
 
+    // Idempotency: if webhook already created the order, just return it
+    if (paymentMethod === 'razorpay' && req.body.razorpayOrderId) {
+      const { pool } = require('../config/db');
+      const [existing] = await pool.query(
+        'SELECT id, status, payment_status FROM vris_orders WHERE razorpay_order_id = ? AND user_id = ? LIMIT 1',
+        [req.body.razorpayOrderId, req.user.id]
+      );
+      if (existing.length > 0) {
+        console.log('[placeOrder] Idempotent — order already exists #', existing[0].id);
+        return res.status(200).json({ success: true, data: existing[0] });
+      }
+    }
+
     const orderPayload = buildOrderPayload(req.body);
     const order = await OrderModel.create(req.user.id, orderPayload);
 
@@ -193,7 +206,7 @@ const placeOrder = async (req, res) => {
 // ── Create Razorpay order ────────────────────────────────────────────────────
 const createRazorpayOrder = async (req, res) => {
   try {
-    const { amount } = req.body;
+    const { amount, checkoutSnapshot } = req.body;
 
     if (!isValidAmount(amount)) {
       return res.status(400).json({
@@ -210,6 +223,20 @@ const createRazorpayOrder = async (req, res) => {
       currency: 'INR',
       receipt: `vris_${req.user.id}_${Date.now()}`,
     });
+
+    // ── Save checkout snapshot so webhook can create order if browser crashes ──
+    if (checkoutSnapshot) {
+      try {
+        const { pool } = require('../config/db');
+        await pool.query(
+          'INSERT INTO vris_pending_checkouts (razorpay_order_id, user_id, checkout_data) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE checkout_data = VALUES(checkout_data)',
+          [order.id, req.user.id, JSON.stringify(checkoutSnapshot)]
+        );
+        console.log('[Checkout] Snapshot saved for', order.id);
+      } catch (snapshotErr) {
+        console.error('[Checkout] Failed to save snapshot:', snapshotErr.message);
+      }
+    }
 
     return res.status(201).json({
       success: true,
@@ -266,6 +293,105 @@ const verifyRazorpayPayment = async (req, res) => {
       success: false,
       message: 'Failed to verify payment.',
     });
+  }
+};
+
+// ── Razorpay Webhook — payment.captured fallback ─────────────────────────────
+// This fires when Razorpay confirms payment server-to-server, even if the
+// customer's browser crashed before placeOrder() completed.
+const razorpayWebhook = async (req, res) => {
+  try {
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (webhookSecret) {
+      const signature = req.headers['x-razorpay-signature'];
+      const expected = crypto
+        .createHmac('sha256', webhookSecret)
+        .update(req.rawBody || JSON.stringify(req.body))
+        .digest('hex');
+      if (signature !== expected) {
+        console.warn('[Webhook] Invalid Razorpay signature — ignoring');
+        return res.status(400).json({ success: false, message: 'Invalid signature.' });
+      }
+    }
+
+    const event = req.body;
+    if (event.event !== 'payment.captured') {
+      return res.json({ success: true, message: 'Event ignored.' });
+    }
+
+    const payment = event.payload?.payment?.entity;
+    if (!payment) return res.json({ success: true });
+
+    const razorpayOrderId = payment.order_id;
+    const paymentId = payment.id;
+    const amountPaid = payment.amount / 100;
+
+    console.log('[Webhook] payment.captured', { paymentId, razorpayOrderId, amountPaid });
+
+    const { pool } = require('../config/db');
+
+    // Check if order already exists (happy path — browser completed normally)
+    const [existing] = await pool.query(
+      'SELECT id FROM vris_orders WHERE razorpay_order_id = ? OR payment_id = ? LIMIT 1',
+      [razorpayOrderId, paymentId]
+    );
+    if (existing.length > 0) {
+      console.log('[Webhook] Order already exists #', existing[0].id, '— skipping');
+      return res.json({ success: true, message: 'Order already exists.' });
+    }
+
+    // Look up pending checkout snapshot
+    const [pending] = await pool.query(
+      'SELECT * FROM vris_pending_checkouts WHERE razorpay_order_id = ? LIMIT 1',
+      [razorpayOrderId]
+    );
+    if (pending.length === 0) {
+      console.warn('[Webhook] No pending checkout snapshot for', razorpayOrderId);
+      return res.json({ success: true, message: 'No snapshot found.' });
+    }
+
+    const snap = typeof pending[0].checkout_data === 'string'
+      ? JSON.parse(pending[0].checkout_data)
+      : pending[0].checkout_data;
+    const userId = pending[0].user_id;
+
+    // Build order payload from snapshot
+    const orderPayload = {
+      items: snap.items || [],
+      totalPrice: amountPaid,
+      deliveryCharge: snap.deliveryCharge || 0,
+      paymentMethod: 'razorpay',
+      paymentStatus: 'Paid',
+      paymentId,
+      razorpayOrderId,
+      address: snap.address || {},
+      gifting: snap.gifting || null,
+      donation: null,
+    };
+
+    const order = await OrderModel.create(userId, orderPayload);
+    await CartModel.clearCart(userId);
+    await pool.query('DELETE FROM vris_pending_checkouts WHERE razorpay_order_id = ?', [razorpayOrderId]);
+
+    console.log('[Webhook] Order #', order.id, 'created via webhook for user', userId);
+
+    // Send confirmation email
+    try {
+      await sendOrderConfirmationNotification({
+        orderId: order.id,
+        userId,
+        items: orderPayload.items,
+        total: amountPaid,
+        address: orderPayload.address,
+      });
+    } catch (emailErr) {
+      console.error('[Webhook] Email failed:', emailErr.message);
+    }
+
+    return res.json({ success: true, orderId: order.id });
+  } catch (error) {
+    console.error('[Webhook] Error:', error.message);
+    return res.status(500).json({ success: false });
   }
 };
 
@@ -347,6 +473,7 @@ module.exports = {
   placeOrder,
   createRazorpayOrder,
   verifyRazorpayPayment,
+  razorpayWebhook,
   getMyOrders,
   getOrderById,
   getAllOrders,
