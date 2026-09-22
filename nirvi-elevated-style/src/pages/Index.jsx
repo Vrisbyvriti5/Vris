@@ -212,11 +212,11 @@ const FullBleedImage = ({ src, alt, id, mobileHeight, to }) => (
 // SECTION 6 — Promo Cards
 // ═══════════════════════════════════════════════════════════════════════
 const CATEGORY_CARDS = [
+  { title: 'Indo Western', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1786057854526-21523b0cb761-IMG_3843.webp', to: '/shop?cat=indo%20western' },
   { title: 'Tops', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188561366-1128e026c30e-Catone.webp', to: '/shop?cat=tops' },
   { title: 'Skirts', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188503890-0f854ea8a047-carfour.webp', to: '/shop?cat=skirts' },
   { title: 'Dresses', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188504150-8d0d4fdff658-catthird.webp', to: '/shop?cat=dresses' },
   { title: 'Full Set', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1783188504221-7aebc1eca5ec-Catsecond.webp', to: '/shop?cat=full%20set' },
-  { title: 'Indo Western', src: 'https://vrisbyvriti-assets.s3.ap-south-1.amazonaws.com/products/product-1786057854526-21523b0cb761-IMG_3843.webp', to: '/shop?cat=indo%20western' },
 ];
 
 const ShopByCategories = () => {
